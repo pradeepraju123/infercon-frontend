@@ -102,7 +102,7 @@
                     <mat-form-field class="example-full-width" appearance="outline">
                       <mat-label>Email</mat-label>
                       <input type="email" matInput formControlName="email" name="email"
-                             placeholder="Ex. pat@example.com">
+                             placeholder="Ex. pat@example.com" required>
                     </mat-form-field>
                   </div>
                 </div>
@@ -110,7 +110,7 @@
                   <div class="mb-3 form_control">
                     <mat-form-field class="example-full-width" appearance="outline">
                       <mat-label>Address</mat-label>
-                      <textarea matInput placeholder="Ex. No.11, 12th cross st..." formControlName="address" name="address" required></textarea>
+                      <textarea matInput placeholder="Ex. No.11, 12th cross st..." formControlName="address" name="address"></textarea>
                     </mat-form-field>
                   </div>
                 </div>
@@ -143,7 +143,7 @@
                     <mat-form-field class="example-full-width" appearance="outline">
                       <mat-label>Additional Mobile</mat-label>
                       <input type="text" matInput formControlName="additionalMobile" name="additionalMobile"
-                             placeholder="Ex. 7123124343" required>
+                             placeholder="Ex. 7123124343">
                     </mat-form-field>
                   </div>
                 </div>
@@ -152,7 +152,7 @@
                     <mat-form-field class="example-full-width" appearance="outline">
                       <mat-label>Work Mobile</mat-label>
                       <input type="text" matInput formControlName="workMobile" name="workMobile"
-                             placeholder="Ex. 7123124343" required>
+                             placeholder="Ex. 7123124343">
                     </mat-form-field>
                   </div>
                 </div>
@@ -161,7 +161,7 @@
                     <mat-form-field class="example-full-width" appearance="outline">
                       <mat-label>Company</mat-label>
                       <input type="text" matInput formControlName="company" name="company"
-                             placeholder="Ex. Infercon Automation" required>
+                             placeholder="Ex. Infercon Automation">
                     </mat-form-field>
                   </div>
                 </div>
@@ -170,7 +170,7 @@
                     <mat-form-field class="example-full-width" appearance="outline">
                       <mat-label>Fees Currency</mat-label>
                       <input type="text" matInput formControlName="feesCurrency" name="feesCurrency"
-                             placeholder="Ex. 120000" required>
+                             placeholder="Ex. 120000">
                     </mat-form-field>
                   </div>
                 </div>
@@ -179,7 +179,7 @@
                     <mat-form-field class="example-full-width" appearance="outline">
                       <mat-label>Education</mat-label>
                       <input type="text" matInput formControlName="education" name="education"
-                             placeholder="Ex. Bachelor of Engg.." required>
+                             placeholder="Ex. Bachelor of Engg..">
                     </mat-form-field>
                   </div>
                 </div>
@@ -187,7 +187,7 @@
                   <div class="mb-3 form_control">
                     <mat-form-field class="example-full-width" appearance="outline">
                       <mat-label>Comments</mat-label>
-                      <textarea matInput placeholder="Ex. Comments.." formControlName="comments" name="comments" required></textarea>
+                      <textarea matInput placeholder="Ex. Comments.." formControlName="comments" name="comments"></textarea>
                     </mat-form-field>
                   </div>
                 </div>
@@ -197,7 +197,7 @@
                     <mat-form-field class="example-full-width" appearance="outline">
                       <mat-label>Industry Experience</mat-label>
                       <input type="text" matInput formControlName="industryexp" name="industryexp"
-                             placeholder="Ex. 12 years.." required>
+                             placeholder="Ex. 12 years..">
                     </mat-form-field>
                   </div>
                 </div>
@@ -206,7 +206,7 @@
                     <mat-form-field class="example-full-width" appearance="outline">
                       <mat-label>Years of Experience</mat-label>
                       <input type="text" matInput formControlName="yearsOfExp" name="yearsOfExp"
-                             placeholder="Ex. 12 years.." required>
+                             placeholder="Ex. 12 years..">
                     </mat-form-field>
                   </div>
                 </div>
@@ -215,7 +215,7 @@
                     <mat-form-field class="example-full-width" appearance="outline">
                       <mat-label>Government ID</mat-label>
                       <input type="text" matInput formControlName="governmentId" name="governmentId"
-                             placeholder="Ex. 122EF4342" required>
+                             placeholder="Ex. 122EF4342">
                     </mat-form-field>
                   </div>
                 </div>
@@ -240,10 +240,8 @@
                 <div class="col-lg-4">
                   <div class="mb-3 form_control">
                     <label for="file" class="form-label">Upload File</label>
-                    <input type="file" class="custom-file-input" name="myFile" (change)="fileEvent($event)" accept=".pdf, .doc, .docx" id="customFile" required>
+                    <input type="file" class="custom-file-input" name="myFile" (change)="fileEvent($event)" accept=".pdf, .doc, .docx" id="customFile">
                   </div>
-                </div>
-                <div class="col-lg-6">
                 </div>
               </div>
               <button type="submit" class="btn btn-primary">Submit Registration</button>
