@@ -1,0 +1,11 @@
+table {
+    width: 100%;
+  }
+
+.contact_table {
+  padding: 20px;
+}
+.lead_status {
+  padding-top: 15px;
+  width: 50px;
+}
