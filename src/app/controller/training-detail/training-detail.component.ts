@@ -15,9 +15,11 @@ export class TrainingDetailComponent {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
-      const trainingId = params.get('id');
-      if (trainingId) {
-        this.trainingService.getTrainingById(trainingId).subscribe(
+      const slug = params.get('id');
+      console.log('slug', slug)
+      if (slug) {
+        console.log(slug)
+        this.trainingService.getTrainingBySlug(slug).subscribe(
           (data) => {
             this.training = data.data; // Assuming your API response has a 'data' property
              // Update meta tags dynamically

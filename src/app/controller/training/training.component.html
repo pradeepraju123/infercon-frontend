@@ -25,7 +25,7 @@
               <h4>{{item.title}}</h4>
               <p [innerHTML]="item.short_description"></p>
               <div class="button_sect">
-                <button [routerLink]="['/app-training-detail', item._id]" class="btn btn-primary">View Training</button>
+                <button [routerLink]="['/app-training-detail', item.slug]" class="btn btn-primary">View Training</button>
               </div>
             </div>
           </div>

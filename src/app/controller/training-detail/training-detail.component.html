@@ -29,7 +29,8 @@
                 </div>
             </div>
             <div class="col-lg-12">
-                <div *ngIf="training.event_details && training.event_details.length">
+               <!-- Check if training is defined before accessing event_details -->
+                <div *ngIf="training && training.event_details && training.event_details.length">
                     <h4 class="text-center">Event Details</h4>
                     <div class="card-group">
                         <div class="card event-card" *ngFor="let eventDetail of training.event_details">
@@ -41,7 +42,8 @@
                     </div>
                 </div>
 
-                <div *ngIf="training.systems_used && training.systems_used.length">
+
+                <div *ngIf="training && training.systems_used && training.systems_used.length">
                     <h4 class="text-center" style="padding: 10px;">Systems Used</h4>
                     <div class="list-group systems-list">
                         <mat-card>

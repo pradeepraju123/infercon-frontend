@@ -171,6 +171,7 @@ toolbar: Toolbar = [
       short_description: [this.trainingForm.value.short_description],
       description: [this.trainingForm.value.description],
       published: [this.trainingForm.value.published],
+      slug : [this.trainingForm.value.slug],
       event_details: [this.trainingForm.value.event_details],
       systems_used: [this.trainingForm.value.systems_used],
     };
@@ -217,6 +218,7 @@ toolbar: Toolbar = [
       description: [''],
       published: [false],
       image: [''],
+      slug : ['', Validators.required],
       event_details: this.fb.array([]),
       systems_used: this.fb.array([]),
     });
@@ -269,6 +271,7 @@ toolbar: Toolbar = [
           description: trainingDetails.description,
           published: trainingDetails.published,
           image: trainingDetails.image,
+          slug : trainingDetails.slug
         });
   
         // Display the image preview

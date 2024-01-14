@@ -30,6 +30,18 @@
 .nav_section .contact_nav a {
     color: #000;
 }
+.nav_section .contact_nav:nth-child(2) {
+    background-color: red;
+    padding : 0px 10px;
+    border-radius: 25px;
+    margin-left: 10px;
+
+}
+.nav_section .contact_nav:nth-child(2) a {
+    color: #fff;
+    padding: 20px;
+
+}
 /* .nav_section .navbar {
     padding: 30px; 
 } */
