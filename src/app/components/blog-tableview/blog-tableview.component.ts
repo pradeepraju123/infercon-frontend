@@ -4,8 +4,6 @@ import { BlogService } from '../../services/blog.service';
 import {
   MatDialog,
 } from '@angular/material/dialog';
-import {MatButtonModule} from '@angular/material/button';
-import { DialogComponent } from '../../components/dialog/dialog.component';
 import { EditBlogComponent } from '../../controller/edit-blog/edit-blog.component';
 
 export interface DialogData {

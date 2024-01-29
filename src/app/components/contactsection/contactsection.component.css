@@ -34,3 +34,8 @@
     width: 100%;
    border-radius: 20px;
 }
+
+.success-snackbar {
+    background-color: #4CAF50; /* Green */
+    color: white;
+  }

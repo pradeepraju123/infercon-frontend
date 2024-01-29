@@ -85,7 +85,7 @@
           <div class="card-body">
               
               <h5 *ngIf="contentLoaded" class="card-title">{{ item.title }}</h5>
-              <div *ngIf="contentLoaded" [innerHTML]="item.description"></div>
+              <div *ngIf="contentLoaded" [innerHTML]="item.short_description"></div>
               <!-- <p class="card-text" *ngIf="contentLoaded">{{ item.description }}</p> -->
           </div>
           <div class="button_sect">

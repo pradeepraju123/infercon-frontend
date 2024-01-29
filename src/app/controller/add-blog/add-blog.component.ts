@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UploadService } from '../../services/upload.service';
 import { Location } from '@angular/common';
@@ -6,6 +6,7 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 import { BlogService } from '../../services/blog.service';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { MatDialogRef } from '@angular/material/dialog';
+import { Editor, Toolbar } from 'ngx-editor';
 @Component({
   selector: 'app-add-blog',
   templateUrl: './add-blog.component.html',
@@ -19,17 +20,33 @@ import { MatDialogRef } from '@angular/material/dialog';
   ],
   encapsulation: ViewEncapsulation.None,
 })
-export class AddBlogComponent {
+export class AddBlogComponent implements OnInit,OnDestroy {
   filedata:any;
   blogdata: any = {}; // Initialize with an empty object
   successMessage: string | null = null;
   errorMessage: string | null = null;
+  editor!: Editor;
+  neweditor!: Editor;
   image: string | null = null; // To store the selected image file
   imagePreview : any;
   horizontalPosition: MatSnackBarHorizontalPosition = 'right';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
+  toolbar: Toolbar = [
+    ['bold', 'italic'],
+    ['underline', 'strike'],
+    ['code', 'blockquote'],
+    ['ordered_list', 'bullet_list'],
+    [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
+    ['link', 'image'],
+    ['text_color', 'background_color'],
+    ['align_left', 'align_center', 'align_right', 'align_justify'],
+  ];
   constructor(private route: ActivatedRoute, private blogService: BlogService,  private uploadService : UploadService, private location : Location,private _snackBar: MatSnackBar, private dialogRef: MatDialogRef<AddBlogComponent>, ) {}
   // imageUrl: Observable<string>;
+  ngOnInit(): void {
+    this.editor = new Editor();
+    this.neweditor = new Editor();
+  }
   fileEvent(event: any) {
     // Handle the file input change event
     const file = event.target.files[0];
@@ -111,5 +128,9 @@ export class AddBlogComponent {
       horizontalPosition: this.horizontalPosition,
       verticalPosition: this.verticalPosition,
     });
+  }
+  ngOnDestroy(): void {
+    this.editor.destroy();
+    this.neweditor.destroy();
   }
 }

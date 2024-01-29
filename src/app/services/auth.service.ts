@@ -12,7 +12,7 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) {}
 
   login(username: string, password: string): Observable<any> {
-    return this.http.post('http://127.0.0.1:8081/api/v1/users/login', { username, password });
+    return this.http.post('https://api.inferconautomation.com/api/v1/users/login', { username, password });
   }
   setToken(token: string | null) {
     this.token = token;
@@ -54,7 +54,7 @@ export class AuthService {
     this.token = null;
     sessionStorage.removeItem('authToken');
   }
-  private clearTokenAndNavigateToLogin() {
+  public clearTokenAndNavigateToLogin() {
     this.clearToken();
     this.navigateToLogin();
   }

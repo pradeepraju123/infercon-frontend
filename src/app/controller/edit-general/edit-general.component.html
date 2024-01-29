@@ -1,0 +1,60 @@
+<h1 mat-dialog-title>Edit General data</h1>
+<form [formGroup]="generalForm" (submit)="onSubmit()"><mat-dialog-content class="mat-typography">
+<section class="edit_section">
+    <div class="container new_container">
+      <div class="row">
+        <div class="col-lg-6">
+          <div class="container mt-5">
+              <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" id="title" formControlName="title" class="form-control">
+              </div>
+              <div class="form-group published_bool">
+                <label for="published">Published</label>
+                <div class="custom-switch">
+                    <div class="switch-toggle" [ngClass]="{'green': generalForm.get('published')?.value, 'blue': !generalForm.get('published')?.value}" [@toggleAnimation]="generalForm.get('published')?.value" (click)="toggleSwitch()">
+                      <input type="checkbox" class="custom-control-input" formControlName="published" style="display: none;">
+                      <span class="toggle-handle"></span>
+                    </div>
+                  </div>          
+              </div>            
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="container  mt-5">
+          
+          <div class="form-group">
+            <label for="image">Image</label>
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" name="myFile" (change)="fileEvent($event)" accept="image/*" id="customFile">
+              <label class="custom-file-label" for="customFile">Choose file</label>
+            </div>
+          </div>    
+            <div class="edit_image">
+              <img [src]="imagePreview" class="img-responsive" *ngIf="imagePreview" alt="Image Preview">
+            </div> 
+          </div>
+         
+        </div>
+        <div class="col-lg-12">
+          <div class="form-group">
+            <label for="short_description">Short description</label>
+            <ngx-editor-menu [editor]="neweditor" [toolbar]="toolbar"> </ngx-editor-menu>
+            <ngx-editor [editor]="neweditor" formControlName="short_description"></ngx-editor>
+        </div>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"> </ngx-editor-menu>
+            <ngx-editor [editor]="editor" formControlName="description"></ngx-editor>
+             </div>
+        </div>
+       
+      </div>
+    </div>
+  </section>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial type="submit">Submit</button>
+</mat-dialog-actions>
+</form>

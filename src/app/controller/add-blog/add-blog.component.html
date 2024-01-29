@@ -26,7 +26,8 @@
   
               <div class="form-group">
                 <label for="description">Description</label>
-                <editor apiKey="i8u7j15zj58dx8urp1dj92z8zqqdua8ns65zk469j7c2hs5t" [(ngModel)]="blogdata.description" [init]="{mergetags_list: [{ value: 'training.description', title: 'Description' }]}" name="description" id="description"></editor>
+                <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"> </ngx-editor-menu>
+                <ngx-editor name = "description" [editor]="editor" [(ngModel)]="blogdata.description"></ngx-editor>
                  </div>
           
               <div class="form-group published_bool">
@@ -48,7 +49,8 @@
           <div class="container  mt-5">
             <div class="form-group">
               <label for="short_description">Short description</label>
-              <textarea name="short_description" class="form-control" id="short_description" rows="3" [(ngModel)]="blogdata.short_description"></textarea>
+              <ngx-editor-menu [editor]="neweditor" [toolbar]="toolbar"> </ngx-editor-menu>
+                <ngx-editor name = "short_description" [editor]="neweditor" [(ngModel)]="blogdata.short_description"></ngx-editor>
           </div>
           <div class="form-group">
             <label for="image">Image</label>

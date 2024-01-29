@@ -65,6 +65,14 @@ import {MatSelectModule} from '@angular/material/select';
 import { BookingComponent } from './components/booking/booking.component';
 import {MatDividerModule} from '@angular/material/divider';
 import { EditContactComponent } from './components/edit-contact/edit-contact.component';
+import { GeneraldataCardviewComponent } from './components/generaldata-cardview/generaldata-cardview.component';
+import { GeneraldataTableviewComponent } from './components/generaldata-tableview/generaldata-tableview.component';
+import { AddGeneralComponent } from './controller/add-general/add-general.component';
+import { EditGeneralComponent } from './controller/edit-general/edit-general.component';
+import { GeneralAdminComponent } from './controller/general-admin/general-admin.component';
+import { PrivacyPolicyComponent } from './controller/privacy-policy/privacy-policy.component';
+import { TermsConditionsComponent } from './controller/terms-conditions/terms-conditions.component';
+import { LogoutComponent } from './controller/logout/logout.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -100,7 +108,15 @@ import { EditContactComponent } from './components/edit-contact/edit-contact.com
     ContactAdminComponent,
     DialogComponent,
     BookingComponent,
-    EditContactComponent
+    EditContactComponent,
+    GeneraldataCardviewComponent,
+    GeneraldataTableviewComponent,
+    AddGeneralComponent,
+    EditGeneralComponent,
+    GeneralAdminComponent,
+    PrivacyPolicyComponent,
+    TermsConditionsComponent,
+    LogoutComponent
   ],
   imports: [
     MatDividerModule,

@@ -23,6 +23,12 @@ import { BlogDetailsComponent } from './controller/blog-details/blog-details.com
 import { TrainingDetailComponent } from './controller/training-detail/training-detail.component';
 import { RegistrationComponent } from './controller/registration/registration.component';
 import { ContactAdminComponent } from './controller/contact-admin/contact-admin.component';
+import { GeneralAdminComponent } from './controller/general-admin/general-admin.component';
+import { AddGeneralComponent } from './controller/add-general/add-general.component';
+import { EditGeneralComponent } from './controller/edit-general/edit-general.component';
+import { TermsConditionsComponent } from './controller/terms-conditions/terms-conditions.component';
+import { PrivacyPolicyComponent } from './controller/privacy-policy/privacy-policy.component';
+import { LogoutComponent } from './controller/logout/logout.component';
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'blog', component: BlogComponent },
@@ -32,12 +38,17 @@ const routes: Routes = [
   { path: 'services', component: ServicesComponent },
   { path: 'contact', component: ContactComponent },
   {path:'training',component:TrainingComponent},
-  {path:'registration',component:RegistrationComponent},
+  {path:'app-terms-conditions',component:TermsConditionsComponent},
+  {path:'app-privacy-policy',component:PrivacyPolicyComponent},
   {path:'login',component:LoginComponent},
+  { path: 'logout', component: LogoutComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
   { path: 'service-admin', component: ServiceAdminComponent, canActivate: [authGuard] },
   { path: 'training-admin', component: TrainingAdminComponent, canActivate: [authGuard] },
   { path: 'app-blog-admin', component: BlogAdminComponent, canActivate: [authGuard] },
+  { path: 'app-general-admin', component: GeneralAdminComponent, canActivate: [authGuard]},
+  { path: 'app-add-general', component: AddGeneralComponent, canActivate: [authGuard]},
+  { path: 'app-edit-general/:id', component: EditGeneralComponent, canActivate: [authGuard]},
   { path: 'edit-training/:id', component: EditTrainingComponent, canActivate:[authGuard] },
   { path: 'app-add-training', component: AddTrainingComponent, canActivate: [authGuard] },
   {path: 'app-add-services', component: AddServicesComponent, canActivate: [authGuard]},

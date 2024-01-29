@@ -29,6 +29,7 @@ export class ContactsectionComponent {
       country: ['', Validators.required],
       phone: ['', Validators.required],
       courses: ['', Validators.required],
+      source : ['Website'], 
       message: ['']
     });
   }
@@ -45,6 +46,7 @@ export class ContactsectionComponent {
           this.successMessage = 'Contact successfully.';
           this.errorMessage = null;
           this.openSnackBar(this.successMessage)
+          this.clearForm()
           // You can handle success, e.g., show a success message
         },
         (error) => {
@@ -60,11 +62,29 @@ export class ContactsectionComponent {
       console.error('Form validation failed. Please check the form.');
     }
   }
-  openSnackBar(message: string) {
-    this._snackBar.open(message, 'Close', 
-    {
-      horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition,
+  clearForm() {
+  // Clear validators for each form control
+  Object.keys(this.contactForm.controls).forEach(key => {
+    const control = this.contactForm.get(key);
+
+    // Check if control is not null before clearing validators
+    if (control) {
+      control.clearValidators();
+      control.updateValueAndValidity();
+    }
+  });
+
+  // Reset the form with default values
+  this.contactForm.reset({
+    source: 'Website'
+    // You may need to set the default values for other form controls if needed
+  });
+  }
+  openSnackBar(message: string, horizontalPosition: MatSnackBarHorizontalPosition = 'center', verticalPosition: MatSnackBarVerticalPosition = 'bottom',panelClass: string = 'success-snackbar') {
+    this._snackBar.open(message, 'Close', {
+      horizontalPosition: horizontalPosition,
+      verticalPosition: verticalPosition,
+      panelClass: panelClass
     });
   }
 }

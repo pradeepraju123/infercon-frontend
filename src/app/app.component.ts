@@ -54,7 +54,7 @@ export class AppComponent implements AfterViewInit {
     // Check the current route to determine whether to show the alternate navbar
     const currentRoute = this.router.url;
     // Define the logic to decide when to show the alternate navbar
-    return routesWithoutDefault.includes(currentRoute) || currentRoute.startsWith('/edit-training/') || currentRoute.startsWith('/app-edit-services/') || currentRoute.startsWith('/app-edit-blog/');
+    return routesWithoutDefault.includes(currentRoute) || currentRoute.startsWith('/edit-training/') || currentRoute.startsWith('/app-edit-services/') || currentRoute.startsWith('/app-edit-blog/') || currentRoute.startsWith('/app-edit-general/');
   }
     
 }
@@ -68,7 +68,10 @@ const routesWithoutDefault = [
   '/app-add-blog',
   '/app-blog-admin',
   '/app-add-services',
-  '/app-contact-admin'
+  '/app-contact-admin',
+  '/app-add-general',
+  '/app-general-admin',
+  '/logout'
 ];
 const routesWithDefault = [
   '/home',
@@ -78,5 +81,7 @@ const routesWithDefault = [
   '/contact',
   '/career',
   '/testing',
-  '/registration'
+  '/registration',  
+  '/app-privacy-policy',
+  '/app-terms-conditions'
 ];

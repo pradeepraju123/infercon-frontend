@@ -3,8 +3,6 @@ import { Router } from '@angular/router';
 import {
   MatDialog,
 } from '@angular/material/dialog';
-import {MatButtonModule} from '@angular/material/button';
-import { DialogComponent } from '../../components/dialog/dialog.component';
 import { AddBlogComponent } from '../add-blog/add-blog.component';
 
 export interface DialogData {

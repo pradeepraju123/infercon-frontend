@@ -44,6 +44,10 @@
     border: none;
     
 }
+.copyright_sect a {
+    text-decoration: None;
+    color: white;
+}
 
 @media (max-width: 980px) {
     .copyright_sect {
