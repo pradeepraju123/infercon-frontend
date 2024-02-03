@@ -64,19 +64,19 @@
                 <a class="nav-link" routerLink="dashboard">Dashboard</a>
               </li>
               
-              <li class="nav-item">
+              <li class="nav-item" *ngIf="getUserType() === 'admin'">
                 <a class="nav-link" routerLink="service-admin">Service</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item" *ngIf="getUserType() === 'admin'">
                 <a class="nav-link" routerLink="training-admin">Training</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item" *ngIf="getUserType() === 'admin'">
                 <a class="nav-link" routerLink="app-contact-admin">Contact</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item " *ngIf="getUserType() === 'staff'">
                 <a class="nav-link" routerLink="app-blog-admin">Blog</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item" *ngIf="getUserType() === 'staff'">
                 <a class="nav-link" routerLink="app-general-admin">General</a>
               </li>
               <li class="nav-item">

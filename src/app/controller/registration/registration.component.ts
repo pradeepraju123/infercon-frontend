@@ -5,6 +5,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { countries } from '../../model/country-data-store';
 import { courses } from '../../model/course-data-store';
+import { PhoneValidationService } from '../../services/phone-validation.service';
+import * as libphonenumber from 'libphonenumber-js';
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
@@ -24,7 +26,8 @@ export class RegistrationComponent implements OnInit {
   constructor(public registrationService: RegistrationService, 
     public uploadService: UploadService,
     private _snackBar: MatSnackBar,
-    private fb: FormBuilder,) {
+    private fb: FormBuilder,
+    private phoneValidation: PhoneValidationService) {
     this.registrationForm = this.fb.group({
       modeOfEducation: ['', Validators.required],
       firstname: ['', [Validators.required]],
@@ -71,10 +74,25 @@ export class RegistrationComponent implements OnInit {
         (fileName) => {
           console.log(fileName)
           const formData = this.registrationForm.value;
-          const combinedPhoneNumber = `+${this.registrationForm.value.country}${this.registrationForm.value.mobile}`;
-          formData.mobile = combinedPhoneNumber;
+          const combinedmobile = `${this.registrationForm.value.country}${this.registrationForm.value.mobile}`;
+          const combinedAdditionalmobile = `${this.registrationForm.value.country}${this.registrationForm.value.additionalMobile}`;
+          const combineWorkdmobile = `${this.registrationForm.value.country}${this.registrationForm.value.workMobile}`;
+          formData.mobile = combinedmobile;
+          formData.additionalMobile = combinedAdditionalmobile;
+          formData.workMobile = combineWorkdmobile;
+          const countryCode = this.getCodeFromDialCode(this.registrationForm.value.country);
           formData.document = fileName; // Update the 'document' property in formData with the filename
-          this.createRegister(formData); // Proceed to update the registration with form data
+          if (countryCode) {
+            const isValid = this.phoneValidation.validatePhoneNumber(countryCode, combinedmobile);
+            if (isValid) {
+              this.createRegister(formData);
+             } // Proceed to update the registration with form data
+              else {
+                console.log('Invalid phone number.');
+                this.openSnackBar('Invalid phone number. Please enter a 10-digit phone number without including the country code.')
+                // Additional logic for invalid phone number
+              }
+            }
         },
         (error) => {
           // Handle the case where image upload fails
@@ -89,8 +107,18 @@ export class RegistrationComponent implements OnInit {
       formData.mobile = combinedmobile;
       formData.additionalMobile = combinedAdditionalmobile;
       formData.workMobile = combineWorkdmobile;
-
+      const countryCode = this.getCodeFromDialCode(this.registrationForm.value.country);
+      if (countryCode) {
+        const isValid = this.phoneValidation.validatePhoneNumber(countryCode, combinedmobile);
+        if (isValid) {
       this.createRegister(formData); // Update the registration without an image
+    } // Proceed to update the registration with form data
+    else {
+      console.log('Invalid phone number.');
+      this.openSnackBar('Invalid phone number. Please enter a 10-digit phone number without including the country code.')
+      // Additional logic for invalid phone number
+    }
+  }
     }
   }
   
@@ -120,5 +148,10 @@ export class RegistrationComponent implements OnInit {
       horizontalPosition: this.horizontalPosition,
       verticalPosition: this.verticalPosition,
     });
+  }
+  getCodeFromDialCode(dialCode: string): libphonenumber.CountryCode | undefined {
+    const country = this.countries.find((c: { dial_code: string; }) => c.dial_code === dialCode);
+    console.log("country", country)
+    return country?.code as libphonenumber.CountryCode;
   }
 }

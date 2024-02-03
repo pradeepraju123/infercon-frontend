@@ -38,6 +38,7 @@ const routes: Routes = [
   { path: 'services', component: ServicesComponent },
   { path: 'contact', component: ContactComponent },
   {path:'training',component:TrainingComponent},
+  { path: 'registration', component: RegistrationComponent},
   {path:'app-terms-conditions',component:TermsConditionsComponent},
   {path:'app-privacy-policy',component:PrivacyPolicyComponent},
   {path:'login',component:LoginComponent},

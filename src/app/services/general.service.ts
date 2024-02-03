@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators'; 
+import { AuthService } from './auth.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -10,7 +11,8 @@ export class GeneralService {
   private apiUrl = 'https://api.inferconautomation.com/api/v1/general-data';
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private authService : AuthService
   ) {}
   
 getAllGeneraldata(): Observable<any> {
@@ -24,8 +26,9 @@ getGeneraldata(_id: string): Observable<any> {
     }
 createGeneraldata(data: any): Observable<any> {
   const token = sessionStorage.getItem('authToken'); // Get the token from sessionStorage
-
-  if (token) {
+  const userType = this.authService.getUserTypeFromToken(token);
+  console.log("user type", userType)
+  if (token && userType === 'admin') {
   //   // Set the headers with the bearer token
   const headers = new HttpHeaders({
     'Authorization': 'Bearer ' + token // Include the token in the request headers

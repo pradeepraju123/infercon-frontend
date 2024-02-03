@@ -67,8 +67,9 @@ export class AuthService {
     // Parse the token and extract the userType
     // Replace this with your actual token decoding logic
     if (token) {
-      const decodedToken = JSON.parse(atob(token.split('.')[1]));
-      return decodedToken.userType || null;
+      const payload = this.decodeJwt(token);
+      console.log("payload",payload)
+      return payload.userType || null;
     }
     return null;
   }

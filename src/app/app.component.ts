@@ -1,6 +1,7 @@
 import { Component,Renderer2, AfterViewInit, ElementRef } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { Router, NavigationEnd } from '@angular/router';
+import { AuthService } from './services/auth.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -19,13 +20,17 @@ export class AppComponent implements AfterViewInit {
   title = 'infercon-angular-dev';
   
   
-  constructor(private router: Router,private renderer: Renderer2, private el: ElementRef) {}
+  constructor(private router: Router,private renderer: Renderer2, private el: ElementRef, private authService : AuthService) {}
   ngAfterViewInit() {
     // Use Renderer2 to select the element and set focus
     const firstNavLink = this.el.nativeElement.querySelector('.nav-link');
     if (firstNavLink) {
       this.renderer.selectRootElement(firstNavLink).focus();
     }
+  }
+  getUserType(): string | null {
+    const token = sessionStorage.getItem('authToken'); // Assuming this function exists in your authService
+    return this.authService.getUserTypeFromToken(token);
   }
    // add a method to close the navbar toggle
    closeNavbar() {
