@@ -58,13 +58,11 @@
 
 /*Secondary navbar*/
 .secondary_navbar {
-    background-color: rgba(0, 0, 0, 0.786);
-    z-index: 2;
     position: relative;
 }
-.secondary_navbar .nav-item a {
+/* .secondary_navbar .nav-item a {
     color: white;
-}
+} */
 .secondary_navbar .contact_nav {
     background-color: #fff;
     padding : 0px 10px;
