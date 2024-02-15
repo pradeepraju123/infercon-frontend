@@ -16,3 +16,10 @@ height: 100%;
 .nav_section {
     display: none;
 }
+.login_sect {
+    margin-top: 30px;
+}
+.login_sect img {
+    border-radius: 30px;
+    box-shadow: 1px 1px 7px #000;
+}
