@@ -11,7 +11,7 @@ import {
 import { EditContactComponent } from '../../components/edit-contact/edit-contact.component';
 import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
-
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-contact-admin',
   templateUrl: './contact-admin.component.html',
@@ -34,10 +34,14 @@ export class ContactAdminComponent implements AfterViewInit {
   data : any
   userType: any
   userName : any
+  successMessage: string | null = null;
+  errorMessage: string | null = null;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'right';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
 
-  constructor(private contactServices: ContactService, private _liveAnnouncer: LiveAnnouncer, public dialog: MatDialog, private getUsername: UserService, private authService: AuthService) {}
+  constructor(private contactServices: ContactService, private _liveAnnouncer: LiveAnnouncer, public dialog: MatDialog,private _snackBar: MatSnackBar,  private getUsername: UserService, private authService: AuthService) {}
   getUser() {
     this.getUsername.getAllUsers().subscribe(
       (data: any) => {
@@ -187,6 +191,42 @@ export class ContactAdminComponent implements AfterViewInit {
       }
     );
   }
+
+  downloadContacts() {
+    const params = {
+      searchTerm: this.searchTerm,
+      start_date: this.formatDate(this.startDate),
+      end_date: this.formatDate(this.endDate),
+      published: this.published,
+      sort_by: this.sortBy,
+      assignee: this.getUserName()
+    };
+    this.contactServices.downloadContact(params).subscribe(
+      (data: any) => {
+          this.successMessage = 'Download Contact successfully.';
+          this.errorMessage = null;
+           // Create a temporary link element
+          const link = document.createElement('a');
+          link.href = data.url;
+          link.download = 'contacts.xlsx'; // Set the file name
+          document.body.appendChild(link);
+          
+          // Trigger the click event to start the download
+          link.click();
+
+          // Remove the link from the document
+          document.body.removeChild(link);
+
+          this.openSnackBar(this.successMessage)
+      },
+      (error) => {
+        console.error('Error fetching contact data:', error);
+        this.errorMessage = 'Error while download contact';
+        this.successMessage = null;
+        this.openSnackBar(this.errorMessage)
+      }
+    );
+  }
   // Function to handle page change event
   
   onPageChange(event: any) {
@@ -208,5 +248,12 @@ export class ContactAdminComponent implements AfterViewInit {
   }
   private formatDate(date: string): string {
     return new Date(date).toISOString();
+  }
+  openSnackBar(message: string) {
+    this._snackBar.open(message, 'Close', 
+    {
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    });
   }
 }
