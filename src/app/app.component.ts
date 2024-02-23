@@ -76,7 +76,8 @@ const routesWithoutDefault = [
   '/app-contact-admin',
   '/app-add-general',
   '/app-general-admin',
-  '/logout'
+  '/logout',
+  '/app-list-admin'
 ];
 const routesWithDefault = [
   '/home',

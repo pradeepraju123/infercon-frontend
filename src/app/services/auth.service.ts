@@ -68,9 +68,19 @@ export class AuthService {
     // Replace this with your actual token decoding logic
     if (token) {
       const payload = this.decodeJwt(token);
-      console.log("payload",payload)
       return payload.userType || null;
     }
     return null;
   }
+  getUserNameFromToken(token: string | null): string | null {
+    // Parse the token and extract the userType
+    // Replace this with your actual token decoding logic
+    if (token) {
+      const payload = this.decodeJwt(token);
+      return payload.userName || null;
+    }
+    return null;
+  }
 }
+
+

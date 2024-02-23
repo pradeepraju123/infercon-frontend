@@ -20,7 +20,7 @@ export class ContactService {
   getContactById(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`);
   }
-  getAllContact(params: any): Observable<any> {
+  getAllContact(data: any): Observable<any> {
     const token = sessionStorage.getItem('authToken'); // Get the token from sessionStorage
 
     if (token) {
@@ -28,7 +28,7 @@ export class ContactService {
       const headers = new HttpHeaders({
         'Authorization': 'Bearer ' + token // Include the token in the request headers
           });
-    return this.http.post(`${this.apiUrl}/get`, { params }, { headers });
+    return this.http.post(`${this.apiUrl}/get`, data, { headers });
   } else {
   //   // Handle the case where there's no token (e.g., user is not authenticated)
   //   // You can choose to return an error Observable or handle it in a way that suits your application.

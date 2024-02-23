@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { ContactService } from '../../services/contact.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -9,6 +9,8 @@ import {
   MatDialog,
 } from '@angular/material/dialog';
 import { EditContactComponent } from '../../components/edit-contact/edit-contact.component';
+import { UserService } from '../../services/user.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-contact-admin',
@@ -19,22 +21,58 @@ export class ContactAdminComponent implements AfterViewInit {
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   displayedColumns: string[] = ['fullname', 'phone', 'course', 'createdAt', 'leadSelection','assigneeSelection','Action'];
   leadOptions: string[] = ['New lead', 'Contacted', 'Followup', 'Not interested', 'Finalized'];
-  assigneeOptions: string[] = ['Pradeep raju', 'senthil', 'Srinivasan', 'sulochana', 'raja'];
+  assigneeOptions: string[] = [];
   contactId!: string
   filteredTrainings: any[] = []; // Add a property to store filtered data
   searchTerm: string = '';
-  startDate: any;
-  endDate: any;
+  startDate: any = null;
+  endDate: any = new Date();
   published: any;
   sortBy: any
-  pageSize: number = 10;
-  pageNum: number = 1;
+  pageSize = 10;
+  pageNum = 1;
   data : any
+  userType: any
+  userName : any
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private contactServices: ContactService, private _liveAnnouncer: LiveAnnouncer, public dialog: MatDialog) {}
-  
+  constructor(private contactServices: ContactService, private _liveAnnouncer: LiveAnnouncer, public dialog: MatDialog, private getUsername: UserService, private authService: AuthService) {}
+  getUser() {
+    this.getUsername.getAllUsers().subscribe(
+      (data: any) => {
+        this.assigneeOptions = data.data
+        .filter((user: any) => user.userType === "staff")
+        .map((user: any) => user.username);
+      },
+      (error) => {
+        console.error('Error while get user:', error);
+      }
+    );
+  }
+  getUserType(): string | null {
+    const token = sessionStorage.getItem('authToken'); // Assuming this function exists in your authService
+    this.userType = this.authService.getUserTypeFromToken(token)
+    if (this.userType === 'staff') {
+      this.displayedColumns = ['fullname', 'phone', 'course', 'createdAt', 'leadSelection','Action'];
+    } else if(this.userType === 'admin') {
+      this.displayedColumns = ['fullname', 'phone', 'course', 'createdAt', 'assigneeSelection','Action'];
+    }
+    return this.userType;
+  }
+  getUserName(): string | null {
+    const token = sessionStorage.getItem('authToken');
+    this.userType = this.authService.getUserTypeFromToken(token)
+    if (this.userType === 'staff'){
+      this.userName = this.authService.getUserNameFromToken(token)
+      return this.userName
+    }else{
+      return null
+    }
+    
+    
+  }
+
   openDialog(_id: String) {
     this.dialog.open(EditContactComponent, {
       data: {
@@ -107,44 +145,54 @@ export class ContactAdminComponent implements AfterViewInit {
 
   ngOnInit(): void {
     this.loadContacts();
+    this.getUser();
+    this.getUserType();
+    this.getUserName()
   }
   loadContacts() {
     const params = {
-      // Add any query parameters here
-    };
-  
-    this.contactServices.getAllContact(params).subscribe(
-      (data: any) => {
-        // Assuming your contact data has an 'id' property
-        this.dataSource = new MatTableDataSource(data.data.map((item: any) => ({ ...item, itemId: item.id })));
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-      },
-      (error) => {
-        console.error('Error fetching contact data:', error);
-      }
-    );
-  }
-  search(): void {
-    const param = {
       searchTerm: this.searchTerm,
       start_date: this.formatDate(this.startDate),
       end_date: this.formatDate(this.endDate),
       published: this.published,
       sort_by: this.sortBy,
       page_size: this.pageSize,
-      page_num: this.pageNum
+      page_num: this.pageNum,
+      assignee: this.getUserName()
     };
+    this.contactServices.getAllContact(params).subscribe(
+      (data: any) => {
+        if (data && data.data && data.data.length > 0) {
+          // Assuming your contact data has an 'id' property
+          
+          this.dataSource = new MatTableDataSource(data.data.map((item: any) => ({ ...item, itemId: item.id })));
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
   
-    this.contactServices.getAllContact(param).subscribe(
-      (responseData: any) => {
-        this.filteredTrainings = responseData.data; // Assuming 'data' is the property containing the results
+          // Check if there are more pages available
+          const totalItems = data.totalItems; // Assuming your API response contains the total number of items
+          const totalPages = Math.ceil(totalItems / this.pageSize);
+          
+          if (this.pageNum < totalPages - 1) {
+            // Increment page number if there are more pages available
+            this.pageNum++;
+            this.loadContacts(); // Fetch the next page
+          }
+        } else {
+          console.log('No more data available.');
+        }
       },
-      error => {
-        console.error('Error:', error);
-        // Handle error if needed
+      (error) => {
+        console.error('Error fetching contact data:', error);
       }
     );
+  }
+  // Function to handle page change event
+  
+  onPageChange(event: any) {
+    this.pageSize = event.pageSize;
+    this.pageNum = event.pageNum;
+    this.loadContacts(); // Call your search function to fetch data
   }
   /** Announce the change in sort state for assistive technology. */
   announceSortChange(sortState: Sort) {

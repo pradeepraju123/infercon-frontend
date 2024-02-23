@@ -1,0 +1,54 @@
+<h1 mat-dialog-title>Edit User</h1>
+<form [formGroup]="userForm" (submit)="onSubmit()"><mat-dialog-content class="mat-typography">
+<section class="edit_section">
+    <div class="container new_container">
+      <div class="row">
+        <div class="col-lg-6">
+              <div class="form-group">
+                <label for="title">Name</label>
+                <input type="text" id="name" formControlName="name" class="form-control">
+              </div>
+              <div class="form-group published_bool">
+                <label for="active">Published</label>
+                <div class="custom-switch">
+                    <div class="switch-toggle" [ngClass]="{'green': userForm.get('active')?.value, 'blue': !userForm.get('active')?.value}" [@toggleAnimation]="userForm.get('active')?.value" (click)="toggleSwitch()">
+                      <input type="checkbox" class="custom-control-input" formControlName="active" style="display: none;">
+                      <span class="toggle-handle"></span>
+                    </div>
+                  </div>          
+              </div>            
+        </div>
+        <div class="col-lg-6">
+            <div class="form-group">
+                <label for="title">Email</label>
+                <input type="text" id="email" formControlName="email" class="form-control">
+              </div>
+        </div>
+        <div class="col-lg-6">
+          
+              <div class="form-group">
+                <label for="title">User Name</label>
+                <input type="text" id="username" formControlName="username" class="form-control">
+              </div>
+              <div class="form-group" *ngIf="contentLoaded == true">
+                <label for="title">Password</label>
+                <input type="text" id="password" formControlName="password" class="form-control">
+              </div>
+              
+        </div>
+        <div class="col-lg-6">
+            <div class="form-group">
+                <label for="title">User Type</label>
+                <input type="text" id="userType" formControlName="userType" class="form-control">
+              </div>
+        </div>
+       
+      </div>
+    </div>
+  </section>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial type="submit">Submit</button>
+</mat-dialog-actions>
+</form>

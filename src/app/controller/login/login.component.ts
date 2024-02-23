@@ -29,7 +29,7 @@ export class LoginComponent {
   
         // Check user type before navigating to the dashboard
         const userType = this.authService.getUserTypeFromToken(token);
-        if (userType === 'admin') {
+        if (userType === 'admin' || userType === 'staff' ) {
           this.router.navigate(['dashboard']);
             this.successMessage = 'Login successfully';
             this.errorMessage = null;

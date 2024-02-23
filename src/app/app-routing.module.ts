@@ -29,6 +29,7 @@ import { EditGeneralComponent } from './controller/edit-general/edit-general.com
 import { TermsConditionsComponent } from './controller/terms-conditions/terms-conditions.component';
 import { PrivacyPolicyComponent } from './controller/privacy-policy/privacy-policy.component';
 import { LogoutComponent } from './controller/logout/logout.component';
+import { ListAdminComponent } from './controller/list-admin/list-admin.component';
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'blog', component: BlogComponent },
@@ -57,6 +58,7 @@ const routes: Routes = [
   {path: 'app-edit-blog/:id', component: EditBlogComponent, canActivate: [authGuard]},
   {path: 'app-edit-services/:id', component: EditServicesComponent, canActivate: [authGuard]},
   {path: 'app-contact-admin', component: ContactAdminComponent, canActivate: [authGuard]},
+  {path: 'app-list-admin', component: ListAdminComponent, canActivate: [authGuard]},
   { path: '**', redirectTo: 'home' },
   
  

@@ -73,6 +73,8 @@ import { GeneralAdminComponent } from './controller/general-admin/general-admin.
 import { PrivacyPolicyComponent } from './controller/privacy-policy/privacy-policy.component';
 import { TermsConditionsComponent } from './controller/terms-conditions/terms-conditions.component';
 import { LogoutComponent } from './controller/logout/logout.component';
+import { AddAdminComponent } from './controller/add-admin/add-admin.component';
+import { ListAdminComponent } from './controller/list-admin/list-admin.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -116,7 +118,9 @@ import { LogoutComponent } from './controller/logout/logout.component';
     GeneralAdminComponent,
     PrivacyPolicyComponent,
     TermsConditionsComponent,
-    LogoutComponent
+    LogoutComponent,
+    AddAdminComponent,
+    ListAdminComponent
   ],
   imports: [
     MatDividerModule,
