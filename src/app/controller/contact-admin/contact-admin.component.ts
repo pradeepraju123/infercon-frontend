@@ -3,7 +3,7 @@ import { ContactService } from '../../services/contact.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import {LiveAnnouncer} from '@angular/cdk/a11y';
-
+import {SelectionModel} from '@angular/cdk/collections';
 import { MatSort, Sort } from '@angular/material/sort';
 import {
   MatDialog,
@@ -34,13 +34,15 @@ export class ContactAdminComponent implements AfterViewInit {
   data : any
   userType: any
   userName : any
+  selected_ids : any
+  selectedAssignee : any
   successMessage: string | null = null;
   errorMessage: string | null = null;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   horizontalPosition: MatSnackBarHorizontalPosition = 'right';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
-
+  selection = new SelectionModel<any>(true, []);
   constructor(private contactServices: ContactService, private _liveAnnouncer: LiveAnnouncer, public dialog: MatDialog,private _snackBar: MatSnackBar,  private getUsername: UserService, private authService: AuthService) {}
   getUser() {
     this.getUsername.getAllUsers().subscribe(
@@ -58,9 +60,9 @@ export class ContactAdminComponent implements AfterViewInit {
     const token = sessionStorage.getItem('authToken'); // Assuming this function exists in your authService
     this.userType = this.authService.getUserTypeFromToken(token)
     if (this.userType === 'staff') {
-      this.displayedColumns = ['fullname', 'phone', 'course', 'createdAt', 'leadSelection','Action'];
+      this.displayedColumns = ['select', 'fullname', 'phone', 'course', 'createdAt', 'leadSelection','Action'];
     } else if(this.userType === 'admin') {
-      this.displayedColumns = ['fullname', 'phone', 'course', 'createdAt', 'assigneeSelection','Action'];
+      this.displayedColumns = ['select', 'fullname', 'phone', 'course', 'createdAt', 'assigneeSelection','Action'];
     }
     return this.userType;
   }
@@ -132,7 +134,6 @@ export class ContactAdminComponent implements AfterViewInit {
           }
         );
         }
-  
     // Find the index of the current row in the dataSource array
     const rowIndex = this.dataSource.data.findIndex(item => item.itemId === itemId);
   
@@ -170,18 +171,9 @@ export class ContactAdminComponent implements AfterViewInit {
           // Assuming your contact data has an 'id' property
           
           this.dataSource = new MatTableDataSource(data.data.map((item: any) => ({ ...item, itemId: item.id })));
+          // Change SelectionModel to match the type of your data source
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
-  
-          // Check if there are more pages available
-          const totalItems = data.totalItems; // Assuming your API response contains the total number of items
-          const totalPages = Math.ceil(totalItems / this.pageSize);
-          
-          if (this.pageNum < totalPages - 1) {
-            // Increment page number if there are more pages available
-            this.pageNum++;
-            this.loadContacts(); // Fetch the next page
-          }
         } else {
           console.log('No more data available.');
         }
@@ -191,7 +183,64 @@ export class ContactAdminComponent implements AfterViewInit {
       }
     );
   }
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
 
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected() ?
+        this.selection.clear() :
+        this.dataSource.data.forEach(row => this.selection.select(row));
+        this.selection.selected.forEach(s => console.log(s._id));
+  }
+
+  async bulkAction() {
+    if (this.selectedAssignee) {
+      // Get the selected_ids asynchronously
+      this.selected_ids = await this.getSelectedIds();
+  
+      console.log(this.selected_ids);
+  
+      if (this.selected_ids && this.selected_ids.length > 0) {
+        const updateData = { assignee: this.selectedAssignee };
+  
+        // Call the updateContact method with the contactId and updateData
+        this.contactServices.updateContactBulk(this.selected_ids, updateData)
+          .subscribe(
+            response => {
+              console.log('Contact updated successfully:', response);
+              this.contactServices.sendNotification(this.selected_ids, this.selectedAssignee).subscribe(
+                response => {
+                  console.log('Send Notification successfully:', response);
+                },
+                error => {
+                  console.error('Error while send notification:', error);
+                });
+              this.loadContacts()
+            },
+            error => {
+              console.error('Error updating contact:', error);
+            }
+          );
+      }
+    }
+  }
+
+    private async getSelectedIds(): Promise<string[]> {
+      return new Promise<string[]>((resolve, reject) => {
+        const selectedIds = this.selection.selected.map(s => s._id);
+        if (selectedIds && selectedIds.length > 0) {
+          resolve(selectedIds);
+        } else {
+          reject('No selected IDs found.');
+        }
+      });
+    }
+  
   downloadContacts() {
     const params = {
       searchTerm: this.searchTerm,

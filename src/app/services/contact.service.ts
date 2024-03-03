@@ -51,6 +51,36 @@ export class ContactService {
      return throwError('No authentication token found'); // For example, using throwError from RxJS
     }
   }
+  updateContactBulk(ids: string[], updateData: any) {
+    const token = sessionStorage.getItem('authToken'); // Get the token from sessionStorage
+
+    if (token) {
+      //   // Set the headers with the bearer token
+      const headers = new HttpHeaders({
+        'Authorization': 'Bearer ' + token // Include the token in the request headers
+          });
+    return this.http.post<any>(`${this.apiUrl}/action/update-many`, { ids, updateData }, { headers });
+        } else {
+          //   // Handle the case where there's no token (e.g., user is not authenticated)
+          //   // You can choose to return an error Observable or handle it in a way that suits your application.
+             return throwError('No authentication token found'); // For example, using throwError from RxJS
+            }
+  }
+  sendNotification(contact_ids: string[], fullname: any) {
+    const token = sessionStorage.getItem('authToken'); // Get the token from sessionStorage
+
+    if (token) {
+      //   // Set the headers with the bearer token
+      const headers = new HttpHeaders({
+        'Authorization': 'Bearer ' + token // Include the token in the request headers
+          });
+    return this.http.post<any>(`${this.apiUrl}/action/send-notification`, { contact_ids, fullname }, { headers });
+        } else {
+          //   // Handle the case where there's no token (e.g., user is not authenticated)
+          //   // You can choose to return an error Observable or handle it in a way that suits your application.
+             return throwError('No authentication token found'); // For example, using throwError from RxJS
+            }
+  }
   updateContact(_id: string, data: any): Observable<any> {
     const token = sessionStorage.getItem('authToken'); // Get the token from sessionStorage
   

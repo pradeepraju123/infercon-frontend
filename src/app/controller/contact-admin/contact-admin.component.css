@@ -15,6 +15,7 @@ table {
   padding: 8px;
   border-radius: 5px;
   border: 2px solid #000;
+  width: 150px !important;
 }
 .search button:hover {
   background: rgb(58, 167, 244);
