@@ -20,6 +20,7 @@ export class TrainingComponent implements OnInit {
     this.trainingService.getAllTraining(this.data).subscribe((data: any) => {
       this.trainings = data.data;
       this.contentLoaded = true;
+      window.scrollTo(0, 0); // Scroll to the top of the page
     });
   }
   

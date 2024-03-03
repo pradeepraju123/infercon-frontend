@@ -22,6 +22,7 @@ export class BlogDetailsComponent implements OnInit {
           (blogdata) => {
             this.blogdata = blogdata;
             this.contentLoaded = true;
+            window.scrollTo(0, 0);
           },
           (error) => {
             // Handle the case where fetching the training data fails

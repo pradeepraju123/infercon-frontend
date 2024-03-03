@@ -32,6 +32,7 @@ export class TrainingDetailComponent {
               this.training.meta_description,
               this.training.keywords
             );
+            window.scrollTo(0, 0); // Scroll to the top of the page
           },
           (error) => {
             console.error('Error fetching training details:', error);
