@@ -81,7 +81,7 @@
             </div>
             <div class="blog_card_content">
               <h5>{{item.title}}</h5>
-              <p>{{item.short_description}}</p>
+              <p [innerHTML]="item.short_description"></p>
             
             </div>
             <div class="row blog_foot">
