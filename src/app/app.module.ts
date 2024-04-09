@@ -75,6 +75,7 @@ import { TermsConditionsComponent } from './controller/terms-conditions/terms-co
 import { LogoutComponent } from './controller/logout/logout.component';
 import { AddAdminComponent } from './controller/add-admin/add-admin.component';
 import { ListAdminComponent } from './controller/list-admin/list-admin.component';
+import { LayoutComponent } from './controller/layout/layout.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -120,7 +121,8 @@ import { ListAdminComponent } from './controller/list-admin/list-admin.component
     TermsConditionsComponent,
     LogoutComponent,
     AddAdminComponent,
-    ListAdminComponent
+    ListAdminComponent,
+    LayoutComponent
   ],
   imports: [
     MatDividerModule,
