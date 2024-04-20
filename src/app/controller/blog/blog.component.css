@@ -9,10 +9,10 @@
     margin-top: 15px;
     padding: 30px;
     background-color: #fff;
-    border-radius: 25px;
+    /* border-radius: 25px; */
 }
 .new_container {
-    max-width: 1040px;
+    max-width: 1250px;
 }
 .banner_section h5 {
     background-color: #FFCC4A;
@@ -32,20 +32,20 @@
     color: #000;
     border: none;
     padding: 13px;
-    border-radius: 20px;
+    /* border-radius: 25px; */
 }
 .blog_card button {
     background-color: #000;
     color: #fff;
     border: none;
     padding: 15px;
-    border-radius: 20px;
+    /* border-radius: 25px; */
     
 }
 .blog_card img {
     width: 100%;
     padding: 5px;
-    border-radius: 20px;
+    /* border-radius: 25px; */
    
 }
 .blog_foot img {
@@ -95,7 +95,7 @@
         margin: 250px 70px;
         padding: 30px 20px !important;
         background: rgba(240, 237, 237, 0.715);
-        border-radius: 25px;
+        /* border-radius: 25px; */
     }
 
 }

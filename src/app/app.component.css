@@ -1,5 +1,5 @@
 .new_container {
-    max-width: 1100px;
+    max-width: 1250px;
 }
 .navbar_brand_new {
     width: 65px;
@@ -14,17 +14,16 @@
 }
 /*navbar sector*/
 .nav_section {
-    background-color: rgba(0, 0, 0, 0.786);
+    background-color: white;
     z-index: 2;
     position: relative;
 }
 .nav_section .nav-item a {
-    color: white;
+    color: #000;
 }
 .nav_section .contact_nav {
     background-color: #fff;
-    padding : 0px 10px;
-    border-radius: 25px;
+    padding : 0px 5px;
 
 }
 .nav_section .contact_nav a {
@@ -33,13 +32,16 @@
 .nav_section .contact_nav:nth-child(2) {
     background-color: red;
     padding : 0px 10px;
-    border-radius: 25px;
     margin-left: 10px;
 
 }
 .nav_section .contact_nav:nth-child(2) a {
     color: #fff;
-    padding: 20px;
+    padding: 10px;
+
+}
+.nav_section .contact_nav:nth-child(2) a img {
+    width: 20px;
 
 }
 /* .nav_section .navbar {
@@ -50,7 +52,7 @@
 }
 .nav_section .navbar-brand img {
     width: 100%;
-    max-width: 120px;
+    max-width: 70px;
 }
 .nav_section .navbar-toggler {
     background: #d4d7935c

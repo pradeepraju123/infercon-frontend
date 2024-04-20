@@ -23,7 +23,7 @@
     width: 30px; /* Half the width of the switch */
     height: 30px; /* Should match the height of the switch */
     background-color: #3498db; /* Change the background color as needed */
-    border-radius: 15px; /* Half of the height to make it circular */
+    /* border-radius: 25px; */ /* Half of the height to make it circular */
     transition: all 0.3s; /* Add a smooth transition */
   }
   

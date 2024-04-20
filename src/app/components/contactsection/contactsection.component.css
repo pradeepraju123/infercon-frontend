@@ -10,18 +10,18 @@
 }
 .form_control input[type=text], .form_control input[type=email], .form_control textarea {
     padding: 10px;
-    border-radius: 20px;
+    /* border-radius: 25px; */
 }
 .form_contact button {
     background-color: #000;
     color: #fff;
     border: none;
     padding: 20px;
-    border-radius: 20px;
+    /* border-radius: 25px; */
 
 }
 .new_container {
-    max-width: 1040px;
+    max-width: 1250px;
 }
 .contact_left h5 {
     background-color: #FFCC4A;
@@ -32,7 +32,7 @@
 }
 .form_contact mat-form-field {
     width: 100%;
-   border-radius: 20px;
+   /* border-radius: 25px; */
 }
 
 .success-snackbar {

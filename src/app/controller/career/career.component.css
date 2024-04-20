@@ -8,10 +8,10 @@
     margin-top: 15px;
     padding: 30px;
     background-color: #fff;
-    border-radius: 25px;
+    /* border-radius: 25px; */
 }
 .new_container {
-    max-width: 1040px;
+    max-width: 1250px;
 }
 .banner_section h5 {
     background-color: #FFCC4A;
@@ -33,7 +33,7 @@
 }
 .form_control input[type=text], .form_control input[type=email], .form_control textarea {
     padding: 10px;
-    border-radius: 20px;
+    /* border-radius: 25px; */
 }
 input[type="file"] {
     position: relative;
@@ -94,14 +94,14 @@ input[type="file"] {
     color: #fff;
     border: none;
     padding: 20px;
-    border-radius: 20px;
+    /* border-radius: 25px; */
 
 }
 .careers_cont {
     padding: 20px 0px;
 }
 .new_container {
-    max-width: 1040px;
+    max-width: 1250px;
 }
 .careers_heading {
     padding: 15px;

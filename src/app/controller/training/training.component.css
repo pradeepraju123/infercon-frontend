@@ -10,10 +10,10 @@
     margin-top: 15px;
     padding: 30px;
     background-color: #fff;
-    border-radius: 25px;
+    /* border-radius: 25px; */
 }
 .new_container {
-    max-width: 1040px;
+    max-width: 1250px;
 }
 .training_cont img {
     width: 100%;
@@ -39,7 +39,7 @@
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0);
-  border-radius: 20px;
+  /* border-radius: 25px; */
   transition: background-color 0.4s ease-in-out;
 }
 
@@ -73,7 +73,7 @@
 .list_images img {
   height: 250px;
   object-fit: cover;
-  border-radius: 15px;
+  /* border-radius: 25px; */
 }
 .list_image_content {
   padding: 20px 10px;
@@ -87,7 +87,8 @@
   width: 100%;
   background: None;
   border: 2px solid #777;
-  color: #000
+  color: #000;
+  border-radius: 0 !important;
 }
 
 .button_sect button:hover {

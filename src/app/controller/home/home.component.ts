@@ -25,6 +25,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
   showText: boolean = false;
   trainings: any[]=[]; // Define a property to store the fetched data
   data = {}
+  filters: { value: string, name: string }[] = [
+    { value: '*', name: 'ALL' },
+    { value: '.html', name: 'PLC' },
+    { value: '.photoshop', name: 'SCADA' },
+    { value: '.wordpress', name: 'AUTOMATION' },
+    { value: '.mobile', name: 'DCS' }
+  ];
+  selectedFilter: string = '*';
   constructor(private blogService: BlogService, private trainingService: TrainingService, public dialog: MatDialog) {}
 
   ngOnInit(): void {
@@ -64,5 +72,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
   openDialog() {
     this.dialog.open(BookingComponent);
+  }
+  filterGallery(event: Event, filter: string) {
+    event.preventDefault();
+    this.selectedFilter = filter;
   }
   }
