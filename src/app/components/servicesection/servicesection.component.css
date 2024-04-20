@@ -39,9 +39,9 @@
     width: 70px;
     object-fit: cover;
 }
-@media (max-width: 560px){
+@media (max-width: 660px){
     .service_card {
-        height: 28vh !important;
+        height: auto !important;
     }
 
 }
