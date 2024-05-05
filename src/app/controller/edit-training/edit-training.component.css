@@ -140,21 +140,3 @@ input[type="file"] {
   height: 90px;
   object-fit: cover;
 }
-.title_field input[type=text],
-.title_field textarea {
-  padding: 15px;
-  border: none;
-  border-radius: 0;
-  border-bottom: 1px solid rgba(25, 24, 24, 0.347);
-  transition: border-bottom 0.3s ease, transform 0.3s ease;
-}
-
-.title_field input[type=text]:focus,
-.title_field textarea:focus {
-  /* Add styles for when the input is in focus (clicked) */
-  box-shadow: none;
-  border: none;
-  border-radius: 0;
-  border-bottom: 1px solid rgb(25, 24, 24);
-  transform: scale(1.02); /* Zoom out effect */
-}

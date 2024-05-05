@@ -13,10 +13,6 @@
 .new_container {
     max-width: 1250px;
 }
-.training_cont img {
-    width: 100%;
-    
-}
 .training_cont{
   padding: 20px;
 }
@@ -24,19 +20,70 @@
 .training_details_sect {
     padding: 30px;
 }
-.training_img {
-    width: 100%;
-    height: 100%;
-}
 .training_img img {
-    padding: 20px 0px;
     /* border-radius: 25px; */
-    width: 100%;
-    height: 100%;
+    height: 300px;
     object-fit: cover;
+    width: 100%;
 }
 
 .event-card {
     margin-top: 10px;
 }
 
+.training_title h4 {
+    font-weight: 500;
+    line-height: 2;
+}
+
+/* .training_details_sect h2 {
+	color: #000;
+	font-size: 26px;
+	font-weight: 300;
+	text-align: center;
+	position: relative;
+	margin: 30px 0 60px;
+} */
+
+/* .training_details_sect h2::after {
+	content: "";
+	width: 100px;
+	position: absolute;
+	margin: 0 auto;
+	height: 4px;
+	border-radius: 1px;
+	background: #1abc9c;
+	left: 0;
+	right: 0;
+	bottom: -20px;
+} */
+.training_content p {
+    line-height: 2;
+}
+
+.system_list {
+    padding: 10px;
+    box-shadow: 0px 1px 5px 3px #e9e7e7;
+}
+
+.training_details_list {
+    padding: 20px;
+    background-color: #e9e7e7;
+    height: 207px;
+    margin-bottom: 20px;
+}
+
+.training_details_list_new {
+padding: 20px;
+background-color: #575ab9;
+display: flex;
+justify-content: center;
+align-items: center;
+height: 207px;
+margin-bottom: 20px;
+
+}
+.training_details_list_new h2 {
+    font-weight: 900;
+    color: #fff;
+}

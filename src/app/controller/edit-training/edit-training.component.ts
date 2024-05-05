@@ -4,12 +4,13 @@ import { TrainingService } from '../../services/training.service';
 import { UploadService } from '../../services/upload.service';
 import { Location } from '@angular/common';
 import { trigger, state, style, animate, transition } from '@angular/animations';
-import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl, FormControl } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl, FormControl, Form } from '@angular/forms';
 import { Editor, Toolbar } from 'ngx-editor';
 import {
   MAT_DIALOG_DATA, MatDialogRef,
 } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { courses_type, sub_type } from '../../model/course-data-store';
 
 @Component({
   selector: 'app-edit-training',
@@ -47,6 +48,8 @@ toolbar: Toolbar = [
   ['text_color', 'background_color'],
   ['align_left', 'align_center', 'align_right', 'align_justify'],
 ];
+public courses_type:any = courses_type
+public sub_type: any = sub_type
 
   constructor(
     private route: ActivatedRoute,
@@ -128,6 +131,7 @@ toolbar: Toolbar = [
   updateArrays(formGroup: FormGroup) {
     formGroup.controls['event_details'].setValue(this.trainingForm.value.event_details);
     formGroup.controls['systems_used'].setValue(this.trainingForm.value.systems_used);
+    formGroup.controls['additional_details'].setValue(this.trainingForm.value.additional_details);
   }
 
   createTraining(trainingFormGroup: FormGroup) {
@@ -168,12 +172,15 @@ toolbar: Toolbar = [
       meta_title: [this.trainingForm.value.meta_title, Validators.required],
       keywords: [this.trainingForm.value.keywords, Validators.required],
       meta_description: [this.trainingForm.value.meta_description, Validators.required],
+      courses_type: [this.trainingForm.value.courses_type, Validators.required],
+      sub_type: [this.trainingForm.value.sub_type],
       short_description: [this.trainingForm.value.short_description],
       description: [this.trainingForm.value.description],
       published: [this.trainingForm.value.published],
       slug : [this.trainingForm.value.slug],
       event_details: [this.trainingForm.value.event_details],
       systems_used: [this.trainingForm.value.systems_used],
+      additional_details: [this.trainingForm.value.additional_details]
     };
   
     // Check if image exists and conditionally add the image control
@@ -214,6 +221,8 @@ toolbar: Toolbar = [
       meta_title: ['', Validators.required],
       keywords: ['', Validators.required],
       meta_description: ['', Validators.required],
+      courses_type: ['', Validators.required],
+      sub_type: [''],
       short_description: [''],
       description: [''],
       published: [false],
@@ -221,6 +230,7 @@ toolbar: Toolbar = [
       slug : ['', Validators.required],
       event_details: this.fb.array([]),
       systems_used: this.fb.array([]),
+      additional_details: this.fb.array([])
     });
   }
   
@@ -230,6 +240,10 @@ toolbar: Toolbar = [
 
   get systemsUsed(): FormArray {
     return this.trainingForm.get('systems_used') as FormArray;
+  }
+
+  get additionalDetails(): FormArray {
+    return this.trainingForm.get('additional_details') as FormArray;
   }
 
   addEventDetail() {
@@ -254,6 +268,19 @@ toolbar: Toolbar = [
     this.systemsUsed.removeAt(index);
   }
 
+  addAdditionalDetails() {
+    this.additionalDetails.push(this.fb.group({
+      super_title : [''],
+      title: [''],
+      detail: [''],
+      type_detail: ['']
+    }))
+  }
+
+  removeAdditionalDetails(index: number) {
+    this.additionalDetails.removeAt(index)
+  }
+
   goBack(): void {
     this.location.back();
   }
@@ -268,6 +295,8 @@ toolbar: Toolbar = [
           keywords: trainingDetails.keywords,
           meta_description: trainingDetails.meta_description,
           short_description: trainingDetails.short_description,
+          courses_type: trainingDetails.courses_type,
+          sub_type: trainingDetails.sub_type,
           description: trainingDetails.description,
           published: trainingDetails.published,
           image: trainingDetails.image,
@@ -288,6 +317,23 @@ toolbar: Toolbar = [
           this.eventDetails.at(lastIndex).patchValue({
             title: event.title,
             detail: event.detail,
+          });
+        }
+
+
+        // Populate the dynamic form controls for event_details
+        this.additionalDetails.clear(); // Clear existing form controls
+  
+        for (const add_detail of trainingDetails.additional_details) {
+          this.addAdditionalDetails(); // Add a new form control
+          const lastIndex = this.additionalDetails.length - 1;
+  
+          // Patch the values for the last added form control
+          this.additionalDetails.at(lastIndex).patchValue({
+            super_title: add_detail.super_title,
+            title: add_detail.title,
+            detail: add_detail.detail,
+            type_detail: add_detail.type_detail
           });
         }
   

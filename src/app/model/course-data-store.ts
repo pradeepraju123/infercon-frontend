@@ -1,4 +1,4 @@
-import { Courses } from "./course.model";
+import { CourseType, Courses, SubType } from "./course.model";
 
 export var courses: Courses [] = [
     {value: 'Certified Automation Engineering', label: 'Certified Automation Engineering' },
@@ -12,3 +12,16 @@ export var courses: Courses [] = [
 
     // Add more courses as needed
   ];
+
+  export var courses_type: CourseType [] = [
+    {value: 'corporate_training', label: 'Corporate Training'},
+    {value: 'individual_training', label: 'Individual Training'},
+    {value: 'academic_training', label: 'Academic Training'},
+  ]
+
+
+  export var sub_type: SubType [] = [
+    {value: 'specialized_training', label: 'Specialized Training'},
+    {value: 'control_system_training', label: 'Control System Training'},
+    {value: 'combined_training', label: 'Combined Training'},
+  ]

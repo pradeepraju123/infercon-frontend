@@ -6,6 +6,10 @@ import { Location } from '@angular/common';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { FormArray, FormBuilder, FormGroup, Validators,AbstractControl } from '@angular/forms';
 import { Editor, Toolbar } from 'ngx-editor';
+import { courses_type, sub_type } from '../../model/course-data-store';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { MatDialogRef } from '@angular/material/dialog';
+import { TrainingcardViewComponent } from '../../components/training-cardview/training-cardview.component';
 @Component({
   selector: 'app-add-training',
   templateUrl: './add-training.component.html',
@@ -30,6 +34,8 @@ export class AddTrainingComponent implements OnInit, OnDestroy {
   imagePreview : any;
   trainingForm!: FormGroup;
   inputState = 'inactive';
+  horizontalPosition: MatSnackBarHorizontalPosition = 'right';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
   toolbar: Toolbar = [
     ['bold', 'italic'],
     ['underline', 'strike'],
@@ -40,6 +46,8 @@ export class AddTrainingComponent implements OnInit, OnDestroy {
     ['text_color', 'background_color'],
     ['align_left', 'align_center', 'align_right', 'align_justify'],
   ];
+  public courses_type:any = courses_type
+  public sub_type:any = sub_type
 
   onInputFocus() {
     this.inputState = 'active';
@@ -48,7 +56,10 @@ export class AddTrainingComponent implements OnInit, OnDestroy {
   onInputBlur() {
     this.inputState = 'inactive';
   }
-  constructor(private route: ActivatedRoute, private trainingService: TrainingService,  private uploadService : UploadService, private location : Location, private fb: FormBuilder) {}
+  constructor(private route: ActivatedRoute, private trainingService: TrainingService,  
+    private uploadService : UploadService, private _snackBar: MatSnackBar, 
+    private location : Location, private fb: FormBuilder,
+    private dialogRef: MatDialogRef<TrainingcardViewComponent>) {}
   // imageUrl: Observable<string>;
   fileEvent(event: any) {
     // Handle the file input change event
@@ -109,6 +120,7 @@ export class AddTrainingComponent implements OnInit, OnDestroy {
     // Update event_details and systems_used arrays in the new form group
     formGroup.controls['event_details'].setValue(this.trainingForm.value.event_details);
     formGroup.controls['systems_used'].setValue(this.trainingForm.value.systems_used);
+    formGroup.controls['additional_details'].setValue(this.trainingForm.value.additional_details);
   }
   
   createTraining(trainingFormGroup: FormGroup) {
@@ -117,10 +129,14 @@ export class AddTrainingComponent implements OnInit, OnDestroy {
         () => {
           this.successMessage = 'Training was created successfully.';
           this.errorMessage = null;
+          this.openSnackBar(this.successMessage)
+          this.dialogRef.close();
         },
         (error) => {
           this.errorMessage = 'Failed to create training.';
           this.successMessage = null;
+          this.openSnackBar(this.errorMessage)
+          this.dialogRef.close();
         }
       );
   }
@@ -135,15 +151,19 @@ export class AddTrainingComponent implements OnInit, OnDestroy {
   createTrainingFormGroup(): FormGroup {
     return this.fb.group({
       title: [this.trainingForm.value.title, Validators.required],
-      meta_title: [this.trainingForm.value.meta_title,, Validators.required],
-      keywords: [this.trainingForm.value.keywords,, Validators.required],
-      meta_description: [this.trainingForm.value.meta_description,, Validators.required],
-      short_description: [this.trainingForm.value.short_description],
+      meta_title: [this.trainingForm.value.meta_title, Validators.required],
+      keywords: [this.trainingForm.value.keywords, Validators.required],
+      meta_description: [this.trainingForm.value.meta_description, Validators.required],
+      short_description: [this.trainingForm.value.short_description, Validators.required],
+      courses_type: [this.trainingForm.value.courses_type, Validators.required],
+      sub_type: [this.trainingForm.value.sub_type],
       description: [this.trainingForm.value.description],
       published: [this.trainingForm.value.published],
       image: [''],
+      slug: [this.trainingForm.value.slug, Validators.required],
       event_details: [this.trainingForm.value.event_details],
       systems_used: [this.trainingForm.value.systems_used],
+      additional_details: [this.trainingForm.value.additional_details]
     });
   }
   
@@ -161,11 +181,15 @@ export class AddTrainingComponent implements OnInit, OnDestroy {
       keywords: ['', Validators.required],
       meta_description: ['', Validators.required],
       short_description: [''],
+      courses_type: ['', Validators.required],
+      sub_type: [''],
       description: [''],
       published: [false],
+      slug: ['',Validators.required],
       image: [''],
       event_details: this.fb.array([]),
       systems_used: this.fb.array([]),
+      additional_details: this.fb.array([])
     });
   }
   get eventDetails(): FormArray {
@@ -174,6 +198,10 @@ export class AddTrainingComponent implements OnInit, OnDestroy {
 
   get systemsUsed(): FormArray {
     return this.trainingForm.get('systems_used') as FormArray;
+  }
+
+  get additionalDetails(): FormArray {
+    return this.trainingForm.get('additional_details') as FormArray;
   }
 
   addEventDetail() {
@@ -198,10 +226,28 @@ export class AddTrainingComponent implements OnInit, OnDestroy {
     this.systemsUsed.removeAt(index);
   }
 
+  addAdditionalDetails() {
+    this.additionalDetails.push(this.fb.group({
+      super_title : [''],
+      title: [''],
+      detail: [''],
+      type_detail: ['']
+    }))
+  }
+
+  removeAdditionalDetails(index: number) {
+    this.additionalDetails.removeAt(index)
+  }
   goBack(): void {
     this.location.back();
   }
-
+  openSnackBar(message: string) {
+    this._snackBar.open(message, 'Close', 
+    {
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    });
+  }
   ngOnDestroy(): void {
     this.editor.destroy();
     this.neweditor.destroy();

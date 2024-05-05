@@ -53,7 +53,7 @@ export class AppComponent implements AfterViewInit {
   showNavbar(): boolean {
     // Check the current route to determine whether to show the navbar
     const currentRoute = this.router.url;
-    return routesWithDefault.includes(currentRoute) || currentRoute.startsWith('/app-blog-details/') || currentRoute.startsWith('/app-training-detail/');
+    return routesWithDefault.includes(currentRoute) || currentRoute.startsWith('/app-blog-details/') || currentRoute.startsWith('/app-training-detail/') || currentRoute.startsWith('/app-training-list');
   }
   showAlternateNavbar(): boolean {
     // Check the current route to determine whether to show the alternate navbar
@@ -89,5 +89,6 @@ const routesWithDefault = [
   '/testing',
   '/registration',  
   '/app-privacy-policy',
-  '/app-terms-conditions'
+  '/app-terms-conditions',
+  '/training-landing'
 ];

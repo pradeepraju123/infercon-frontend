@@ -30,6 +30,8 @@ import { TermsConditionsComponent } from './controller/terms-conditions/terms-co
 import { PrivacyPolicyComponent } from './controller/privacy-policy/privacy-policy.component';
 import { LogoutComponent } from './controller/logout/logout.component';
 import { ListAdminComponent } from './controller/list-admin/list-admin.component';
+import { TrainingLandingComponent } from './controller/training-landing/training-landing.component';
+import { TrainingListComponent } from './controller/training-list/training-list.component';
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'blog', component: BlogComponent },
@@ -41,6 +43,8 @@ const routes: Routes = [
   {path:'training',component:TrainingComponent},
   { path: 'registration', component: RegistrationComponent},
   {path:'app-terms-conditions',component:TermsConditionsComponent},
+  {path:'training-landing',component:TrainingLandingComponent},
+  {path:'app-training-list/:id',component:TrainingListComponent},
   {path:'app-privacy-policy',component:PrivacyPolicyComponent},
   {path:'login',component:LoginComponent},
   { path: 'logout', component: LogoutComponent },

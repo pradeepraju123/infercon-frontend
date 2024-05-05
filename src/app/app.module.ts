@@ -76,6 +76,8 @@ import { LogoutComponent } from './controller/logout/logout.component';
 import { AddAdminComponent } from './controller/add-admin/add-admin.component';
 import { ListAdminComponent } from './controller/list-admin/list-admin.component';
 import { LayoutComponent } from './controller/layout/layout.component';
+import { TrainingLandingComponent } from './controller/training-landing/training-landing.component';
+import { TrainingListComponent } from './controller/training-list/training-list.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -122,7 +124,9 @@ import { LayoutComponent } from './controller/layout/layout.component';
     LogoutComponent,
     AddAdminComponent,
     ListAdminComponent,
-    LayoutComponent
+    LayoutComponent,
+    TrainingLandingComponent,
+    TrainingListComponent
   ],
   imports: [
     MatDividerModule,

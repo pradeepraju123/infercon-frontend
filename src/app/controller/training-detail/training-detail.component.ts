@@ -12,22 +12,22 @@ import { ViewportScroller } from '@angular/common';
 })
 export class TrainingDetailComponent {
   training: any;
+  groupedDetails: { super_title: string, details: any[] }[] = []; // Initialize groupedDetails with a specific type
 
-  constructor(private route: ActivatedRoute, private trainingService: TrainingService, public metaService: MetaService,
-    private router: Router, private viewportScroller: ViewportScroller) {}
-
-  ngOnInit(): void {
-   
-    this.route.paramMap.subscribe((params) => {
+  constructor(
+    private route: ActivatedRoute,
+    private trainingService: TrainingService,
+    private metaService: MetaService
+  ) {
+    this.route.paramMap.subscribe(params => {
       const slug = params.get('id');
-      console.log('slug', slug)
       if (slug) {
-        console.log(slug)
         this.trainingService.getTrainingBySlug(slug).subscribe(
           (data) => {
-            this.training = data.data; // Assuming your API response has a 'data' property
-             // Update meta tags dynamically
-             this.metaService.updateMetaTags(
+            this.training = data.data;
+            this.groupedDetails = this.groupByTitle(this.training.additional_details);
+            // Update meta tags dynamically
+            this.metaService.updateMetaTags(
               this.training.meta_title,
               this.training.meta_description,
               this.training.keywords
@@ -40,12 +40,17 @@ export class TrainingDetailComponent {
         );
       }
     });
+  }
 
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        // Scroll to the top of the page
-        this.viewportScroller.scrollToPosition([0, 0]);
+  groupByTitle(details: any[]): { super_title: string, details: any[] }[] {
+    const groups: { [super_title: string]: any[] } = {}; // Specify the type of groups object
+    details.forEach(detail => {
+      const super_title = detail.super_title;
+      if (!groups[super_title]) {
+        groups[super_title] = [];
       }
+      groups[super_title].push(detail);
     });
+    return Object.keys(groups).map(super_title => ({ super_title, details: groups[super_title] }));
   }
 }

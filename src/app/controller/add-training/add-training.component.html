@@ -7,20 +7,28 @@
         <div class="col-sm-6">
           <!-- Title -->
           <div class="mb-3 title_field">
-            <label class="form-label">Title:</label>
-            <input class="form-control" formControlName="title" type="text" placeholder="Title">
+            <mat-form-field class="example-full-width" appearance="outline" style="width: 100%;">
+              <mat-label>Title</mat-label>
+              <input type="text" matInput formControlName="title" name="title"
+                     placeholder="Title" required>
+            </mat-form-field>
           </div>
 
           <!-- Short Description -->
           <div class="mb-3 title_field">
-            <label class="form-label">Meta title (SEO):</label>
-            <input class="form-control" type="text" formControlName="meta_title" placeholder="Meta title">
+            <mat-form-field class="example-full-width" appearance="outline" style="width: 100%;">
+              <mat-label>Meta title (SEO)</mat-label>
+              <input type="text" matInput formControlName="meta_title" name="meta_title"
+                     placeholder="Meta title" required>
+            </mat-form-field>
           </div>
         
           <!-- Short Description -->
           <div class="mb-3 title_field">
-            <label class="form-label">Meta description (SEO):</label>
-            <textarea class="form-control" formControlName="meta_description" placeholder="Meta Description"></textarea>
+            <mat-form-field class="example-full-width" appearance="outline" style="width: 100%;">
+              <mat-label>Meta description (SEO)</mat-label>
+              <textarea matInput placeholder="Meta Description" formControlName="meta_description" name="meta_description"></textarea>
+            </mat-form-field>
           </div>
 
          
@@ -37,29 +45,61 @@
             
           </div>
         </div>
+        
   
         <!-- Second Column -->
         <div class="col-sm-6">
-          <!-- Image Upload -->
-          <label class="form-label">Image:</label>
-          <div class="row">
-            <div class="col-sm-6">
-              <input class="form-control" type="file" (change)="fileEvent($event)" accept="image/*">
-            </div>
-            <div class="col-sm-6 image_cont">
-              <img *ngIf="imagePreview" [src]="imagePreview" alt="Image Preview" class="mt-2">
-            </div>
-          </div>
-           <!-- Short Description -->
-           <div class="mb-3 title_field">
-            <label class="form-label">Meta keywords (SEO):</label>
-            <textarea class="form-control" formControlName="keywords" placeholder="Meta keywords"></textarea>
-          </div>
           <!-- Slug -->
           <div class="mb-3 title_field">
-            <label class="form-label">Slug:</label>
-            <input class="form-control" formControlName="slug" type="text" placeholder="Slug Title">
+              <mat-form-field class="example-full-width" appearance="outline" style="width: 100%;">
+                <mat-label>Slug</mat-label>
+                <input type="text" matInput formControlName="slug" name="slug" placeholder="Slug Title">
+              </mat-form-field>
+          </div>        
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="mb-3 ">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <mat-label>Courses Type</mat-label>
+                  <mat-select formControlName="courses_type" name="courses_type">
+                    <mat-option *ngFor="let course of courses_type" [value]="course.value">
+                      {{ course.label }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="mb-3 ">
+                <mat-form-field appearance="outline" style="width: 100%;">
+                  <mat-label>Sub Type</mat-label>
+                  <mat-select formControlName="sub_type" name="sub_type">
+                    <mat-option *ngFor="let sub_t of sub_type" [value]="sub_t.value">
+                      {{ sub_t.label }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
           </div>
+                     <!-- Short Description -->
+                     <div class="mb-3 title_field">
+                      <mat-form-field class="example-full-width" appearance="outline" style="width: 100%;">
+                        <mat-label>Meta keywords (SEO)</mat-label>
+                        <textarea matInput placeholder="" formControlName="keywords" name="keywords"></textarea>
+                      </mat-form-field>
+                    </div>
+                    <!-- Image Upload -->
+                    <label class="form-label">Image:</label>
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <input class="form-control" type="file" (change)="fileEvent($event)" accept="image/*">
+                      </div>
+                      <div class="col-sm-6 image_cont">
+                        <img *ngIf="imagePreview" [src]="imagePreview" alt="Image Preview" class="mt-2">
+                      </div>
+                    </div>
 
         </div>
         <div class="col-lg-12">
@@ -70,13 +110,19 @@
               <div *ngFor="let event of eventDetails.controls; let i = index" [formGroupName]="i">
                 <!-- Event Title and Detail Inputs -->
                 <div class="row">
-                  <div class="col-sm-5 title_field">
-                    <input class="form-control" formControlName="title" type="text" placeholder="Event Title" [value]="event.value.title">
+                  <div class="col-sm-6 title_field">
+                    <mat-form-field class="example-full-width" appearance="outline" style="width: 100%;">
+                      <input type="text" matInput formControlName="title" name="title"
+                             placeholder="Title" [value]="event.value.title">
+                    </mat-form-field>
                   </div>
                   <div class="col-sm-5 title_field">
-                    <input class="form-control" formControlName="detail" type="text" placeholder="Event Detail" [value]="event.value.detail">
+                    <mat-form-field class="example-full-width" appearance="outline" style="width: 100%;">
+                      <input type="text" matInput formControlName="detail" name="detail"
+                             placeholder="Detail" [value]="event.value.detail">
+                    </mat-form-field>
                   </div>
-                  <div class="col-sm-2">
+                  <div class="col-sm-1">
                     <button type="button" (click)="removeEventDetail(i)" class="btn">
                       <span class="plus-minus-button">-</span>
                     </button>
@@ -95,22 +141,22 @@
               <div *ngFor="let system of systemsUsed.controls; let i = index" [formGroupName]="i">
                 <!-- System Title and Detail Inputs -->
                 <div class="row">
-                  <div class="col-sm-5 title_field">
-                    <input class="form-control" formControlName="title" type="text" placeholder="System Title" [value]="system.value.title">
+                  <div class="col-sm-6 title_field">
+                    <mat-form-field class="example-full-width" appearance="outline" style="width: 100%;">
+                      <input type="text" matInput formControlName="title" name="title"
+                             placeholder="Title" [value]="system.value.title">
+                    </mat-form-field>
                   </div>
                   <div class="col-sm-5 title_field">
-                    <input class="form-control" formControlName="detail" type="text" placeholder="System Detail" [value]="system.value.detail">
+                    <mat-form-field class="example-full-width" appearance="outline" style="width: 100%;">
+                      <input type="text" matInput formControlName="detail" name="detail"
+                             placeholder="Detail" [value]="system.value.detail">
+                    </mat-form-field>
                   </div>
-                  <div class="col-sm-2">
+                  <div class="col-sm-1">
                     <button type="button" (click)="removeSystemUsed(i)" class="btn">
                       <span class="plus-minus-button">-</span>
                     </button>
-                  </div>
-                </div>
-                <!-- Remove Button -->
-                <div class="row">
-                  <div class="col-sm-12">
-                    
                   </div>
                 </div>
               </div>
@@ -118,6 +164,48 @@
             <!-- Add System Used Button -->
             <button type="button" (click)="addSystemUsed()" class="btn btn-primary mt-2">Add</button>
           </div>
+                  <!-- Additional Details Section -->
+                  <div class="mb-3">
+                    <label class="form-label">Additional Details:</label>
+                    <div formArrayName="additional_details">
+                      <div *ngFor="let add_detail of additionalDetails.controls; let i = index" [formGroupName]="i">
+                        <!-- System Title and Detail Inputs -->
+                        <div class="row">
+                          <div class="col-sm-6 title_field">
+                            <mat-form-field class="example-full-width" appearance="outline" style="width: 100%;">
+                              <input type="text" matInput formControlName="super_title" name="super_title"
+                                      placeholder="Super Title" [value]="add_detail.value.super_title">
+                            </mat-form-field>
+                          </div>
+                          <div class="col-sm-6 title_field">
+                            <mat-form-field class="example-full-width" appearance="outline" style="width: 100%;">
+                              <input type="text" matInput formControlName="title" name="title"
+                                      placeholder="Title" [value]="add_detail.value.title">
+                            </mat-form-field>
+                          </div>
+                          <div class="col-sm-6 title_field">
+                            <mat-form-field class="example-full-width" appearance="outline" style="width: 100%;">
+                              <input type="text" matInput formControlName="detail" name="detail"
+                                      placeholder="Detail" [value]="add_detail.value.detail">
+                            </mat-form-field>
+                          </div>
+                          <div class="col-sm-6 title_field">
+                            <mat-form-field class="example-full-width" appearance="outline" style="width: 100%;">
+                              <input type="text" matInput formControlName="type_detail" name="type_detail"
+                                      placeholder="Type" [value]="add_detail.value.type_detail">
+                            </mat-form-field>
+                          </div>
+                          <div class="col-sm-1">
+                            <button type="button" (click)="removeAdditionalDetails(i)" class="btn">
+                              <span class="plus-minus-button">-</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- Add System Used Button -->
+                    <button type="button" (click)="addAdditionalDetails()" class="btn btn-primary mt-2">Add</button>
+                  </div>
           <!-- Short Description -->
           <div class="mb-3 title_field">
             <label class="form-label">Short Description:</label>
