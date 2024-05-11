@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CareersService } from '../../services/careers.service';
 import { UploadService } from '../../services/upload.service';
 
@@ -7,7 +7,7 @@ import { UploadService } from '../../services/upload.service';
   templateUrl: './career.component.html',
   styleUrls: ['./career.component.css']
 })
-export class CareerComponent {
+export class CareerComponent implements OnInit {
   careerdata: any = {}; // Initialize with an empty object
   successMessage: string | null = null;
   errorMessage: string | null = null;
@@ -55,5 +55,8 @@ createCareers() {
           this.successMessage = null;
         }
       );
+  }
+  ngOnInit(): void {
+    window.scrollTo(0, 0); // Scroll to the top of the page
   }
 }

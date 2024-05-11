@@ -30,15 +30,35 @@
     margin-top: 10px;
     padding: 20px;
     border : 3px solid #FFF;
+    background: #f1f2f5;
+    height: 240px;
     /* border-radius: 25px; */
 }
 .pipeline_card:hover {
     margin-top: 10px;
     padding: 20px;
     border : 3px solid #575ab9;
+    height: 240px;
     /* border-radius: 25px; */
 }
 
+@media (max-width: 650px){
+    .pipeline_card {
+        margin-top: 10px;
+        padding: 20px;
+        border : 3px solid #FFF;
+        background: #f1f2f5;
+        height: auto;
+        /* border-radius: 25px; */
+    }
+    .pipeline_card:hover {
+        margin-top: 10px;
+        padding: 20px;
+        border : 3px solid #575ab9;
+        height: auto;
+        /* border-radius: 25px; */
+    }
+}
 
 /* project sect */
 .project_sect {
@@ -65,10 +85,10 @@
 .right_content p{
     padding: 0px 0px 0px 60px;
 }
-.right_content h5 {
-    background-color: #FFCC4A;
-    color: #000;
+.right_side h5 {
+    background-color: #575ab9;
+    color: #fff;
     display: inline-block;
     padding: 3px 10px;
-    border-radius: 30px;
-}
+    /* border-radius: 30px; */
+  }

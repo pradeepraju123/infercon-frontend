@@ -30,8 +30,8 @@ export class TrainingListComponent implements OnInit {
         this.fetchAllTrainings();
       }
     });
+    window.scrollTo(0,0);
   }
-  
   fetchTrainingsByType(courses_type: string): void {
     this.trainingService.getAllTraining(this.data).subscribe((data: any) => {
       // Filter trainings based on type

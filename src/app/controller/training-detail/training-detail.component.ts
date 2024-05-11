@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TrainingService } from '../../services/training.service';
 import { MetaService } from '../../services/meta.service';
@@ -12,7 +12,7 @@ import { BookingComponent } from '../../components/booking/booking.component';
   templateUrl: './training-detail.component.html',
   styleUrls: ['./training-detail.component.css']
 })
-export class TrainingDetailComponent {
+export class TrainingDetailComponent implements OnInit {
   training: any;
   groupedDetails: { super_title: string, details: any[] }[] = []; // Initialize groupedDetails with a specific type
 
@@ -58,5 +58,8 @@ export class TrainingDetailComponent {
   }
   openDialog() {
     this.dialog.open(BookingComponent);
+  }
+  ngOnInit(): void {
+    window.scrollTo(0, 0); // Scroll to the top of the page
   }
 }

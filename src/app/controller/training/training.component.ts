@@ -16,6 +16,7 @@ export class TrainingComponent implements OnInit {
   ngOnInit(): void {
     this.fetchAllTrainings();
   }
+  
   fetchAllTrainings(): void {
     this.trainingService.getAllTraining(this.data).subscribe((data: any) => {
       this.trainings = data.data;

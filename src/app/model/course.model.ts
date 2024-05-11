@@ -1,3 +1,7 @@
+export interface Projects {
+    value: string
+    label: string
+}
 export interface Courses {
     value: string
     label: string

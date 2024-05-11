@@ -17,6 +17,6 @@ export class BlogComponent implements OnInit {
       this.blogdata = data.data;
       this.contentLoaded = true;
     });
+    window.scrollTo(0,0);
   }
-
 }

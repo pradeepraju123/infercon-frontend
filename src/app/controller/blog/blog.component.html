@@ -3,7 +3,10 @@
 </section>
 <section class="blog_sector">
     <div class="container new_container">
-      <h5>BLOG</h5>
+      <div class="right_side">
+        <h5>BLOG</h5>
+      </div>
+      
       <div class="row">
         <div class="col-lg-6 col-8">
           
@@ -74,22 +77,12 @@
               <p [innerHTML]="item.short_description"></p>
             
             </div>
-            <div class="row blog_foot">
-              <div class="col-lg-2 hide">
-                <img src="assets/1.png" alt="">
-              </div>
-              <div class="col-lg-6 col-4 blog_date">
-                <p>{{item.author}}</p>
-              </div>
-              <div class="col-lg-4 col-8 ">
-                <div class="button_box">
-                  <button *ngIf="contentLoaded" [routerLink]="['/app-blog-details', item._id]" class="btn btn-primary">Read more</button>
-                </div>
-                
-              </div>
+            <div class="button_box">
+              <button *ngIf="contentLoaded" [routerLink]="['/app-blog-details', item._id]" class="btn btn-primary">Read more</button>
             </div>
           </div>
         </div>
+        
 
       </div>
     </div>

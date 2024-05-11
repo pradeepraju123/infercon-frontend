@@ -96,7 +96,7 @@
 .pipeline_card {
     text-align: center;
     margin-top: 10px;
-    padding: 20px;
+    padding: 23px;
     border : 3px solid #FFF;
     background-color: #575ab9;
     color: #fff;
@@ -104,7 +104,7 @@
 }
 .pipeline_card:hover {
     margin-top: 10px;
-    padding: 20px;
+    padding: 23px;
     background-color: #fff;
     color: #000;
     border: 1px solid #575ab9;
