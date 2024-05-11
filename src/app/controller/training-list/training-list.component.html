@@ -1,21 +1,11 @@
 <section class="banner_section">
-    <div class="container new_container">
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="banner_cont">
-                    <h5>COURSES</h5>
-                    <h2>Training courses</h2>
-                </div>
-            </div>
-        </div>
-    </div>
 </section>
 <section class="list_image_sect">
     <div class="container new_container animated-div" #animatedDiv [@slideIn]="contentLoaded ? 'visible' : 'hidden'">
       <div class="row">
         <div class="col-lg-12" *ngIf="individualTraining == true">
             <div class="training_heading">
-              <h5 class="text-center">Combined Training</h5>
+              <h5>COMBINED TRAINING</h5>
             </div>
           </div>
           <div class="row" *ngIf="individualTraining == true">
@@ -36,7 +26,7 @@
         </div>
         <div class="col-lg-12"  *ngIf="individualTraining == true">
             <div class="training_heading">
-              <h5 class="text-center">Control System Training</h5>
+              <h5>CONTROL SYSTEM TRAINING</h5>
             </div>
           </div>
           <div class="row" *ngIf="individualTraining == true">
@@ -57,7 +47,7 @@
         </div>
           <div class="col-lg-12" *ngIf="individualTraining == true">
             <div class="training_heading">
-              <h5 class="text-center">specialized Training</h5>
+              <h5>SPECIALIZED TRAINING</h5>
             </div>
           </div>
           <div class="row" *ngIf="individualTraining == true">
@@ -78,7 +68,7 @@
         </div>
         <div class="col-lg-12" *ngIf="academicTraining == true">
             <div class="training_heading">
-              <h5 class="text-center">specialized Training</h5>
+              <h5>ACADEMIC TRAINING</h5>
             </div>
           </div>
           <div class="row" *ngIf="academicTraining == true">

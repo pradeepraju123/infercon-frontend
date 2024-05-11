@@ -1,5 +1,12 @@
+.banner_section {
+  background-image: url('/assets/emerson_deltav.jpeg');
+  background-size: cover;
+  background-position: center;
+  padding: 20px;
+  height: 30vh;
+}
 .cards-wrapper-new {
-margin-bottom: 30px;
+margin: 30px;
   }
   
   .card {
@@ -55,9 +62,9 @@ margin-bottom: 30px;
   }
   
   .card:hover .tags .tag {
-    background: rgba(255,255,255,0.5);
-    padding: 20px;
-    color: black;
+    background: #575ab9;
+    padding: 12px;
+    color: #fff;
   }
   
   .card .date {
@@ -84,16 +91,16 @@ margin-bottom: 30px;
   }
   
   .card:before {
-    background: #ddd;
+    background: #fff;
     width: 250%;
     height: 250%;
   }
   
-  .card:after {
+  /* .card:after {
     background: white;
     width: 200%;
     height: 200%;
-  }
+  } */
   
   .card:hover {
     color: var(--color);
@@ -163,4 +170,12 @@ margin-bottom: 30px;
     .info h1 {
       margin: 0;
     }
+  }
+
+  .training_heading h5 {
+    background-color: #575ab9;
+    color: #fff;
+    display: inline-block;
+    padding: 3px 10px;
+    /* border-radius: 30px; */
   }

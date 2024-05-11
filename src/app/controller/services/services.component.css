@@ -4,7 +4,7 @@
     background-size: cover;
     background-position: center;
     padding: 20px;
-    height: 40vh;
+    height: 30vh;
 }
 .banner_cont {
     margin-top: 15px;
@@ -15,6 +15,30 @@
 .new_container {
     max-width: 1250px;
 }
+
+/*Pipeline Sector*/
+.steps_sect {
+    padding: 30px 5px;
+}
+.steps_sect img {
+    padding: 15px 0px;
+}
+.pipeline_sect {
+    padding: 20px;
+}
+.pipeline_card {
+    margin-top: 10px;
+    padding: 20px;
+    border : 3px solid #FFF;
+    /* border-radius: 25px; */
+}
+.pipeline_card:hover {
+    margin-top: 10px;
+    padding: 20px;
+    border : 3px solid #575ab9;
+    /* border-radius: 25px; */
+}
+
 
 /* project sect */
 .project_sect {

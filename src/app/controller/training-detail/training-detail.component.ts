@@ -4,6 +4,8 @@ import { TrainingService } from '../../services/training.service';
 import { MetaService } from '../../services/meta.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { ViewportScroller } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
+import { BookingComponent } from '../../components/booking/booking.component';
 
 @Component({
   selector: 'app-training-detail',
@@ -17,7 +19,8 @@ export class TrainingDetailComponent {
   constructor(
     private route: ActivatedRoute,
     private trainingService: TrainingService,
-    private metaService: MetaService
+    private metaService: MetaService,
+    public dialog: MatDialog
   ) {
     this.route.paramMap.subscribe(params => {
       const slug = params.get('id');
@@ -52,5 +55,8 @@ export class TrainingDetailComponent {
       groups[super_title].push(detail);
     });
     return Object.keys(groups).map(super_title => ({ super_title, details: groups[super_title] }));
+  }
+  openDialog() {
+    this.dialog.open(BookingComponent);
   }
 }

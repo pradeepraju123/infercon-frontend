@@ -30,8 +30,8 @@ export class RegistrationComponent implements OnInit {
     private phoneValidation: PhoneValidationService) {
     this.registrationForm = this.fb.group({
       modeOfEducation: ['', Validators.required],
-      firstname: ['', [Validators.required]],
-      middlename: ['', Validators.required],
+      firstname: ['', Validators.required],
+      middlename: [''],
       lastname: ['', Validators.required],
       bday: [''],
       country: ['', Validators.required],

@@ -104,12 +104,11 @@ input[type="file"] {
     max-width: 1250px;
 }
 .careers_heading {
-    padding: 15px;
+    padding: 15px 0px;
 }
 .careers_heading h5 {
-    background-color: #FFCC4A;
-    color: #000;
+    background-color: #575ab9;
+    color: #fff;
     display: inline-block;
     padding: 3px 10px;
-    border-radius: 30px;
 }
