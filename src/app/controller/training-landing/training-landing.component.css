@@ -172,6 +172,12 @@ margin: 30px;
     }
   }
 
+  @media (max-width: 650px){
+    .card {
+      height: auto;
+    }
+  }
+
   .training_heading h5 {
     background-color: #575ab9;
     color: #fff;
