@@ -46,6 +46,13 @@
             <ngx-editor formControlName="short_description"  [editor]="neweditor"></ngx-editor>
           </div>
           <div class="form-group">
+            <label for="type_">Type</label>
+              <select class="form-select" id="type_" formControlName="type_">
+                <option selected value="banner">Banner</option>
+                <option value="general">General</option>
+              </select>
+          </div>
+          <div class="form-group">
             <label for="image">Image</label>
             <div class="custom-file">
               <input type="file" class="custom-file-input" (change)="fileEvent($event)" accept="image/*" id="customFile">

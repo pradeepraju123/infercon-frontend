@@ -19,9 +19,11 @@ export class BlogService {
 getAllblogs(): Observable<any> {
       return this.http.get<any>(this.apiUrl);
     }
-getAllblogstest(limit: number): Observable<any> {
-    const url = `${this.apiUrl}?limit=${limit}`;  
-      return this.http.get(url);
+getAllblogstest(data: any): Observable<any> {
+      const url = `${this.apiUrl}/list`;
+      const headers = new HttpHeaders({
+         });
+      return this.http.post(url, data, { headers });
     }
 getBlogdetail(_id: string): Observable<any> {
       const url = `https://api.inferconautomation.com/api/v1/blogs/${_id}`;

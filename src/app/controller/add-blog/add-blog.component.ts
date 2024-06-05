@@ -21,17 +21,9 @@ import { Editor, Toolbar } from 'ngx-editor';
   encapsulation: ViewEncapsulation.None,
 })
 export class AddBlogComponent implements OnInit,OnDestroy {
-  filedata:any;
-  blogdata: any = {}; // Initialize with an empty object
-  successMessage: string | null = null;
-  errorMessage: string | null = null;
   editor!: Editor;
   neweditor!: Editor;
-  image: string | null = null; // To store the selected image file
-  imagePreview : any;
-  horizontalPosition: MatSnackBarHorizontalPosition = 'right';
-  verticalPosition: MatSnackBarVerticalPosition = 'top';
-  toolbar: Toolbar = [
+  toolbarnew: Toolbar = [
     ['bold', 'italic'],
     ['underline', 'strike'],
     ['code', 'blockquote'],
@@ -41,96 +33,119 @@ export class AddBlogComponent implements OnInit,OnDestroy {
     ['text_color', 'background_color'],
     ['align_left', 'align_center', 'align_right', 'align_justify'],
   ];
-  constructor(private route: ActivatedRoute, private blogService: BlogService,  private uploadService : UploadService, private location : Location,private _snackBar: MatSnackBar, private dialogRef: MatDialogRef<AddBlogComponent>, ) {}
-  // imageUrl: Observable<string>;
+
+  blogdata = {
+    title: '',
+    author: '',
+    description: '',
+    type_: '',
+    short_description: '',
+    image: '',
+    published: false
+  };
+
+  image: File | null = null;
+  imagePreview: string | null = null;
+  successMessage: string | null = null;
+  errorMessage: string | null = null;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'center'; // Adjust as necessary
+  verticalPosition: MatSnackBarVerticalPosition = 'top'; // Adjust as necessary
+
+  constructor(
+    private blogService: BlogService,
+    private uploadService: UploadService,
+    private _snackBar: MatSnackBar,
+    public dialogRef: MatDialogRef<AddBlogComponent>,
+    private location: Location
+  ) {}
+
   ngOnInit(): void {
     this.editor = new Editor();
     this.neweditor = new Editor();
   }
-  fileEvent(event: any) {
-    // Handle the file input change event
+
+  ngOnDestroy(): void {
+    this.editor.destroy();
+    this.neweditor.destroy();
+  }
+
+  fileEvent(event: any): void {
     const file = event.target.files[0];
     this.image = file;
-    
-    // Display a preview of the new image
+
     const reader = new FileReader();
     reader.onload = (e: any) => {
       this.imagePreview = e.target.result;
     };
     reader.readAsDataURL(file);
   }
-  onImageSelected(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      this.image = file;
-    }
-  }
-  displayImagePreview(file: File) {
+
+  displayImagePreview(file: File): void {
     if (file) {
       const reader = new FileReader();
-      reader.onload = (event) => {
+      reader.onload = (event: any) => {
         if (event && event.target) {
           this.imagePreview = event.target.result as string;
         } else {
-          // Handle the case where event or event.target is null
           console.error('Event or event.target is null.');
         }
       };
       reader.readAsDataURL(file);
     }
   }
-  onSubmit() {
+
+  onSubmit(): void {
     if (this.image) {
-      // First, upload the image and get the filename
       this.uploadService.uploadImage(this.image).subscribe(
         (fileName) => {
-          this.blogdata.image = fileName; // Update the 'image' property of the training object with the filename
-          this.createBlogsnew(); // Proceed to update the training
+          this.blogdata.image = fileName;
+          this.createBlogsnew();
         },
         (error) => {
-          // Handle the case where image upload fails
           console.error('Failed to upload the image:', error);
         }
       );
     } else {
-      this.createBlogsnew(); // Update the training without an image
+      this.createBlogsnew();
     }
   }
-  
-  createBlogsnew() {
-    this.blogService.createBlogs(this.blogdata)
-      .subscribe(
-        () => {
-          this.successMessage = 'Blog was created successfully.';
-          this.errorMessage = null;
-          this.openSnackBar(this.successMessage)
-          this.dialogRef.close();
-        },
-        (error) => {
-          this.errorMessage = 'Failed to create training.';
-          this.successMessage = null;
-          this.openSnackBar(this.errorMessage)
-        }
-      );
+
+  createBlogsnew(): void {
+    // Convert the editor content to JSON strings
+    const descriptionContent = JSON.stringify(this.blogdata.description);
+    const shortDescriptionContent = JSON.stringify(this.blogdata.short_description);
+
+    // Remove the surrounding quotes added by JSON.stringify
+    this.blogdata.description = descriptionContent.slice(1, -1);
+    this.blogdata.short_description = shortDescriptionContent.slice(1, -1);
+
+    this.blogService.createBlogs(this.blogdata).subscribe(
+      () => {
+        this.successMessage = 'Blog was created successfully.';
+        this.errorMessage = null;
+        this.openSnackBar(this.successMessage);
+        this.dialogRef.close();
+      },
+      (error) => {
+        this.errorMessage = 'Failed to create blog.';
+        this.successMessage = null;
+        this.openSnackBar(this.errorMessage);
+      }
+    );
   }
+
   goBack(): void {
-    this.location.back(); // This uses the Angular Location service to navigate back.
+    this.location.back();
   }
-  toggleSwitch() {
+
+  toggleSwitch(): void {
     this.blogdata.published = !this.blogdata.published;
-    if (this.blogdata.published){
-      
-    }
   }
-  openSnackBar(message: string) {
-    this._snackBar.open(message, 'Close', 
-    {
+
+  openSnackBar(message: string): void {
+    this._snackBar.open(message, 'Close', {
       horizontalPosition: this.horizontalPosition,
       verticalPosition: this.verticalPosition,
     });
-  }
-  ngOnDestroy(): void {
-    this.editor.destroy();
-    this.neweditor.destroy();
   }
 }

@@ -4,6 +4,7 @@ import { BlogService } from '../../services/blog.service';
 import { TrainingService } from '../../services/training.service';
 import { BookingComponent } from '../../components/booking/booking.component';
 import { MatDialog } from '@angular/material/dialog';
+import { GeneralService } from '../../services/general.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -19,11 +20,14 @@ import { MatDialog } from '@angular/material/dialog';
 export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild('animatedDiv') animatedDiv!: ElementRef;
   blogdata: any[] = [];
+  type: string = 'blog'
+  type_: string = 'banner'
   state: string = 'hidden';
   contentLoaded: boolean = false;
   limit: number = 2;
   showText: boolean = false;
   trainings: any[]=[]; // Define a property to store the fetched data
+  generaldata: any[]=[]
   data = {}
   filters: { value: string, name: string }[] = [
     { value: '*', name: 'ALL' },
@@ -33,13 +37,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
     { value: '.mobile', name: 'DCS' }
   ];
   selectedFilter: string = '*';
-  constructor(private blogService: BlogService, private trainingService: TrainingService, public dialog: MatDialog) {}
+  constructor(private blogService: BlogService, private trainingService: TrainingService, public dialog: MatDialog, public generlService: GeneralService) {}
 
   ngOnInit(): void {
-    this.blogService.getAllblogstest(this.limit).subscribe((data: any) => {
-      this.blogdata = data.data;
+    const param = {
+      limit: this.limit,
+      type: this.type
+    }
+    this.blogService.getAllblogstest(param).subscribe((responseData: any) => {
+      this.blogdata = responseData.data;
       this.contentLoaded = true;
       this.fetchAllTrainings();
+      this.fetchGeneralDataByType();
     });
   }
 
@@ -69,6 +78,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.trainings = data.data;
       this.contentLoaded = true;
     });
+  }
+  fetchGeneralDataByType(): void {
+    const param = {
+      type: this.type_
+    }
+    this.generlService.getGeneralDataByType(param).subscribe((data: any) => {
+      this.generaldata = data.data;
+    })
   }
   openDialog() {
     this.dialog.open(BookingComponent);

@@ -119,6 +119,7 @@ export class EditGeneralComponent implements OnInit,OnDestroy {
       short_description: [''],
       description: [''],
       published: [false],
+      type_: ['', Validators.required],
       image: ['']
     });
   }
@@ -151,6 +152,7 @@ export class EditGeneralComponent implements OnInit,OnDestroy {
           description: generalDetails.description,
           published: generalDetails.published,
           image: generalDetails.image,
+          type_: generalDetails.type_
         });
   
         // Display the image preview
@@ -166,7 +168,8 @@ export class EditGeneralComponent implements OnInit,OnDestroy {
       title: [this.generalForm.value.title, Validators.required],
       short_description: [this.generalForm.value.short_description],
       description: [this.generalForm.value.description],
-      published: [this.generalForm.value.published]
+      published: [this.generalForm.value.published],
+      type_: [this.generalForm.value.type_]
     };
   
     // Check if image exists and conditionally add the image control

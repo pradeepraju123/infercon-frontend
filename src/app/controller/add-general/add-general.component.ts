@@ -113,6 +113,7 @@ export class AddGeneralComponent implements OnInit, OnDestroy {
       description: [this.generalForm.value.description],  // Adjust validators as needed
       short_description: [this.generalForm.value.short_description],  // Adjust validators as needed
       image: [''],
+      type_: [''],
       published: [this.generalForm.value.published],  // Assuming this is a boolean property
     });
   }
@@ -148,7 +149,8 @@ export class AddGeneralComponent implements OnInit, OnDestroy {
       short_description: [''],
       description: [''],
       published: [false],
-      image: ['']
+      image: [''],
+      type_: [''],
     });
   }
   openSnackBar(message: string) {

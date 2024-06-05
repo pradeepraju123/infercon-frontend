@@ -18,6 +18,11 @@ export class GeneralService {
 getAllGeneraldata(): Observable<any> {
       return this.http.get<any>(this.apiUrl);
     }
+  
+getGeneralDataByType(data: any): Observable<any> {
+  const url = `${this.apiUrl}/list`;
+  return this.http.post(url, data, {})
+}
 getGeneraldata(_id: string): Observable<any> {
       const url = `https://api.inferconautomation.com/api/v1/general-data/${_id}`;
       return this.http.get(url).pipe(

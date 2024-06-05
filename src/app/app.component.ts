@@ -90,5 +90,7 @@ const routesWithDefault = [
   '/registration',  
   '/app-privacy-policy',
   '/app-terms-conditions',
-  '/training-landing'
+  '/training-landing',
+  '/events-list',
+  '/iot'
 ];

@@ -10,10 +10,15 @@
     }
 }
 .content_text {
-    margin: 180px 0px;
+  text-align: center;
+    margin-top: 350px;
     padding: 20px;
-    background: #f0ededb6;
+    background: #f0eded70;
     /* border-radius: 25px; */
+}
+
+.slider_sect {
+  text-align: center !important;
 }
 /* .slider_sect {
     position: relative;

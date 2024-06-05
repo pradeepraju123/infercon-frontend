@@ -78,6 +78,9 @@ import { ListAdminComponent } from './controller/list-admin/list-admin.component
 import { LayoutComponent } from './controller/layout/layout.component';
 import { TrainingLandingComponent } from './controller/training-landing/training-landing.component';
 import { TrainingListComponent } from './controller/training-list/training-list.component';
+import { EventsComponent } from './components/events/events.component';
+import { IotComponent } from './components/iot/iot.component';
+import { EventsListComponent } from './components/events-list/events-list.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -126,7 +129,10 @@ import { TrainingListComponent } from './controller/training-list/training-list.
     ListAdminComponent,
     LayoutComponent,
     TrainingLandingComponent,
-    TrainingListComponent
+    TrainingListComponent,
+    EventsComponent,
+    IotComponent,
+    EventsListComponent
   ],
   imports: [
     MatDividerModule,

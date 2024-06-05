@@ -32,6 +32,9 @@ import { LogoutComponent } from './controller/logout/logout.component';
 import { ListAdminComponent } from './controller/list-admin/list-admin.component';
 import { TrainingLandingComponent } from './controller/training-landing/training-landing.component';
 import { TrainingListComponent } from './controller/training-list/training-list.component';
+import { EventsComponent } from './components/events/events.component';
+import { IotComponent } from './components/iot/iot.component';
+import { EventsListComponent } from './components/events-list/events-list.component';
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'blog', component: BlogComponent },
@@ -46,6 +49,9 @@ const routes: Routes = [
   {path:'training-landing',component:TrainingLandingComponent},
   {path:'app-training-list/:id',component:TrainingListComponent},
   {path:'app-privacy-policy',component:PrivacyPolicyComponent},
+  {path: 'events/:id', component:EventsComponent},
+  {path: 'events-list', component: EventsListComponent},
+  {path: 'iot', component: IotComponent},
   {path:'login',component:LoginComponent},
   { path: 'logout', component: LogoutComponent },
   { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
