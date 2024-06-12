@@ -1,0 +1,72 @@
+<h1 mat-dialog-title>Edit Placement</h1>
+<form [formGroup]="careerListForm" (submit)="onSubmit()"><mat-dialog-content class="mat-typography">
+<section class="edit_section">
+    <div class="container new_container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="alert alert-success" role="alert" *ngIf="successMessage">
+            {{ successMessage }}
+          </div>
+          <div class="alert alert-danger" role="alert" *ngIf="errorMessage">
+            {{ errorMessage }}
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="container mt-1">
+              <div class="form-group">
+                <label for="job_title">Job Title</label>
+                <input type="text" class="form-control" formControlName="job_title">
+              </div>
+
+              <div class="form-group">
+                <label for="company_name">Company Name</label>
+                <input type="text" class="form-control" formControlName="company_name">
+              </div>
+             
+              <div class="form-group">
+                <label for="job_description">Job Description</label>
+                <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"> </ngx-editor-menu>
+                <ngx-editor formControlName="job_description" [editor]="editor"></ngx-editor>
+                 </div>
+          
+              <div class="form-group published_bool">
+                <label for="published">Published</label>
+                <div class="custom-switch">
+                    <div class="switch-toggle" [ngClass]="{'green': careerListForm.get('published')?.value, 'blue': !careerListForm.get('published')?.value}" [@toggleAnimation]="careerListForm.get('published')?.value" (click)="toggleSwitch()">
+                      <input type="checkbox" class="custom-control-input" formControlName="published" style="display: none;">
+                      <span class="toggle-handle"></span>
+                    </div>
+                  </div>              
+              </div>            
+              <!-- <button type="submit" class="btn btn-primary">Save</button> -->
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="container  mt-1">
+            <div class="form-group">
+                <label for="experience">Experience</label>
+                <input type="text" class="form-control" formControlName="experience">
+              </div>
+  
+              <div class="form-group">
+                <label for="work_location">Work Location</label>
+                <input type="text" class="form-control" formControlName="work_location">
+              </div>
+            <div class="form-group">
+              <label for="skills">Skills</label>
+              <ngx-editor-menu [editor]="neweditor" [toolbar]="toolbar"> </ngx-editor-menu>
+            <ngx-editor formControlName="skills"  [editor]="neweditor"></ngx-editor>
+          </div>
+          </div>
+         
+        </div>
+      </div>
+    </div>
+  </section></mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button cdkFocusInitial type="submit">Submit</button>
+  </mat-dialog-actions>
+</form>
+  
+  

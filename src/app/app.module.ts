@@ -81,6 +81,13 @@ import { TrainingListComponent } from './controller/training-list/training-list.
 import { EventsComponent } from './components/events/events.component';
 import { IotComponent } from './components/iot/iot.component';
 import { EventsListComponent } from './components/events-list/events-list.component';
+import { PlacementComponent } from './controller/placement/placement.component';
+import { AddPlacementComponent } from './controller/add-placement/add-placement.component';
+import { EditPlacementComponent } from './controller/edit-placement/edit-placement.component';
+import { PlacementAdminComponent } from './controller/placement-admin/placement-admin.component';
+import { PlacementCardviewComponent } from './components/placement-cardview/placement-cardview.component';
+import { PlacementTableviewComponent } from './components/placement-tableview/placement-tableview.component';
+import { PlacementListComponent } from './controller/placement-list/placement-list.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -132,7 +139,14 @@ import { EventsListComponent } from './components/events-list/events-list.compon
     TrainingListComponent,
     EventsComponent,
     IotComponent,
-    EventsListComponent
+    EventsListComponent,
+    PlacementComponent,
+    AddPlacementComponent,
+    EditPlacementComponent,
+    PlacementAdminComponent,
+    PlacementCardviewComponent,
+    PlacementTableviewComponent,
+    PlacementListComponent
   ],
   imports: [
     MatDividerModule,

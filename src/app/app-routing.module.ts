@@ -35,6 +35,12 @@ import { TrainingListComponent } from './controller/training-list/training-list.
 import { EventsComponent } from './components/events/events.component';
 import { IotComponent } from './components/iot/iot.component';
 import { EventsListComponent } from './components/events-list/events-list.component';
+import { PlacementAdminComponent } from './controller/placement-admin/placement-admin.component';
+import { PlacementCardviewComponent } from './components/placement-cardview/placement-cardview.component';
+import { PlacementTableviewComponent } from './components/placement-tableview/placement-tableview.component';
+import { EditPlacementComponent } from './controller/edit-placement/edit-placement.component';
+import { AddPlacementComponent } from './controller/add-placement/add-placement.component';
+import { PlacementListComponent } from './controller/placement-list/placement-list.component';
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'blog', component: BlogComponent },
@@ -69,6 +75,12 @@ const routes: Routes = [
   {path: 'app-edit-services/:id', component: EditServicesComponent, canActivate: [authGuard]},
   {path: 'app-contact-admin', component: ContactAdminComponent, canActivate: [authGuard]},
   {path: 'app-list-admin', component: ListAdminComponent, canActivate: [authGuard]},
+  {path: 'app-placement-admin', component: PlacementAdminComponent, canActivate: [authGuard]},
+  {path: 'app-placement-cardview', component: PlacementCardviewComponent, canActivate: [authGuard]},
+  {path: 'app-placement-tableview', component: PlacementTableviewComponent, canActivate: [authGuard]},
+  {path: 'app-edit-placement', component: EditPlacementComponent, canActivate: [authGuard]},
+  {path: 'app-add-placement', component: AddPlacementComponent, canActivate: [authGuard]},
+  {path: 'app-placement-list', component: PlacementListComponent},
   { path: '**', redirectTo: 'home' },
   
  

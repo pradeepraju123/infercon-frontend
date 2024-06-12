@@ -77,7 +77,8 @@ const routesWithoutDefault = [
   '/app-add-general',
   '/app-general-admin',
   '/logout',
-  '/app-list-admin'
+  '/app-list-admin',
+  '/app-placement-admin'
 ];
 const routesWithDefault = [
   '/home',
@@ -92,5 +93,6 @@ const routesWithDefault = [
   '/app-terms-conditions',
   '/training-landing',
   '/events-list',
-  '/iot'
+  '/iot',
+  '/app-placement-list'
 ];

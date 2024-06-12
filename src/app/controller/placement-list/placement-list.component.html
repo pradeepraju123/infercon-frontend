@@ -1,0 +1,31 @@
+<section class="banner_section">
+</section>
+<section class="pipeline_sect">
+    <div class="container new_container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="pipeline_right">
+            <div class="right_side">
+              <h5>Placement</h5>
+          </div>
+            <div class="row">
+              <div class="col-lg-6" *ngFor="let item of generaldata">
+                <div class="pipeline_card">
+                    <div class="right_side">
+                        <h5>Job ID : {{item.job_id}}</h5>
+                    </div>
+                  <h6>{{item.job_title}}</h6>
+                    <p>
+                      <span style="font-weight:bold">Location</span> : {{item.work_location}}</p>
+                      <p><span style="font-weight:bold">Experience</span> : {{item.experience}}</p>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+<app-contactsection></app-contactsection>
+<app-footersection></app-footersection>
