@@ -1,1 +1,23 @@
-<p>placement works!</p>
+<section class="blog_details">
+    <div class="container new_container">
+        <h5 style="width: 100%;">{{placementdata.job_title}}</h5>
+        <div class="row">
+            <div class="col-lg-6">
+                <p><span style="font-weight: 600">Work Location : </span>{{placementdata.work_location}}</p>
+            </div>
+            <div class="col-lg-6">
+                <p style="float: right; padding-left: 20px;"><span style="font-weight: 600;">Experience : </span>{{placementdata.experience}}</p>
+                <p style="float: right; padding-left: 20px;"><span style="font-weight: 600">Job Id : </span>{{placementdata.job_id}}</p>
+            </div>
+            <div class="col-lg-12">  
+                <div [innerHTML]="placementdata.job_description" style="width: 100%;"></div>
+                <div [innerHTML]="placementdata.skills" class="description-content" style="width: 100%;"></div>
+            </div>
+        </div>
+    </div>
+</section>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <!-- <button mat-button cdkFocusInitial type="submit">Submit</button> -->
+  </mat-dialog-actions>
+<!-- <app-contactsection></app-contactsection> -->

@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { PlacementService } from '../../services/placement.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
+import { PlacementComponent } from '../placement/placement.component';
 
 @Component({
   selector: 'app-placement-list',
@@ -16,9 +17,6 @@ contentLoaded: boolean = false;
 generaldata: any[]=[]; // Define a property to store the fetched data
 
 constructor(private careerlistServices: PlacementService, private router: Router,public dialog: MatDialog) { };
-editServices(serviceId: String) {
-  this.router.navigate(['/app-edit-blog', serviceId]);  // Navigate to the edit component with the ID
-}
 ngOnInit(): void {
   this.careerlistServices.getAllCareerListGetAPI().subscribe((data: any) => {
     this.contentLoaded = true;
@@ -29,5 +27,12 @@ console.error('Error loading data: ', error);
 // Handle the error (e.g., show an error message or retry the request)
 }
 );
+}
+openDialog(_id: String) {
+  this.dialog.open(PlacementComponent, {
+    data: {
+      itemId: _id,
+    }
+  });
 }
 }

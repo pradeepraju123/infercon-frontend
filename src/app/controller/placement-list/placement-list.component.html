@@ -18,6 +18,10 @@
                     <p>
                       <span style="font-weight:bold">Location</span> : {{item.work_location}}</p>
                       <p><span style="font-weight:bold">Experience</span> : {{item.experience}}</p>
+
+                      <div class="button_sect">
+                        <button *ngIf="showButton && contentLoaded" class="btn btn-primary" mat-button (click)="openDialog(item._id)">View Details</button>
+                      </div>
                 </div>
               </div>
             </div>

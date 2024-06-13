@@ -41,6 +41,7 @@ import { PlacementTableviewComponent } from './components/placement-tableview/pl
 import { EditPlacementComponent } from './controller/edit-placement/edit-placement.component';
 import { AddPlacementComponent } from './controller/add-placement/add-placement.component';
 import { PlacementListComponent } from './controller/placement-list/placement-list.component';
+import { PlacementComponent } from './controller/placement/placement.component';
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'blog', component: BlogComponent },
@@ -81,6 +82,7 @@ const routes: Routes = [
   {path: 'app-edit-placement', component: EditPlacementComponent, canActivate: [authGuard]},
   {path: 'app-add-placement', component: AddPlacementComponent, canActivate: [authGuard]},
   {path: 'app-placement-list', component: PlacementListComponent},
+  {path:'app-placement/:id', component:PlacementComponent},
   { path: '**', redirectTo: 'home' },
   
  
