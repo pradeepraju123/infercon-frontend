@@ -2,6 +2,7 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { TrainingService } from '../../services/training.service';
 import { MatDialog } from '@angular/material/dialog';
 import { EditTrainingComponent } from '../../controller/edit-training/edit-training.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-trainingcard-view',
@@ -22,12 +23,24 @@ export class TrainingcardViewComponent {
   pageSize: number = 10;
   pageNum: number = 1;
   data : any
-  constructor(private trainingService: TrainingService,public dialog: MatDialog) {}
+  constructor(private trainingService: TrainingService,public dialog: MatDialog, public snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
     this.fetchAllTrainings();
   }
-
+  deleteTraining(serviceId: string) {
+    this.trainingService.deleteTraining(serviceId).subscribe(() => {
+      this.trainings = this.trainings.filter(blog => blog.id !== serviceId); // Assuming blog has an id property
+      this.snackBar.open('Blog deleted successfully', 'Close', {
+        duration: 3000,
+      });
+    }, (error) => {
+      console.error('Error deleting blog: ', error);
+      this.snackBar.open('Failed to delete blog', 'Close', {
+        duration: 3000,
+      });
+    });
+  }
   fetchAllTrainings(): void {
     this.trainingService.getAllTraining(this.data).subscribe((data: any) => {
       this.trainings = data.data;

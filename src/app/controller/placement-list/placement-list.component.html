@@ -20,7 +20,8 @@
                       <p><span style="font-weight:bold">Experience</span> : {{item.experience}}</p>
 
                       <div class="button_sect">
-                        <button *ngIf="showButton && contentLoaded" class="btn btn-primary" mat-button (click)="openDialog(item._id)">View Details</button>
+                        <button *ngIf="showButton && contentLoaded" class="btn btn-primary" mat-raised-button (click)="openDialog(item._id)">View Details</button>
+                        <button *ngIf="showButton && contentLoaded" class="btn btn-primary" mat-raised-button (click)="openDialogPlacementEnquiry(item.job_id)">Apply now</button>
                       </div>
                 </div>
               </div>

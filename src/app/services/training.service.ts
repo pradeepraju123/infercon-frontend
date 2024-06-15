@@ -81,4 +81,20 @@ private getUserTypeFromToken(token: string | null): string | null {
   }
   return null;
 }
+deleteTraining(id: string): Observable<any> {
+  const token = sessionStorage.getItem('authToken'); // Get the token from sessionStorage
+
+  if (token) {
+    const headers = new HttpHeaders({
+      'Authorization': 'Bearer ' + token // Include the token in the request headers
+       });
+  const url = `${this.apiUrl}/${id}`; // Assuming you want to pass the ID in the URL
+  
+  return this.http.delete(url, { headers });
+} else {
+  //   // Handle the case where there's no token (e.g., user is not authenticated)
+  //   // You can choose to return an error Observable or handle it in a way that suits your application.
+     return throwError('No authentication token found'); // For example, using throwError from RxJS
+    }
+}
 }

@@ -88,6 +88,7 @@ import { PlacementAdminComponent } from './controller/placement-admin/placement-
 import { PlacementCardviewComponent } from './components/placement-cardview/placement-cardview.component';
 import { PlacementTableviewComponent } from './components/placement-tableview/placement-tableview.component';
 import { PlacementListComponent } from './controller/placement-list/placement-list.component';
+import { PlacementEnquiryComponent } from './components/placement-enquiry/placement-enquiry.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -146,7 +147,8 @@ import { PlacementListComponent } from './controller/placement-list/placement-li
     PlacementAdminComponent,
     PlacementCardviewComponent,
     PlacementTableviewComponent,
-    PlacementListComponent
+    PlacementListComponent,
+    PlacementEnquiryComponent
   ],
   imports: [
     MatDividerModule,

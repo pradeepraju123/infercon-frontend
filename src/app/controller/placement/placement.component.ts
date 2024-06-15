@@ -4,8 +4,9 @@ import { Location } from '@angular/common';
 import { PlacementService } from '../../services/placement.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
-  MAT_DIALOG_DATA, MatDialogRef,
+  MAT_DIALOG_DATA, MatDialog, MatDialogRef,
 } from '@angular/material/dialog';
+import { PlacementEnquiryComponent } from '../../components/placement-enquiry/placement-enquiry.component';
 @Component({
   selector: 'app-placement',
   templateUrl: './placement.component.html',
@@ -20,7 +21,8 @@ export class PlacementComponent implements OnInit {
     private location : Location, 
     private _snackBar: MatSnackBar, 
     @Inject(MAT_DIALOG_DATA) public data: {itemId: string},
-    private dialogRef: MatDialogRef<PlacementComponent>) {}
+    private dialogRef: MatDialogRef<PlacementComponent>,
+    public dialog: MatDialog) {}
 
   ngOnInit(): void {
     const id = this.data.itemId;
@@ -47,5 +49,12 @@ export class PlacementComponent implements OnInit {
   }
   goBack(): void {
     this.location.back(); // This uses the Angular Location service to navigate back.
+  }
+  openDialogPlacementEnquiry(job_id: String) {
+    this.dialog.open(PlacementEnquiryComponent, {
+      data: {
+        itemId: job_id
+      }
+    });
   }
 }

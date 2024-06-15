@@ -80,16 +80,17 @@
         <div class="card mb-3">
           <div class="card-img-container">
            
-            <img *ngIf="contentLoaded"  src="{{ item.image }}" alt="Card image" class="card-img">
+            <img *ngIf="item.image"  src="{{ item.image }}" alt="Card image" class="card-img">
           </div>
           <div class="card-body">
-              
+            <h6 *ngIf="contentLoaded" class="card-title">{{ item.type_ }}</h6>
               <h5 *ngIf="contentLoaded" class="card-title">{{ item.title }}</h5>
               <div *ngIf="contentLoaded" [innerHTML]="item.short_description"></div>
               <!-- <p class="card-text" *ngIf="contentLoaded">{{ item.description }}</p> -->
           </div>
           <div class="button_sect">
             <button *ngIf="showButton && contentLoaded" class="btn btn-primary" mat-button (click)="openDialog(item._id)">Edit Blog</button>
+            <button *ngIf="showButton" class="btn btn-primary" mat-button (click)="deleteBlogData(item._id)">Delete</button>
           </div>
         </div>
       </div>

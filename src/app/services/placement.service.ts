@@ -57,6 +57,13 @@ createCareerList(data: any): Observable<any> {
   }
 }
 
+createPlacementEnquiryList(data: any): Observable<any> {
+    const headers = new HttpHeaders({
+    });
+    const url = 'https://api.inferconautomation.com/api/v1/placements';
+    return this.http.post(url, data, { headers });
+}
+
 updateCareerList(_id: string, data: any): Observable<any> {
   const token = sessionStorage.getItem('authToken');
   const userType = this.getUserTypeFromToken(token);

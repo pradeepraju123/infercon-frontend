@@ -92,3 +92,7 @@
     padding: 3px 10px;
     /* border-radius: 30px; */
   }
+
+  .button_sect button {
+    margin: 0px 10px;
+  }

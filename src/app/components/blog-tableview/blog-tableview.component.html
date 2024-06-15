@@ -14,7 +14,7 @@
           <td style="width: 15%;">{{ item.title }}</td>
           <td style="width: 75%; height: 100px; overflow: hidden;" [innerHTML]="item.short_description"></td>
           <td style="width: 5%;">
-            <button class="btn btn-primary" mat-button (click)="openDialog(item._id)">Edit Blogs</button>
+            <button class="btn btn-primary" style="padding: 10px;" mat-raised-button (click)="openDialog(item._id)">Edit Blogs</button>
           </td>
         </tr>
       </tbody>

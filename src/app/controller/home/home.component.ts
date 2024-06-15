@@ -24,17 +24,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
   type_: string = 'banner'
   state: string = 'hidden';
   contentLoaded: boolean = false;
-  limit: number = 2;
+  limit: number = 3;
   showText: boolean = false;
   trainings: any[]=[]; // Define a property to store the fetched data
   generaldata: any[]=[]
   data = {}
   filters: { value: string, name: string }[] = [
     { value: '*', name: 'ALL' },
-    { value: '.html', name: 'PLC' },
-    { value: '.photoshop', name: 'SCADA' },
-    { value: '.wordpress', name: 'AUTOMATION' },
-    { value: '.mobile', name: 'DCS' }
+    { value: '.plc', name: 'PLC Training' },
+    { value: '.dcs', name: 'DCS Training' },
+    { value: '.events', name: 'Events' }
   ];
   selectedFilter: string = '*';
   constructor(private blogService: BlogService, private trainingService: TrainingService, public dialog: MatDialog, public generlService: GeneralService) {}

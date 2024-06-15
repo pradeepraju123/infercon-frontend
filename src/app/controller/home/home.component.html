@@ -1,14 +1,23 @@
 <section class="slider_sect">
-    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="true">
-      <div class="carousel-indicators">
-        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-      </div>
-      <div class="carousel-inner">
-
-           <div class="carousel-inner">
-      <div *ngFor="let item of generaldata; let i = index" class="carousel-item" [class.active]="i === 0" [ngStyle]="{'background-image': 'url(' + item.image + ')', 'background-size': 'cover'}">
+  <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="true">
+    <div class="carousel-indicators">
+      <button
+        *ngFor="let item of generaldata; let i = index"
+        type="button"
+        [attr.data-bs-target]="'#carouselExampleIndicators'"
+        [attr.data-bs-slide-to]="i"
+        [class.active]="i === 0"
+        [attr.aria-current]="i === 0 ? 'true' : null"
+        [attr.aria-label]="'Slide ' + (i + 1)"
+      ></button>
+    </div>
+    <div class="carousel-inner">
+      <div
+        *ngFor="let item of generaldata; let i = index"
+        class="carousel-item"
+        [class.active]="i === 0"
+        [ngStyle]="{'background-image': 'url(' + item.image + ')', 'background-size': 'cover'}"
+      >
         <div class="container new_container">
           <div class="row">
             <div class="col-lg-12">
@@ -25,17 +34,17 @@
         </div>
       </div>
     </div>
-      </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button>
-    </div>
-  </section>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+</section>
+
   <section class="about_sect">
     <div class="container new_container">
       <div class="row">
@@ -325,40 +334,64 @@
                      <div class="iso-box-section wow fadeIn" data-wow-delay="0.9s">
                        <div class="iso-box-wrapper col4-iso-box">
   
-                          <div class="iso-box col-lg-4 col-md-4 col-sm-6 col-xs-6 " *ngIf="selectedFilter === '*' || selectedFilter === '.html'">
-                            <a href="assets/gallery-1.png" data-lightbox-gallery="portfolio-gallery"><img src="assets/gallery-1.png" alt="portfolio img"></a>
+                          <div class="iso-box col-lg-4 col-md-4 col-sm-6 col-xs-6 " *ngIf="selectedFilter === '*' || selectedFilter === '.plc'">
+                            <a href="assets/plc_training_image/IMG_4434.jpg" data-lightbox-gallery="portfolio-gallery"><img src="assets/plc_training_image/IMG_4434.jpg" alt="portfolio img"></a>
                           </div>
   
-                          <div class="iso-box col-md-4 col-lg-4 col-sm-6 col-xs-6" *ngIf="selectedFilter === '*' || selectedFilter === '.photoshop'">
-                            <a href="assets/gallery-2.png" data-lightbox-gallery="portfolio-gallery"><img src="assets/gallery-2.png" alt="portfolio img"></a>
+                          <div class="iso-box col-md-4 col-lg-4 col-sm-6 col-xs-6" *ngIf="selectedFilter === '*' || selectedFilter === '.plc'">
+                            <a href="assets/plc_training_image/JR6L0164.jpeg" data-lightbox-gallery="portfolio-gallery"><img src="assets/plc_training_image/JR6L0164.jpeg" alt="portfolio img"></a>
                           </div>
   
-                          <div class="iso-box col-lg-4 col-md-4 col-sm-6 col-xs-12" *ngIf="selectedFilter === '*' || selectedFilter === '.html'">
-                            <a href="assets/gallery-3.png" data-lightbox-gallery="portfolio-gallery"><img src="assets/gallery-3.png" alt="portfolio img"></a>
+                          <div class="iso-box col-lg-4 col-md-4 col-sm-6 col-xs-12" *ngIf="selectedFilter === '*' || selectedFilter === '.plc'">
+                            <a href="assets/plc_training_image/JR6L0151.jpeg" data-lightbox-gallery="portfolio-gallery"><img src="assets/plc_training_image/JR6L0151.jpeg" alt="portfolio img"></a>
                           </div>
   
-                          <div class="iso-box col-lg-4 col-md-4 col-sm-6 col-xs-6" *ngIf="selectedFilter === '*' || selectedFilter === '.wordpress'">
-                            <a href="assets/gallery-4.png" data-lightbox-gallery="portfolio-gallery"><img src="assets/gallery-4.png" alt="portfolio img"></a>
+                          <div class="iso-box col-lg-4 col-md-4 col-sm-6 col-xs-6" *ngIf="selectedFilter === '*' || selectedFilter === '.plc'">
+                            <a href="assets/plc_training_image/IMG_4471.jpg" data-lightbox-gallery="portfolio-gallery"><img src="assets/plc_training_image/IMG_4471.jpg" alt="portfolio img"></a>
                           </div>
   
-                          <div class="iso-box col-lg-4 col-md-4 col-sm-6 col-xs-6" *ngIf="selectedFilter === '*' || selectedFilter === '.mobile'">
-                            <a href="assets/gallery-5.png" data-lightbox-gallery="portfolio-gallery"><img src="assets/gallery-5.png" alt="portfolio img"></a>
+                          <div class="iso-box col-lg-4 col-md-4 col-sm-6 col-xs-6" *ngIf="selectedFilter === '*' || selectedFilter === '.plc'">
+                            <a href="assets/plc_training_image/JR6L0152.jpeg" data-lightbox-gallery="portfolio-gallery"><img src="assets/plc_training_image/JR6L0152.jpeg" alt="portfolio img"></a>
                           </div>
   
-                          <div class="iso-box col-lg-4 col-md-4 col-sm-6 col-xs-12" *ngIf="selectedFilter === '*' || selectedFilter === '.wordpress'">
-                            <a href="assets/gallery-6.png" data-lightbox-gallery="portfolio-gallery"><img src="assets/gallery-6.png" alt="portfolio img"></a>
+                          <div class="iso-box col-lg-4 col-md-4 col-sm-6 col-xs-12" *ngIf="selectedFilter === '*' || selectedFilter === '.dcs'">
+                            <a href="assets/dcs_training_image/IMG_4404.jpg" data-lightbox-gallery="portfolio-gallery"><img src="assets/dcs_training_image/IMG_4404.jpg" alt="portfolio img"></a>
                           </div>
   
-                          <div class="iso-box col-lg-4 col-md-4 col-sm-12 col-xs-6" *ngIf="selectedFilter === '*' || selectedFilter === '.photoshop'">
-                            <a href="assets/gallery-7.png" data-lightbox-gallery="portfolio-gallery"><img src="assets/gallery-7.png" alt="portfolio img"></a>
+                          <div class="iso-box col-lg-4 col-md-4 col-sm-12 col-xs-6" *ngIf="selectedFilter === '*' || selectedFilter === '.dcs'">
+                            <a href="assets/dcs_training_image/IMG_4402.jpg" data-lightbox-gallery="portfolio-gallery"><img src="assets/dcs_training_image/IMG_4402.jpg" alt="portfolio img"></a>
                           </div>
   
-                          <div class="iso-box col-lg-4 col-md-4 col-sm-6 col-xs-6" *ngIf="selectedFilter === '*' || selectedFilter === '.mobile'">
-                            <a href="assets/gallery-8.png" data-lightbox-gallery="portfolio-gallery"><img src="assets/gallery-8.png" alt="portfolio img"></a>
+                          <div class="iso-box col-lg-4 col-md-4 col-sm-6 col-xs-6" *ngIf="selectedFilter === '*' || selectedFilter === '.dcs'">
+                            <a href="assets/dcs_training_image/JR6L0044.jpeg" data-lightbox-gallery="portfolio-gallery"><img src="assets/dcs_training_image/JR6L0044.jpeg" alt="portfolio img"></a>
                           </div>
   
-                          <div class="iso-box col-lg-4 col-md-4 col-sm-6 col-xs-12" *ngIf="selectedFilter === '*' || selectedFilter === '.wordpress'">
-                            <a href="assets/gallery-9.png" data-lightbox-gallery="portfolio-gallery"><img src="assets/gallery-9.png" alt="portfolio img"></a>
+                          <div class="iso-box col-lg-4 col-md-4 col-sm-6 col-xs-12" *ngIf="selectedFilter === '*' || selectedFilter === '.dcs'">
+                            <a href="assets/dcs_training_image/IMG_4417.jpg" data-lightbox-gallery="portfolio-gallery"><img src="assets/dcs_training_image/IMG_4417.jpg" alt="portfolio img"></a>
+                          </div>
+
+                          <div class="iso-box col-lg-4 col-md-4 col-sm-6 col-xs-12" *ngIf="selectedFilter === '*' || selectedFilter === '.dcs'">
+                            <a href="assets/dcs_training_image/JR6L0060.jpeg" data-lightbox-gallery="portfolio-gallery"><img src="assets/dcs_training_image/JR6L0060.jpeg" alt="portfolio img"></a>
+                          </div>
+
+                          <div class="iso-box col-lg-4 col-md-4 col-sm-6 col-xs-6 " *ngIf="selectedFilter === '*' || selectedFilter === '.events'">
+                            <a href="assets/IV/IMG-20240606-WA0012.jpg" data-lightbox-gallery="portfolio-gallery"><img src="assets/IV/IMG-20240606-WA0012.jpg" alt="portfolio img"></a>
+                          </div>
+  
+                          <div class="iso-box col-md-4 col-lg-4 col-sm-6 col-xs-6" *ngIf="selectedFilter === '*' || selectedFilter === '.events'">
+                            <a href="assets/IV/IMG-20240606-WA0013.jpg" data-lightbox-gallery="portfolio-gallery"><img src="assets/IV/IMG-20240606-WA0013.jpg" alt="portfolio img"></a>
+                          </div>
+  
+                          <div class="iso-box col-lg-4 col-md-4 col-sm-6 col-xs-12" *ngIf="selectedFilter === '*' || selectedFilter === '.events'">
+                            <a href="assets/IV/IMG-20240606-WA0014.jpg" data-lightbox-gallery="portfolio-gallery"><img src="assets/IV/IMG-20240606-WA0014.jpg" alt="portfolio img"></a>
+                          </div>
+  
+                          <div class="iso-box col-lg-4 col-md-4 col-sm-6 col-xs-6" *ngIf="selectedFilter === '*' || selectedFilter === '.events'">
+                            <a href="assets/IV/IMG-20240606-WA0021.jpg" data-lightbox-gallery="portfolio-gallery"><img src="assets/IV/IMG-20240606-WA0021.jpg" alt="portfolio img"></a>
+                          </div>
+  
+                          <div class="iso-box col-lg-4 col-md-4 col-sm-6 col-xs-6" *ngIf="selectedFilter === '*' || selectedFilter === '.events'">
+                            <a href="assets/IV/IMG-20240606-WA0030.jpg" data-lightbox-gallery="portfolio-gallery"><img src="assets/IV/IMG-20240606-WA0030.jpg" alt="portfolio img"></a>
                           </div>
   
                        </div>

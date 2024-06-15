@@ -3,6 +3,7 @@ import { PlacementService } from '../../services/placement.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { PlacementComponent } from '../placement/placement.component';
+import { PlacementEnquiryComponent } from '../../components/placement-enquiry/placement-enquiry.component';
 
 @Component({
   selector: 'app-placement-list',
@@ -35,4 +36,14 @@ openDialog(_id: String) {
     }
   });
 }
+
+openDialogPlacementEnquiry(job_id: String) {
+  this.dialog.open(PlacementEnquiryComponent, {
+    data: {
+      itemId: job_id
+    }
+  });
+}
+
+
 }
