@@ -51,7 +51,9 @@ toolbar: Toolbar = [
       fullname: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', Validators.required],
-      courses: [[]],
+      city: [''],
+      state: [''],
+      country: [''],
     });
   }
 
@@ -115,8 +117,10 @@ toolbar: Toolbar = [
     return this.fb.group({
       fullname: [this.editForm.value.fullname, Validators.required],
       email: [this.editForm.value.email],
-      courses: [this.editForm.value.courses],
-      phone: [this.editForm.value.phone]
+      city: [this.editForm.value.city],
+      phone: [this.editForm.value.phone],
+      state: [this.editForm.value.state],
+      country: [this.editForm.value.country]
     });
   }
 
@@ -139,8 +143,10 @@ toolbar: Toolbar = [
     this.editForm = this.fb.group({
       fullname: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      courses: ['', Validators.required],
-      phone: ['', Validators.required]
+      phone: ['', Validators.required],
+      city: [''],
+      state: [''],
+      country: [''],
       // event_details: this.fb.array([]),
       // systems_used: this.fb.array([]),
     });
@@ -159,7 +165,10 @@ toolbar: Toolbar = [
           fullname: contactDetails.data.fullname,
           email:contactDetails.data.email,
           phone: contactDetails.data.phone,
-          courses: contactDetails.data.courses
+          courses: contactDetails.data.courses,
+          city: contactDetails.data.city,
+          state:contactDetails.data.state,
+          country:contactDetails.data.country
         });
       },
       (error) => {

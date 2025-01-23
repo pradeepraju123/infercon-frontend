@@ -81,6 +81,16 @@ export class AuthService {
     }
     return null;
   }
+  getUserIdFromToken(token: string | null): string | null {
+    // Parse the token and extract the userType
+    // Replace this with your actual token decoding logic
+    if (token) {
+      const payload = this.decodeJwt(token);
+      return payload.userName || null;
+    }
+    return null;
+  }
 }
+
 
 

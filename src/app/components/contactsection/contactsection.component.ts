@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component ,OnInit} from '@angular/core';
 import { ContactService } from '../../services/contact.service';
 import {MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition,} from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { countries } from '../../model/country-data-store';
+import { indianStates } from '../../model/state-data';
+
 import { MatDialogRef } from '@angular/material/dialog';
 import { courses } from '../../model/course-data-store';
 import { PhoneValidationService } from '../../services/phone-validation.service';
@@ -13,8 +15,11 @@ import * as libphonenumber from 'libphonenumber-js';
   templateUrl: './contactsection.component.html',
   styleUrls: ['./contactsection.component.css']
 })
-export class ContactsectionComponent {
+export class ContactsectionComponent implements OnInit {
   public countries:any = countries
+  public indianStates:any = indianStates
+  showStates: boolean = false;
+
   public courses:any = courses
   contactForm: FormGroup;
   horizontalPosition: MatSnackBarHorizontalPosition = 'right';
@@ -30,17 +35,32 @@ export class ContactsectionComponent {
       fullname: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       country: ['', Validators.required],
+      state: ['', Validators.required],
       phone: ['', Validators.required],
       courses: ['', Validators.required],
       source : ['Website'], 
       message: ['']
     });
   }
+  ngOnInit(): void {
+   
+
+  }
+  onCountryChange(event: any): void {
+    const selectedCountry = event.value;
+    this.showStates = selectedCountry === '91';
+    if (!this.showStates) {
+      this.contactForm.get('state')?.reset();
+    }
+  }
 
   onSubmit() {
+
     if (this.contactForm.valid) {
       const formData = this.contactForm.value;
       const countryCode = this.getCodeFromDialCode(this.contactForm.value.country);
+      const country = this.getCountry(this.contactForm.value.country)
+      formData.country = country;
       const combinedPhoneNumber = `${this.contactForm.value.country}${this.contactForm.value.phone}`;
       if (countryCode) {
       const isValid = this.phoneValidation.validatePhoneNumber(countryCode, combinedPhoneNumber);
@@ -105,5 +125,12 @@ export class ContactsectionComponent {
     const country = this.countries.find((c: { dial_code: string; }) => c.dial_code === dialCode);
     console.log("country", country)
     return country?.code as libphonenumber.CountryCode;
+  }
+
+  getCountry(dialCode: string){
+    const country = this.countries.find((c: { dial_code: string; }) => c.dial_code === dialCode);
+    console.log("country", country)
+    return country.name
+
   }
 }

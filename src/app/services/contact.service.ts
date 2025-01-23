@@ -81,6 +81,22 @@ export class ContactService {
              return throwError('No authentication token found'); // For example, using throwError from RxJS
             }
   }
+
+  sendMessageToUser(contact_ids: string[], message: any) {
+    const token = sessionStorage.getItem('authToken'); // Get the token from sessionStorage
+
+    if (token) {
+      //   // Set the headers with the bearer token
+      const headers = new HttpHeaders({
+        'Authorization': 'Bearer ' + token // Include the token in the request headers
+          });
+    return this.http.post<any>(`${this.apiUrl}/action/send-message`, { contact_ids, message }, { headers });
+        } else {
+          //   // Handle the case where there's no token (e.g., user is not authenticated)
+          //   // You can choose to return an error Observable or handle it in a way that suits your application.
+             return throwError('No authentication token found'); // For example, using throwError from RxJS
+            }
+  }
   updateContact(_id: string, data: any): Observable<any> {
     const token = sessionStorage.getItem('authToken'); // Get the token from sessionStorage
   

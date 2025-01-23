@@ -19,7 +19,7 @@ import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition
 })
 export class ContactAdminComponent implements AfterViewInit {
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
-  displayedColumns: string[] = ['fullname', 'phone', 'course', 'createdAt', 'leadSelection','assigneeSelection','Action'];
+  displayedColumns: string[] = ['fullname', 'phone', 'course', 'createdAt', 'leadSelection','assigneeSelection','Action', 'SendMessage'];
   leadOptions: string[] = ['New lead', 'Contacted', 'Followup', 'Not interested', 'Finalized'];
   assigneeOptions: string[] = [];
   contactId!: string
@@ -34,22 +34,30 @@ export class ContactAdminComponent implements AfterViewInit {
   data : any
   userType: any
   userName : any
+  userId: any
+  AdminDetails: any
   selected_ids : any
   selectedAssignee : any
   successMessage: string | null = null;
   errorMessage: string | null = null;
+  testMessage: string = 'Test Message'
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   horizontalPosition: MatSnackBarHorizontalPosition = 'right';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   selection = new SelectionModel<any>(true, []);
-  constructor(private contactServices: ContactService, private _liveAnnouncer: LiveAnnouncer, public dialog: MatDialog,private _snackBar: MatSnackBar,  private getUsername: UserService, private authService: AuthService) {}
+  constructor(private contactServices: ContactService, 
+    private _liveAnnouncer: LiveAnnouncer, 
+    public dialog: MatDialog,
+    private _snackBar: MatSnackBar,  
+    private getUsername: UserService, 
+    private authService: AuthService) {}
   getUser() {
     this.getUsername.getAllUsers().subscribe(
       (data: any) => {
         this.assigneeOptions = data.data
         .filter((user: any) => user.userType === "staff")
-        .map((user: any) => user.username);
+        .map((user: any) => user.name);
       },
       (error) => {
         console.error('Error while get user:', error);
@@ -60,9 +68,9 @@ export class ContactAdminComponent implements AfterViewInit {
     const token = sessionStorage.getItem('authToken'); // Assuming this function exists in your authService
     this.userType = this.authService.getUserTypeFromToken(token)
     if (this.userType === 'staff') {
-      this.displayedColumns = ['select', 'fullname', 'phone', 'course', 'createdAt', 'leadSelection','Action'];
+      this.displayedColumns = ['select', 'fullname', 'phone', 'course', 'createdDate','createdTime', 'leadSelection','Action', 'SendMessage'];
     } else if(this.userType === 'admin') {
-      this.displayedColumns = ['select', 'fullname', 'phone', 'course', 'createdAt', 'assigneeSelection','Action'];
+      this.displayedColumns = ['select', 'fullname', 'phone', 'course', 'createdDate','createdTime','assigneeSelection','Action', 'SendMessage'];
     }
     return this.userType;
   }
@@ -79,12 +87,34 @@ export class ContactAdminComponent implements AfterViewInit {
     
   }
 
+
+async getStaffAdminDetails(): Promise<any | null> {
+  const token = sessionStorage.getItem('authToken');
+  this.userType = this.authService.getUserTypeFromToken(token);
+
+  if (this.userType === 'staff') {
+    this.userId = this.authService.getUserIdFromToken(token);
+    
+    try {
+      const userDetails = await this.getUsername.getUserById(this.userId).toPromise();
+      return userDetails;
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+      return null;
+    }
+  } else {
+    return null;
+  }
+}
+
+
   openDialog(_id: String) {
     this.dialog.open(EditContactComponent, {
       data: {
         itemId: _id,
       }
     });
+    this.loadContacts()
   }
   onCourseSelectionChange(selectedLead: string, itemId: string) {
     this.contactId = itemId;
@@ -228,6 +258,28 @@ export class ContactAdminComponent implements AfterViewInit {
           );
       }
     }
+  }
+
+
+  async SendBulkMessage() {
+      // Get the selected_ids asynchronously
+      this.selected_ids = await this.getSelectedIds();
+  
+      console.log(this.selected_ids);
+  
+      if (this.selected_ids && this.selected_ids.length > 0) {
+  
+        this.contactServices.sendMessageToUser(this.selected_ids, this.testMessage).subscribe(
+          response => {
+            this.successMessage = 'Send bulk Message successfully.';
+            console.log('Send Notification successfully:', response);
+            this.openSnackBar(this.successMessage)
+          },
+          error => {
+            console.error('Error while send notification:', error);
+          });
+        this.loadContacts()
+      }
   }
 
     private async getSelectedIds(): Promise<string[]> {
