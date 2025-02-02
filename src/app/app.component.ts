@@ -17,6 +17,7 @@ import { AuthService } from './services/auth.service';
 })
 
 export class AppComponent implements AfterViewInit {
+  
   title = 'infercon-angular-dev';
   
   

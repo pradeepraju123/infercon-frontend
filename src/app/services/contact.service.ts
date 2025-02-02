@@ -9,6 +9,7 @@ import { AuthService } from './auth.service';
 export class ContactService {
 
   private apiUrl = 'https://api.inferconautomation.com/api/v1/contact';
+  private excelUrl='http://localhost:8081/api/v1/users/bulkpload';
 
   constructor(
     private http: HttpClient
@@ -17,6 +18,11 @@ export class ContactService {
        const url = `${this.apiUrl}`;
        return this.http.post(url, data);
   }
+
+  uploaduser(data: any): Observable<any> {
+    const url = `${this.excelUrl}`;
+    return this.http.post(url, data);
+}
   getContactById(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`);
   }

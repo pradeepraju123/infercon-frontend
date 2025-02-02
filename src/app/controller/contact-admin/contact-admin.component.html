@@ -21,6 +21,7 @@
             <button class="btn" (click)="downloadContacts()">Download</button>
             
           </div>
+         
         </div>
         <div class="col-lg-4">
           <div class="title_field_card">
@@ -33,11 +34,16 @@
             <button class="btn" (click)="bulkAction()">Select</button>
           </div>
         </div>
+        <input type="file" (change)="onFileSelected($event)" accept=".xls, .xlsx">
+        <button (click)="uploadFile()">Upload</button>
+        
+        <p *ngIf="fileError" style="color: red;">{{ fileError }}</p>
         <div class="col-lg-4">
-          <button class="btn" (click)="SendBulkMessage()">Send Message</button>
+          <!-- <button class="btn" (click)="SendBulkMessage()">Send Message</button> -->
         </div>
       </div>
     </div>
+   
     <div class="mat-elevation-z2">
       <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
          <!-- Checkbox Column -->
