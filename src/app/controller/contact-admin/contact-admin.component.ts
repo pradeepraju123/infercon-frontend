@@ -88,6 +88,8 @@ export class ContactAdminComponent implements AfterViewInit {
     
     this.contactService.uploaduser(formData).subscribe(
       (response) => {
+        this.successMessage = 'File uploaded successfully.';
+          this.openSnackBar(this.successMessage)
         console.log('File uploaded successfully', response);
         this.userType = response;
       },

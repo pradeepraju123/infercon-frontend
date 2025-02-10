@@ -16,12 +16,24 @@ export class ContactService {
   ) {}
   createContact(data: any): Observable<any> {
        const url = `${this.apiUrl}`;
+       
        return this.http.post(url, data);
   }
 
   uploaduser(data: any): Observable<any> {
+    const token = sessionStorage.getItem('authToken');
     const url = `${this.excelUrl}`;
-    return this.http.post(url, data);
+    if(token)
+    {
+      const headers = new HttpHeaders({
+        'Authorization': 'Bearer ' + token // Include the token in the request headers
+          });
+      return this.http.post(url, data, { headers });
+    }
+    else{
+      return throwError('No authentication token found'); 
+    }
+   
 }
   getContactById(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`);

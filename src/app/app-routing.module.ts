@@ -42,6 +42,10 @@ import { EditPlacementComponent } from './controller/edit-placement/edit-placeme
 import { AddPlacementComponent } from './controller/add-placement/add-placement.component';
 import { PlacementListComponent } from './controller/placement-list/placement-list.component';
 import { PlacementComponent } from './controller/placement/placement.component';
+import { WhatsappActivityComponent } from './components/whatsapp-activity/whatsapp-activity.component';
+// /Users/trstscore/Nanthini/infercon-frontend/src/app/components/whatsapp-activity/whatsapp-activity.component.ts
+
+
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'blog', component: BlogComponent },
@@ -83,6 +87,8 @@ const routes: Routes = [
   {path: 'app-add-placement', component: AddPlacementComponent, canActivate: [authGuard]},
   {path: 'app-placement-list', component: PlacementListComponent},
   {path:'app-placement/:id', component:PlacementComponent},
+   { path:'whatsappactivity', component: WhatsappActivityComponent },
+
   { path: '**', redirectTo: 'home' },
   
  
