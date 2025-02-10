@@ -32,6 +32,15 @@ getTraining(_id: string): Observable<any> {
 getTrainingById(id: string): Observable<any> {
       return this.http.get(`${this.apiUrl}/${id}`);
     }
+  
+    getTrainingByPublished(data: any): Observable<any> {
+      return this.http.post(`${this.apiUrl}/published`, data);
+    }
+  
+  getTrainingByFeatured(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/featured`);
+  }
+
 
 getTrainingBySlug(slug: string): Observable<any> {
       return this.http.get(`${this.apiUrl}/detail/${slug}`);

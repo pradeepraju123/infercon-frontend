@@ -1,119 +1,169 @@
-<section class="banner_section">
-</section>
-<section class="training_details_sect">
- <div class="container new_container">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="training_heading" *ngIf="training">
-                <h2>{{ training.title }}</h2>
-            </div>
-            
-        </div>
-        <div class="col-lg-12">
-            <div *ngIf="training" class="training_img">
-                <img src="{{training.image}}" alt="">
-            </div>
-        </div>
+<!-- <section class="banner_section">
+</section> -->
 
-        <div class="col-lg-12">
-            <!-- Check if training is defined before accessing event_details -->
-            <div *ngIf="training && training.event_details && training.event_details.length">
-                <h4 class="text-center">Event Details</h4>
-                <div class="card-group">
-                    <div class="card event-card" *ngFor="let eventDetail of training.event_details">
-                        <div class="card-body">
-                            <h5 class="card-title text-center">{{ eventDetail.title }}</h5>
-                            <p class="card-text text-center">{{ eventDetail.detail }}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <div class="col-lg-12">
-            <div class="training_cont">
-                <div *ngIf="training">
-                    <p [innerHTML]="training.description"></p>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-12">
-            <div class="system_list" *ngIf="training && training.systems_used && training.systems_used.length">
-                <h4>Systems Used</h4>
-                <div class="list-group systems-list">
-                    <div *ngFor="let systemUsed of training.systems_used">
-                    <div class="row">
-                        <div class="col-lg-4 col-4">
-                            <div class="training_title">
-                                <h4>{{ systemUsed.title }}</h4>
-                            </div>
-                            
-                        </div>
-                        <div class="col-lg-8 col-8">
-                            <div class="training_content">
-                                <p>{{ systemUsed.detail }}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                    <!-- <mat-card>
-                        <div *ngFor="let systemUsed of training.systems_used">
-                            
-                            <mat-card-content>{{ systemUsed.title }}: {{ systemUsed.detail }}</mat-card-content>
-                            </div>
-                          </mat-card> -->
-                </div>
-            </div>
-        </div>
-        <div *ngIf="groupedDetails && groupedDetails.length">
+<section class="training_banner_sect">
+    <div class="container">
+        <div class="training_banner_sect_inner">
             <div class="row">
-                <div class="col-lg-2">
-
-                </div>
-                <div class="col-lg-5">
-                    <div class="training_details_lis">
-                        <h2>BASIC LEVEL - 20 HOURS</h2>
+                <div class="col-lg-6">
+                    <div class="training_heading" *ngIf="training">
+                        <h1>{{ training.title }}</h1>
+                    </div>
+                    <div class="training_cont">
+                        <div *ngIf="training">
+                            <p [innerHTML]="training.short_description"></p>
+                        </div>
+                    </div>
+                    <div class="text-left">
+                        <a href="#form_contact" class="enrollbtn">ENROLL NOW</a>
                     </div>
                     
                 </div>
-                <div class="col-lg-5">
-                    <div class="training_details_lis">
-                        <h2>ADVANCED LEVEL - 40 HOURS</h2>
+                <div class="col-lg-6">
+                    <div *ngIf="training" class="training_img">
+                        <img src="{{training.image}}" alt="">
                     </div>
                 </div>
-            </div>
-            <div *ngFor="let detailGroup of groupedDetails">
-                <div class="row">
-                    <div class="col-lg-2">
-                        <div class="training_details_list_new">
-                            <h2 class="text-center">{{detailGroup.super_title}}</h2>
-                        </div>
-                    </div>
-                    <div class="col-lg-5">
-                        <div *ngFor="let add_detail of detailGroup.details">
-                            <div *ngIf="add_detail.type_detail === 'basic_level'" class="training_details_list">
-                                <h5>{{add_detail.title}}</h5>
-                                <p>{{add_detail.detail}}</p>
+                <div class="col-lg-12">
+                    <!-- Check if training is defined before accessing event_details -->
+                    <div *ngIf="training && training.event_details && training.event_details.length">
+                        <div class="card-group">
+                            <div class="card event-card" *ngFor="let eventDetail of training.event_details">
+                                <div class="card-body">
+                                    <h5 class="card-title text-center">{{ eventDetail.title }}</h5>
+                                    <p class="card-text text-center">{{ eventDetail.detail }}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-5">
-                        <div *ngFor="let add_detail of detailGroup.details">
-                            <div *ngIf="add_detail.type_detail === 'advanced_level'" class="training_details_list">
-                                <h5>{{add_detail.title}}</h5>
-                                <p>{{add_detail.detail}}</p>
-                            </div>
-                        </div>
-                    </div>
+        
                 </div>
             </div>
-            <div class="training_details text-center">
-                <button class="second_child text-center" (click)="openDialog()">ENQUIRY</button>  
-            </div>
+    
         </div>
     </div>
+</section>
+
+<section class="training_details_sect">
+ <div class="container new_container">
+        <div class="training_sub_banner">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="training_heading" *ngIf="training">
+                        <h2>{{ training.title }}</h2>
+                    </div>
+                    <div *ngIf="training">
+                        <p [innerHTML]="training.description"></p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div *ngIf="training" class="training_img">
+                        <img src="{{training.second_image}}" alt="">
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+        <div *ngFor="let key of formattedData | keyvalue">
+            <div *ngIf="key.value.type_detail === 'key_benefits'">
+                <h2 class="text-center">{{ key.value.super_title }}</h2>
+                <h3 class="text-center" style="font-weight: 700; padding: 20px;">{{ key.value.super_description }}</h3>
+                    <div class="row">      
+                        <div class="col-lg-6" *ngFor="let item of key.value.details">
+                           <div class="white_box_content">
+                            <h4 style="font-weight: 600;">{{ item.title }}</h4>
+                            <p>{{ item.detail }}</p>
+                           </div>
+                        </div>
+                    </div>
+            </div>
+
+            <div *ngIf="key.value.type_detail === 'skills_and_qualifications'">
+                <h2 class="text-center">{{ key.value.super_title }}</h2>
+                <h3 class="text-center" style="font-weight: 700;  padding: 20px;">{{ key.value.super_description }}</h3>
+                    <div class="row">      
+                        <div class="col-lg-6" *ngFor="let item of key.value.details">
+                           <div class="blue_box_content">
+                            <h4 style="font-weight: 600;">{{ item.title }}</h4>
+                            <p>{{ item.detail }}</p>
+                           </div>
+                        </div>
+                    </div>
+            </div>
+
+
+           
+            
+          </div>
+
+          <div *ngFor="let key of formattedData | keyvalue">
+            <div *ngIf="key.value.type_detail === 'cerifications'">
+                <h2 class="text-center">{{ key.value.super_title }}</h2>
+                <h3 class="text-center" style="font-weight: 700; padding: 20px;">{{ key.value.super_description }}</h3>
+                    <div class="row">  
+                        <div class="col-lg-6">
+                            <div *ngIf="training" class="training_img">
+                                <img src="{{training.certificate_image}}" alt="">
+                            </div>
+                        </div>    
+                        <div class="col-lg-6">
+                           <div class="certificate_content"  *ngFor="let item of key.value.details">
+                            <h4 style="font-weight: 600;">{{ item.title }}</h4>
+                            <p>{{ item.detail }}</p>
+                           </div>
+                        </div>
+                    </div>
+            </div>
+
+          </div>
+    
+        <!-- <div *ngFor="let detailGroup of groupedDetails">
+            <div class="row">
+                <div class="col-lg-12" *ngIf="detailGroup.super_title">
+                    <div class="training_details_list_new">
+                        <h2 class="text-center">{{ detailGroup.super_title }}</h2>
+                        <p></p>
+                    </div>
+                </div>
+        
+                <div class="col-lg-10">
+                    <div *ngFor="let add_detail of detailGroup.details">
+                        <div class="training_details_list">
+                            <h5>{{ add_detail.title }}</h5>
+                            <p>{{ add_detail.detail }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
  </div>   
 </section>
+
+<section class="list_image_sect" *ngIf="trainingDetailsList && trainingDetailsList.length > 0">
+    <div class="container new_container">
+      <div class="row">
+        <div class="col-lg-12">
+            <div class="training_heading">
+                <h5 class="text-center">Related Trainings</h5>
+            </div>
+        </div>
+
+        <div class="text-center col-lg-4" *ngFor="let item of trainingDetailsList">
+            <div class="list_images">
+            <img class="fixed-size-image" src="{{ item.image }}" alt="">
+            <div class="list_image_content">
+                <h4>{{ item.title }}</h4>
+                <p [innerHTML]="item.short_description"></p>
+                <div class="button_sect">
+                <button [routerLink]="['/app-training-detail', item.slug]" class="btn btn-primary">View Training</button>
+                </div>
+            </div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 
 <app-contactsection></app-contactsection>
 <app-footersection></app-footersection>

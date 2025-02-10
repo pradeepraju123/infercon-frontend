@@ -6,10 +6,14 @@ import { Location } from '@angular/common';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 import { FormArray, FormBuilder, FormGroup, Validators,AbstractControl } from '@angular/forms';
 import { Editor, Toolbar } from 'ngx-editor';
-import { courses_type, sub_type } from '../../model/course-data-store';
+import { courses_type, sub_type, content_types } from '../../model/course-data-store';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { MatDialogRef } from '@angular/material/dialog';
 import { TrainingcardViewComponent } from '../../components/training-cardview/training-cardview.component';
+
+import { forkJoin, of, Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+
 @Component({
   selector: 'app-add-training',
   templateUrl: './add-training.component.html',
@@ -33,7 +37,11 @@ export class AddTrainingComponent implements OnInit, OnDestroy {
   image: string | null = null; // To store the selected image file
   imagePreview : any;
   secondImage: string | null = null;
+  thirdImage: string | null = null;
   secondImagePreview: any;
+  thirdImagePreview: any;
+  AllTrainings: any;
+  data = {}
   trainingForm!: FormGroup;
   inputState = 'inactive';
   horizontalPosition: MatSnackBarHorizontalPosition = 'right';
@@ -51,6 +59,8 @@ export class AddTrainingComponent implements OnInit, OnDestroy {
   public courses_type:any = courses_type
   public sub_type:any = sub_type
 
+  public content_types:any = content_types
+
   onInputFocus() {
     this.inputState = 'active';
   }
@@ -67,10 +77,18 @@ export class AddTrainingComponent implements OnInit, OnDestroy {
     private trainingService: TrainingService
   ) {}
 
+  fetchAllTrainings(): void {
+    this.trainingService.getAllTraining(this.data).subscribe((data: any) => {
+      this.AllTrainings = data.data;
+      window.scrollTo(0, 0); // Scroll to the top of the page
+    });
+  }
+
   ngOnInit(): void {
     this.editor = new Editor();
     this.neweditor = new Editor();
     this.initializeForm();
+    this.fetchAllTrainings();
   }
 
   initializeForm() {
@@ -84,9 +102,12 @@ export class AddTrainingComponent implements OnInit, OnDestroy {
       sub_type: [''],
       description: [''],
       published: [false],
+      featured: [false],
       slug: ['', Validators.required],
       image: [''],
       second_image: [''],
+      cerficate_image: [''],
+      related_trainings: [''],
       event_details: this.fb.array([]),
       systems_used: this.fb.array([]),
       additional_details: this.fb.array([])
@@ -130,6 +151,7 @@ export class AddTrainingComponent implements OnInit, OnDestroy {
   addAdditionalDetails() {
     this.additionalDetails.push(this.fb.group({
       super_title: [''],
+      super_description: [''],
       title: [''],
       detail: [''],
       type_detail: ['']
@@ -168,6 +190,13 @@ export class AddTrainingComponent implements OnInit, OnDestroy {
     this.displayImagePreview(file, 'secondImagePreview');
   }
 
+  certifcateFileEvent(event: any) {
+    const file = event.target.files[0];
+    this.thirdImage = file;
+    this.displayImagePreview(file, 'thirdImagePreview');
+  }
+
+
   displayImagePreview(file: File, previewProperty: string) {
     if (file) {
       const reader = new FileReader();
@@ -184,37 +213,43 @@ export class AddTrainingComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     const trainingFormGroup = this.createTrainingFormGroup();
-
-    if (this.image) {
-      this.uploadService.uploadImage(this.image).subscribe(
-        (fileName) => {
-          trainingFormGroup.controls['image'].setValue(fileName);
-          if (this.secondImage) {
-            this.uploadService.uploadImage(this.secondImage).subscribe(
-              (secondFileName) => {
-                trainingFormGroup.controls['second_image'].setValue(secondFileName);
-                this.updateArrays(trainingFormGroup);
-                this.createTraining(trainingFormGroup);
-              },
-              (error) => {
-                console.error('Failed to upload the second image:', error);
-              }
-            );
-          } else {
-            this.updateArrays(trainingFormGroup);
-            this.createTraining(trainingFormGroup);
-          }
+    const uploadObservables: Observable<any>[] = [];
+  
+    const uploadAndSetImage = (image: any, controlName: string) => {
+      if (image) {
+        const upload$ = this.uploadService.uploadImage(image).pipe(
+          switchMap((fileName) => {
+            console.log(`${controlName} uploaded successfully:`, fileName);
+            trainingFormGroup.controls[controlName].setValue(fileName);
+            return of(fileName);
+          })
+        );
+        uploadObservables.push(upload$);
+      }
+    };
+  
+    // Upload images if they exist
+    uploadAndSetImage(this.image, 'image');
+    uploadAndSetImage(this.thirdImage, 'certificate_image');
+    uploadAndSetImage(this.secondImage, 'second_image');
+  
+    if (uploadObservables.length > 0) {
+      // Wait for all uploads to complete before processing training
+      forkJoin(uploadObservables).subscribe(
+        () => {
+          this.updateArrays(trainingFormGroup);
+          this.createTraining(trainingFormGroup);
         },
-        (error) => {
-          console.error('Failed to upload the image:', error);
-        }
+        (error) => console.error('Image upload failed:', error)
       );
     } else {
-      console.log('No image selected. Only updating other parameters.');
+      // No images to upload, proceed immediately
+      console.log('No images to upload. Proceeding with form submission.');
       this.updateArrays(trainingFormGroup);
       this.createTraining(trainingFormGroup);
     }
   }
+
 
   updateArrays(formGroup: FormGroup) {
     formGroup.controls['event_details'].setValue(this.trainingForm.value.event_details);
@@ -250,8 +285,11 @@ export class AddTrainingComponent implements OnInit, OnDestroy {
       sub_type: [this.trainingForm.value.sub_type],
       description: [this.trainingForm.value.description],
       published: [this.trainingForm.value.published],
+      featured: [this.trainingForm.value.featured],
       image: [''],
       second_image: [''],
+      certificate_image: [''],
+      related_trainings: [''],
       slug: [this.trainingForm.value.slug, Validators.required],
       event_details: [this.trainingForm.value.event_details],
       systems_used: [this.trainingForm.value.systems_used],
@@ -259,10 +297,19 @@ export class AddTrainingComponent implements OnInit, OnDestroy {
     });
   }
 
-  toggleSwitch() {
+  toggleSwitchPublised() {
     const publishedControl = this.trainingForm.get('published');
     if (publishedControl) {
       publishedControl.setValue(!publishedControl.value);
     }
   }
+
+  
+  toggleSwitchFeatured() {
+    const featuredControl = this.trainingForm.get('featured');
+    if (featuredControl) {
+      featuredControl.setValue(!featuredControl.value);
+    }
+  }
+
 }

@@ -10,7 +10,10 @@ import {
   MAT_DIALOG_DATA, MatDialogRef,
 } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
-import { courses_type, sub_type } from '../../model/course-data-store';
+import { courses_type, sub_type, content_types } from '../../model/course-data-store';
+
+import { forkJoin, Observable, of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit-training',
@@ -33,8 +36,14 @@ export class EditTrainingComponent implements OnInit, OnDestroy {
   successMessage: string | null = null;
   errorMessage: string | null = null;
   image: string | null = null;
+  second_image: string | null = null;
+  certificate_image: string | null = null;
   imagePreview: any;
+  secondImagePreview: any;
+  thirdImagePreview: any;
   trainingForm!: FormGroup;
+  AllTrainings: any;
+  request_data = {}
   trainingId: string | null = null; // Add a property to store the training ID
   horizontalPosition: MatSnackBarHorizontalPosition = 'right';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
@@ -50,6 +59,7 @@ toolbar: Toolbar = [
 ];
 public courses_type:any = courses_type
 public sub_type: any = sub_type
+public content_types:any = content_types
 
   constructor(
     private route: ActivatedRoute,
@@ -60,6 +70,13 @@ public sub_type: any = sub_type
     @Inject(MAT_DIALOG_DATA) public data: {itemId: string},
     private _snackBar: MatSnackBar, private dialogRef: MatDialogRef<EditTrainingComponent>,
   ) {}
+
+  fetchAllTrainings(): void {
+    this.trainingService.getAllTraining(this.request_data).subscribe((data: any) => {
+      this.AllTrainings = data.data;
+    });
+  }
+
 
   fileEvent(event: any) {
     // Handle the file input change event
@@ -74,12 +91,33 @@ public sub_type: any = sub_type
     reader.readAsDataURL(file);
   }
 
-  onImageSelected(event: any) {
+  fileEventsecond(event: any) {
+    // Handle the file input change event
     const file = event.target.files[0];
-    if (file) {
-      this.image = file;
-    }
+    this.second_image = file;
+    
+    // Display a preview of the new image
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.secondImagePreview = e.target.result;
+    };
+    reader.readAsDataURL(file);
   }
+
+
+  fileEventThird(event: any) {
+    // Handle the file input change event
+    const file = event.target.files[0];
+    this.certificate_image = file;
+    
+    // Display a preview of the new image
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.thirdImagePreview = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+  
 
   // displayImagePreview(file: File) {
   //   if (file) {
@@ -94,36 +132,45 @@ public sub_type: any = sub_type
   //     reader.readAsDataURL(file);
   //   }
   // }
-
   onSubmit() {
     const trainingFormGroup = this.createTrainingFormGroup();
+    const uploadObservables: Observable<any>[] = [];
   
-    if (this.image) {
-      console.log('it passes through')
-      this.uploadService.uploadImage(this.image).subscribe(
-        (fileName) => {
-          // Update the image parameter only when an image is selected
-          trainingFormGroup.controls['image'].setValue(fileName);
-          this.updateArrays(trainingFormGroup);
-          if (this.trainingId) {
-            this.updateTraining(trainingFormGroup);
-          } else {
-            this.createTraining(trainingFormGroup);
-          }
+    const uploadAndSetImage = (image: any, controlName: string) => {
+      if (image) {
+        const upload$ = this.uploadService.uploadImage(image).pipe(
+          switchMap((fileName) => {
+            console.log(`${controlName} uploaded successfully: `, fileName);
+            trainingFormGroup.controls[controlName].setValue(fileName);
+            return of(fileName);
+          })
+        );
+        uploadObservables.push(upload$);
+      }
+    };
+  
+    // Only add uploads if images exist
+    if (this.second_image) uploadAndSetImage(this.second_image, 'second_image');
+    if (this.certificate_image) uploadAndSetImage(this.certificate_image, 'certificate_image');
+    if (this.image) uploadAndSetImage(this.image, 'image');
+  
+    if (uploadObservables.length > 0) {
+      // If at least one image exists, wait for uploads to finish
+      forkJoin(uploadObservables).subscribe(
+        () => {
+          this.processTraining(trainingFormGroup);
         },
-        (error) => {
-          console.error('Failed to upload the image:', error);
-        }
+        (error) => console.error('Image upload failed:', error)
       );
     } else {
-      // Do not update the image parameter if no image is selected
-      this.updateArrays(trainingFormGroup);
-      if (this.trainingId) {
-        this.updateTraining(trainingFormGroup);
-      } else {
-        this.createTraining(trainingFormGroup);
-      }
+      // No images to upload, process immediately
+      this.processTraining(trainingFormGroup);
     }
+  }
+  private processTraining(trainingFormGroup: FormGroup) {
+    this.updateArrays(trainingFormGroup);
+    console.log('Final training form:', trainingFormGroup.value);
+    this.trainingId ? this.updateTraining(trainingFormGroup) : this.createTraining(trainingFormGroup);
   }
   
 
@@ -149,6 +196,7 @@ public sub_type: any = sub_type
 
   updateTraining(trainingFormGroup: FormGroup) {
     if (this.trainingId) {
+      console.log('last :: ' , trainingFormGroup.value)
       this.trainingService.updateTraining(this.trainingId, trainingFormGroup.value).subscribe(
         () => {
           this.successMessage = 'Training was updated successfully.';
@@ -174,9 +222,11 @@ public sub_type: any = sub_type
       meta_description: [this.trainingForm.value.meta_description, Validators.required],
       courses_type: [this.trainingForm.value.courses_type, Validators.required],
       sub_type: [this.trainingForm.value.sub_type],
+      related_trainings : [this.trainingForm.value.related_trainings],
       short_description: [this.trainingForm.value.short_description],
       description: [this.trainingForm.value.description],
       published: [this.trainingForm.value.published],
+      featured: [this.trainingForm.value.featured],
       slug : [this.trainingForm.value.slug],
       event_details: [this.trainingForm.value.event_details],
       systems_used: [this.trainingForm.value.systems_used],
@@ -187,24 +237,39 @@ public sub_type: any = sub_type
     if (this.image) {
       formGroupConfig['image'] = [''] as any; // Type assertion here
     }
+
+    if (this.second_image) {
+      formGroupConfig['second_image'] = [''] as any; // Type assertion here
+    }
+
+    if (this.certificate_image) {
+      formGroupConfig['certificate_image'] = [''] as any; // Type assertion here
+    }
   
     return this.fb.group(formGroupConfig);
   }
   
   
 
-  toggleSwitch() {
+  toggleSwitchPublised() {
     const publishedControl = this.trainingForm.get('published');
     if (publishedControl) {
       publishedControl.setValue(!publishedControl.value);
     }
   }
 
+  toggleSwitchFeatured() {
+    const featuredControl = this.trainingForm.get('featured');
+    if (featuredControl) {
+      featuredControl.setValue(!featuredControl.value);
+    }
+  }
 
   ngOnInit(): void {
     this.editor = new Editor();
     this.neweditor = new Editor();
     this.initializeForm();
+    this.fetchAllTrainings();
     const id = this.data.itemId;
     if (id){
       this.trainingId = id;
@@ -226,7 +291,11 @@ public sub_type: any = sub_type
       short_description: [''],
       description: [''],
       published: [false],
+      featured: [false],
       image: [''],
+      second_image: [''],
+      certificate_image: [''],
+      related_trainings: [''],
       slug : ['', Validators.required],
       event_details: this.fb.array([]),
       systems_used: this.fb.array([]),
@@ -271,6 +340,7 @@ public sub_type: any = sub_type
   addAdditionalDetails() {
     this.additionalDetails.push(this.fb.group({
       super_title : [''],
+      super_description: [''],
       title: [''],
       detail: [''],
       type_detail: ['']
@@ -299,12 +369,19 @@ public sub_type: any = sub_type
           sub_type: trainingDetails.sub_type,
           description: trainingDetails.description,
           published: trainingDetails.published,
+          featured: trainingDetails.featured,
           image: trainingDetails.image,
+          related_trainings: trainingDetails.related_trainings,
+          second_image: trainingDetails.second_image,
+          certificate_image: trainingDetails.certificate_image,
           slug : trainingDetails.slug
         });
   
         // Display the image preview
-        this.displayImagePreview(trainingDetails.image);
+        this.displayImagePreview(trainingDetails.image, 1);
+
+        this.displayImagePreview(trainingDetails.second_image, 2);
+        this.displayImagePreview(trainingDetails.certificate_image, 3);
   
         // Populate the dynamic form controls for event_details
         this.eventDetails.clear(); // Clear existing form controls
@@ -331,6 +408,7 @@ public sub_type: any = sub_type
           // Patch the values for the last added form control
           this.additionalDetails.at(lastIndex).patchValue({
             super_title: add_detail.super_title,
+            super_description: add_detail.super_description,
             title: add_detail.title,
             detail: add_detail.detail,
             type_detail: add_detail.type_detail
@@ -357,10 +435,16 @@ public sub_type: any = sub_type
     );
   }
   
-  displayImagePreview(imageUrl: string) {
-    if (imageUrl) {
+  displayImagePreview(imageUrl: string, type: number) {
+    if (imageUrl && type === 1) {
       // Set the imagePreview property to the imageUrl
       this.imagePreview = imageUrl;
+    }
+    else if (imageUrl && type === 2){
+      this.secondImagePreview = imageUrl;
+    }
+    else{
+      this.thirdImagePreview = imageUrl
     }
   }
   

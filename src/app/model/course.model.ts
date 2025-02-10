@@ -15,3 +15,8 @@ export interface SubType {
     value: string
     label: string
 }
+
+export interface ContentType {
+    value: string
+    label: string
+}

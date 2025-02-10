@@ -24,7 +24,20 @@
                        (click)="toggleSwitch()">
                   </div>
                 </div>              
-              </div>            
+              </div>  
+              
+              <div class="form-group published_bool">
+                <label for="published">Featured</label>
+                <div class="custom-control custom-switch">
+                  <input type="checkbox" class="custom-control-input" id="published" name="published" [(ngModel)]="blogdata.published">
+                  <label class="custom-control-label" for="published"></label>
+                  <div class="switch-toggle" 
+                       [ngClass]="{'green': blogdata.published, 'blue': !blogdata.published}" 
+                       [@toggleAnimation]="blogdata.published" 
+                       (click)="toggleSwitch()">
+                  </div>
+                </div>              
+              </div>   
           </div>
         </div>
         <div class="col-lg-6">
