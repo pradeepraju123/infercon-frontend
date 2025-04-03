@@ -79,7 +79,9 @@ const routesWithoutDefault = [
   '/app-general-admin',
   '/logout',
   '/app-list-admin',
-  '/app-placement-admin'
+  '/app-placement-admin',
+  '/whatsappactivity'
+
 ];
 const routesWithDefault = [
   '/home',

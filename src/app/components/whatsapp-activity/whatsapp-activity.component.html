@@ -1,67 +1,103 @@
 <section class="whatsapp_activity_table">
-    <div class="container">
-      <div class="search">
-        <div class="row">
-          <div class="col-md-4">
-            <mat-card class="custom-card">
-                <mat-card-header>
-                  <mat-card-title>Angular Card</mat-card-title>
-                  <mat-card-subtitle>Using Angular Material</mat-card-subtitle>
-                </mat-card-header>
-                <img mat-card-image src="https://source.unsplash.com/random/300x200" alt="Random Image">
-                <mat-card-content>
-                  <p>This is a simple card with Angular Material.</p>
-                </mat-card-content>
-                <mat-card-actions>
-                  <button mat-button color="primary">Like</button>
-                  <button mat-button color="accent">Share</button>
-                </mat-card-actions>
-              </mat-card>
-              
-           
-          </div>
-        
-          <div class="col-md-4">
-            <mat-card class="custom-card">
-                <mat-card-header>
-                  <mat-card-title>Angular Card</mat-card-title>
-                  <mat-card-subtitle>Using Angular Material</mat-card-subtitle>
-                </mat-card-header>
-                <img mat-card-image src="https://source.unsplash.com/random/300x200" alt="Random Image">
-                <mat-card-content>
-                  <p>This is a simple card with Angular Material.</p>
-                </mat-card-content>
-                <mat-card-actions>
-                  <button mat-button color="primary">Like</button>
-                  <button mat-button color="accent">Share</button>
-                </mat-card-actions>
-              </mat-card>
-              
-           
-          </div>
-          <div class="col-md-4">
-            <mat-card class="custom-card">
-                <mat-card-header>
-                  <mat-card-title>Angular Card</mat-card-title>
-                  <mat-card-subtitle>Using Angular Material</mat-card-subtitle>
-                </mat-card-header>
-                <img mat-card-image src="https://source.unsplash.com/random/300x200" alt="Random Image">
-                <mat-card-content>
-                  <p>This is a simple card with Angular Material.</p>
-                </mat-card-content>
-                <mat-card-actions>
-                  <button mat-button color="primary">Like</button>
-                  <button mat-button color="accent">Share</button>
-                </mat-card-actions>
-              </mat-card>
-              
-           
-          </div>
-        
-        </div>
+
+  
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <h2 class="whatsappac">Whatsapp Activity</h2>
+        <form [formGroup]="filterForm" (ngSubmit)="submitForm()">
+          <div class="row">
+            <!-- Country -->
+            <div class="col-md-4">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Select Country</mat-label>
+                <mat-select formControlName="country" multiple>
+                  <mat-option *ngFor="let country of countries" [value]="country.name">
+                    {{ country.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+  
+            <!-- State -->
+            <div class="col-md-4">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Select States</mat-label>
+                <mat-select formControlName="state" multiple>
+                  <mat-option *ngFor="let state of states" [value]="state.name">
+                    {{ state.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+  
+            <!-- City -->
+            <div class="col-md-4">
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Select City</mat-label>
+                <mat-select formControlName="citie" multiple>
+                  <mat-option *ngFor="let city of cities" [value]="city.name">
+                    {{ city.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div> <!-- End Row -->
+            <br><br>
+            <div class="row justify-content-center"> 
+              <!-- Start Date -->
+              <div class="col-md-4 col-lg-4">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Start Date</mat-label>
+                  <input matInput [matDatepicker]="startPicker" formControlName="startDate">
+                  <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                  <mat-datepicker #startPicker></mat-datepicker>
+                </mat-form-field>
+              </div>
+          
+              <!-- End Date -->
+              <div class="col-md-4 col-lg-4">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>End Date</mat-label>
+                  <input matInput [matDatepicker]="endPicker" formControlName="endDate">
+                  <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                  <mat-datepicker #endPicker></mat-datepicker>
+                </mat-form-field>
+              </div>
+          
+              <!-- Submit Button -->
+              <div class="col-md-4 col-lg-4">
+                <button mat-raised-button color="primary" type="submit" class="w-100">Submit</button>
+              </div>
+            </div> <!-- End Row -->
+        </form>
       </div>
-     
-      
-      
+    </div>
   </div>
-  </section>
+  
+  
+  
+  <div class="container">
+    <h3>Total Contacts: {{ totalContacts }}</h3>  
+    
+    <div class="row">
+      <div class="col-md-4" *ngFor="let contact of contacts">
+        <mat-card class="custom-card">
+          <mat-card-header>
+            <mat-card-title>{{ contact.fullname }}</mat-card-title>
+            <mat-card-subtitle>{{ contact.email }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p><strong>Phone:</strong> {{ contact.phone_number }}</p>
+            <p><strong>City:</strong> {{ contact.city }}, {{ contact.state }}</p>
+            <p><strong>Country:</strong> {{ contact.country }}</p>
+            <p><strong>Courses:</strong> {{ contact.courses.join(', ') }}</p>
+            <p><strong>Year:</strong> {{ contact.year }}</p>
+            <p><strong>Month:</strong> {{ contact.month }}</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+  
+</section>

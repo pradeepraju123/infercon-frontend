@@ -1,9 +1,14 @@
-table {
+.whatsapp_activity_table {
     width: 100%;
+  }
+  .whatsappac
+  {
+    padding-top:30px;
+    padding-bottom:30px;
   }
 
 .whatsapp_activity_table {
-  padding: 20px;
+  margin: 20px auto;
 }
 .lead_status {
   padding-top: 15px;

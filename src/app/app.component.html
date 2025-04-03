@@ -41,6 +41,7 @@
               <li class="nav-item">
                 <a class="nav-link" routerLink="contact">Contact</a>
               </li>     
+
                
                    
             </ul>
@@ -98,6 +99,9 @@
               <li class="nav-item" *ngIf="getUserType() === 'staff' || getUserType() === 'admin'">
                 <a class="nav-link" routerLink="app-placement-admin">Placement</a>
               </li>
+              <li class="nav-item" *ngIf="getUserType() === 'admin'">
+                <a class="nav-link" routerLink="whatsappactivity">whatsappactivity</a>
+              </li>     
             </ul>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 profile-menu" *ngIf="getUserType() === 'staff' || getUserType() === 'admin'"> 
               <li class="nav-item dropdown">

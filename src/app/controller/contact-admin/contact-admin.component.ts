@@ -27,6 +27,8 @@ export class ContactAdminComponent implements AfterViewInit {
   searchTerm: string = '';
   startDate: any = null;
   endDate: any = new Date();
+  singleStartDate: Date | null = null;
+  singleEndDate: Date | null = null;
   published: any;
   sortBy: any
   pageSize = 10;
@@ -89,7 +91,7 @@ export class ContactAdminComponent implements AfterViewInit {
     this.contactService.uploaduser(formData).subscribe(
       (response) => {
         this.successMessage = 'File uploaded successfully.';
-          this.openSnackBar(this.successMessage)
+        this.openSnackBar(this.successMessage)
         console.log('File uploaded successfully', response);
         this.userType = response;
       },
@@ -238,6 +240,7 @@ async getStaffAdminDetails(): Promise<any | null> {
       searchTerm: this.searchTerm,
       start_date: this.formatDate(this.startDate),
       end_date: this.formatDate(this.endDate),
+
       published: this.published,
       sort_by: this.sortBy,
       page_size: this.pageSize,

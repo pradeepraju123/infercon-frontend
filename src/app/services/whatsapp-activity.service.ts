@@ -11,6 +11,8 @@ export class WhatsappActivityService {
   
   private apiUrl = 'https://api.inferconautomation.com/api/v1/contact';
   private excelUrl='http://localhost:8081/api/v1/users/getall';
+  private excelUrl1='http://localhost:8081/api/v1/users/bulkwhatsmes';
+
 
   constructor(
     private http: HttpClient
@@ -29,6 +31,25 @@ export class WhatsappActivityService {
   //    return throwError('No authentication token found'); 
   //   }
   // }
+
+  // sendmessage_filtercontact(data: any): Observable<any> {
+  //   const token = sessionStorage.getItem('authToken');
+
+  //   if (token) {
+  //     const headers = new HttpHeaders({
+  //       'Authorization': 'Bearer ' + token
+  //         });
+  //   return this.http.post(`${this.excelUrl1}/get`, data, { headers });
+  // } else {
+ 
+  //    return throwError('No authentication token found'); 
+  //   }
+  // }
+  sendmessage_filtercontact(data: any): Observable<any> {
+    const url = `${this.excelUrl1}`;
+    return this.http.post(url,data);
+
+  }
 
   getAllContact(): Observable<any> {
     const url = `${this.excelUrl}`;
