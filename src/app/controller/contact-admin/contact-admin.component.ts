@@ -98,6 +98,7 @@ export class ContactAdminComponent implements AfterViewInit {
       (error) => {
         console.error('Error uploading file:', error);
         this.fileError = 'Error uploading file. Please try again.';
+        this.openSnackBar(this.fileError)
       }
     );
 

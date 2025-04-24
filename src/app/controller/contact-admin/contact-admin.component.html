@@ -36,7 +36,7 @@
         <input type="file" (change)="onFileSelected($event)" accept=".xls, .xlsx">
         <button (click)="uploadFile()">Upload</button>
         
-        <p *ngIf="fileError" style="color: red;">{{ fileError }}</p>
+        <!-- <p *ngIf="fileError" style="color: red;">{{ fileError }}</p> -->
         <div class="col-lg-4">
           <!-- <button class="btn" (click)="SendBulkMessage()">Send Message</button> -->
         </div>
