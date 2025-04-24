@@ -9,7 +9,7 @@ import { AuthService } from './auth.service';
 export class ContactService {
 
   private apiUrl = 'https://api.inferconautomation.com/api/v1/contact';
-  private excelUrl='http://localhost:8081/api/v1/users/bulkpload';
+  private excelUrl='https://api.inferconautomation.com/api/v1/users/bulkpload';
 
   constructor(
     private http: HttpClient
