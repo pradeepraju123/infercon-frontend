@@ -27,6 +27,8 @@ export class ContactAdminComponent implements AfterViewInit {
   searchTerm: string = '';
   startDate: any = null;
   endDate: any = new Date();
+  singleStartDate: Date | null = null;
+  singleEndDate: Date | null = null;
   published: any;
   sortBy: any
   pageSize = 10;
@@ -51,7 +53,56 @@ export class ContactAdminComponent implements AfterViewInit {
     public dialog: MatDialog,
     private _snackBar: MatSnackBar,  
     private getUsername: UserService, 
-    private authService: AuthService) {}
+    private authService: AuthService,
+    private contactService: ContactService,
+
+    ) {}
+    selectedFile: File | null = null;
+  fileError: string | null = null;
+
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+
+    if (file) {
+      const fileName = file.name;
+      const fileExtension = fileName.split('.').pop()?.toLowerCase();
+
+      if (fileExtension !== 'xls' && fileExtension !== 'xlsx') {
+        this.fileError = "Only Excel files (.xls, .xlsx) are allowed!";
+        return;
+      }
+
+      this.fileError = null;
+      this.selectedFile = file;
+    }
+  }
+
+  uploadFile() {
+    if (!this.selectedFile) {
+      this.fileError = "Please select a file first!";
+      return;
+    }
+    console.log(this.selectedFile);
+
+    const formData = new FormData();
+    formData.append("file", this.selectedFile);
+    
+    this.contactService.uploaduser(formData).subscribe(
+      (response) => {
+        this.successMessage = 'File uploaded successfully.';
+        this.openSnackBar(this.successMessage)
+        console.log('File uploaded successfully', response);
+        this.userType = response;
+      },
+      (error) => {
+        console.error('Error uploading file:', error);
+        this.fileError = 'Error uploading file. Please try again.';
+      }
+    );
+
+
+  }
   getUser() {
     this.getUsername.getAllUsers().subscribe(
       (data: any) => {
@@ -189,6 +240,7 @@ async getStaffAdminDetails(): Promise<any | null> {
       searchTerm: this.searchTerm,
       start_date: this.formatDate(this.startDate),
       end_date: this.formatDate(this.endDate),
+
       published: this.published,
       sort_by: this.sortBy,
       page_size: this.pageSize,

@@ -19,8 +19,8 @@
             </mat-form-field>
             <button class="btn" (click)="loadContacts()">Search</button>
             <button class="btn" (click)="downloadContacts()">Download</button>
-            
           </div>
+         
         </div>
         <div class="col-lg-4">
           <div class="title_field_card">
@@ -33,11 +33,39 @@
             <button class="btn" (click)="bulkAction()">Select</button>
           </div>
         </div>
+        <input type="file" (change)="onFileSelected($event)" accept=".xls, .xlsx">
+        <button (click)="uploadFile()">Upload</button>
+        
+        <p *ngIf="fileError" style="color: red;">{{ fileError }}</p>
         <div class="col-lg-4">
-          <button class="btn" (click)="SendBulkMessage()">Send Message</button>
+          <!-- <button class="btn" (click)="SendBulkMessage()">Send Message</button> -->
         </div>
       </div>
+      
     </div>
+  
+    
+    <!-- <div class="row">
+      <div class="col-lg-4">
+        <mat-form-field appearance="outline">
+          <mat-label>Select Start Date</mat-label>
+          <input matInput [matDatepicker]="startPicker" [(ngModel)]="singleStartDate" placeholder="Start date">
+          <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    
+      <div class="col-lg-4">
+        <mat-form-field appearance="outline">
+          <mat-label>Select End Date</mat-label>
+          <input matInput [matDatepicker]="endPicker" [(ngModel)]="singleEndDate" placeholder="End date">
+          <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+          <mat-datepicker #endPicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+     -->
+   
     <div class="mat-elevation-z2">
       <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
          <!-- Checkbox Column -->

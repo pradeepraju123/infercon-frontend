@@ -9,14 +9,32 @@ import { AuthService } from './auth.service';
 export class ContactService {
 
   private apiUrl = 'https://api.inferconautomation.com/api/v1/contact';
+  private excelUrl='http://localhost:8081/api/v1/users/bulkpload';
 
   constructor(
     private http: HttpClient
   ) {}
   createContact(data: any): Observable<any> {
        const url = `${this.apiUrl}`;
+       
        return this.http.post(url, data);
   }
+
+  uploaduser(data: any): Observable<any> {
+    const token = sessionStorage.getItem('authToken');
+    const url = `${this.excelUrl}`;
+    if(token)
+    {
+      const headers = new HttpHeaders({
+        'Authorization': 'Bearer ' + token // Include the token in the request headers
+          });
+      return this.http.post(url, data, { headers });
+    }
+    else{
+      return throwError('No authentication token found'); 
+    }
+   
+}
   getContactById(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`);
   }

@@ -89,6 +89,7 @@ import { PlacementCardviewComponent } from './components/placement-cardview/plac
 import { PlacementTableviewComponent } from './components/placement-tableview/placement-tableview.component';
 import { PlacementListComponent } from './controller/placement-list/placement-list.component';
 import { PlacementEnquiryComponent } from './components/placement-enquiry/placement-enquiry.component';
+import { WhatsappActivityComponent } from './components/whatsapp-activity/whatsapp-activity.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -148,7 +149,8 @@ import { PlacementEnquiryComponent } from './components/placement-enquiry/placem
     PlacementCardviewComponent,
     PlacementTableviewComponent,
     PlacementListComponent,
-    PlacementEnquiryComponent
+    PlacementEnquiryComponent,
+    WhatsappActivityComponent
   ],
   imports: [
     MatDividerModule,

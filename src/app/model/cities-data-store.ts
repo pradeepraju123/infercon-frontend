@@ -1,0 +1,35 @@
+import { Cities } from "./cities.model";
+
+
+export var cities: Cities[] = [
+    { "name": "Chennai" },
+    { "name": "Coimbatore" },
+    { "name": "Madurai" },
+    { "name": "Tiruchirappalli" },
+    { "name": "Salem" },
+    { "name": "Erode" },
+    { "name": "Tirunelveli" },
+    { "name": "Vellore" },
+    { "name": "Thoothukudi" },
+    { "name": "Thanjavur" },
+    { "name": "Dindigul" },
+    { "name": "Tiruppur" },
+    { "name": "Karur" },
+    { "name": "Cuddalore" },
+    { "name": "Kanchipuram" },
+    { "name": "Nagapattinam" },
+    { "name": "Kanyakumari" },
+    { "name": "Ariyalur" },
+    { "name": "Ramanathapuram" },
+    { "name": "Perambalur" },
+    { "name": "Virudhunagar" },
+    { "name": "Krishnagiri" },
+    { "name": "Namakkal" },
+    { "name": "Sivaganga" },
+    { "name": "Pudukkottai" },
+    { "name": "Thiruvarur" },
+    { "name": "Dharmapuri" },
+    { "name": "Viluppuram" },
+    { "name": "Tenkasi" },
+    { "name": "Mayiladuthurai" }
+];

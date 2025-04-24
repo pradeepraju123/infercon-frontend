@@ -17,6 +17,7 @@ import { AuthService } from './services/auth.service';
 })
 
 export class AppComponent implements AfterViewInit {
+  
   title = 'infercon-angular-dev';
   
   
@@ -78,7 +79,9 @@ const routesWithoutDefault = [
   '/app-general-admin',
   '/logout',
   '/app-list-admin',
-  '/app-placement-admin'
+  '/app-placement-admin',
+  '/whatsappactivity'
+
 ];
 const routesWithDefault = [
   '/home',
