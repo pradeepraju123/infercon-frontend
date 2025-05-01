@@ -10,8 +10,10 @@ export class WhatsappActivityService {
 
   
   private apiUrl = 'https://api.inferconautomation.com/api/v1/contact';
-  private excelUrl='https://api.inferconautomation.com/api/v1/users/getall';
-  private excelUrl1='https://api.inferconautomation.com/api/v1/users/bulkwhatsmes';
+  // private excelUrl='https://api.inferconautomation.com/api/v1/users/getall';
+  // private excelUrl1='https://api.inferconautomation.com/api/v1/users/bulkwhatsmes';
+  private excelUrl='http://localhost:8081/api/v1/users/getall';
+  private excelUrl1='http://localhost:8081/api/v1/users/bulkwhatsmes';
 
 
   constructor(

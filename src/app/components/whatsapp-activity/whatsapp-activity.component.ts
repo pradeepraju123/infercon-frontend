@@ -11,6 +11,8 @@ import { countries } from '../../model/country-data-store';
 import { Countries } from '../../model/country.model';
 import { IndianState, indianStates } from '../../model/state-data';
 import { FormGroup, FormControl } from '@angular/forms';
+import { ContactService } from '../../services/contact.service';
+
 
 import {
   MatDialog,
@@ -27,53 +29,67 @@ import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition
   styleUrl: './whatsapp-activity.component.css'
 })
 export class WhatsappActivityComponent {
+  
   filterForm!: FormGroup;
   totalContacts: number = 0;
+  contacts: any[] = []; // ✅ this avoids the 'possibly undefined' error
+  currentPage = 1;
+  pageSize = 10;
+  totalPages = 0;
+  userType: any
 
-  cities: Cities[] = [];
-  states: IndianState[] = [];
-  countries:Countries[]=[];
-    contacts: any[] = []; // Store flattened contact list
+
+  successMessage: string | null = null;
+  errorMessage: string | null = null;
+    
   displayedColumns: string[] = ['year', 'data']; // Table column headers
   dataSource = new MatTableDataSource<any>(); // Data for Material Table
   selectedCity: string = ''; 
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'right';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
+  selection = new SelectionModel<any>(true, []);
 
   constructor(
     private whatsappActivityService: WhatsappActivityService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private contactService: ContactService,
+    public dialog: MatDialog,
+
   ) {}
+  selectedFile: File | null = null;
+  fileError: string | null = null;
 
   ngOnInit(): void {
-    this.loadCities();
-    this.loadCountries();
-    this.getAllContact();
-    this.loadStates();
+    // this.loadCities();
+    // this.loadCountries();
+     this.getAllContact();
+    // this.loadStates();
     this.initializeForm();
     // this.sendmessage_filtercontact();
 
     console.log('hi');
    }
    
-   loadCities() {
-    this.cities = cities; // Assign imported cities array to the component property
-    console.log('Loaded Cities:', this.cities);
-  }
-  loadCountries() {
-    this.countries = countries; // Assign imported cities array to the component property
-    console.log('Loaded Cities:', this.countries);
-  }
-  loadStates() {
-    this.states = indianStates; // Assign data from state-data.ts
-    console.log('Loaded States:', this.states);
-  }
+  //  loadCities() {
+  //   this.cities = cities; // Assign imported cities array to the component property
+  //   console.log('Loaded Cities:', this.cities);
+  // }
+  // loadCountries() {
+  //   this.countries = countries; // Assign imported cities array to the component property
+  //   console.log('Loaded Cities:', this.countries);
+  // }
+  // loadStates() {
+  //   this.states = indianStates; // Assign data from state-data.ts
+  //   console.log('Loaded States:', this.states);
+  // }
   initializeForm() {
     this.filterForm = new FormGroup({
-      country: new FormControl([]), // Multi-select for country
-      states: new FormControl([]), // Multi-select for states
-      cities: new FormControl([]), // Multi-select for cities
+      // country: new FormControl([]), // Multi-select for country
+      // states: new FormControl([]), // Multi-select for states
+      // cities: new FormControl([]), // Multi-select for cities
       startDate: new FormControl(''),
       endDate: new FormControl('')
     });
@@ -90,30 +106,7 @@ export class WhatsappActivityComponent {
     );
     console.log('Form Data:', this.filterForm.value);
   }
-  flattenContacts(data: any): any[] {
-    let contactsArray: any[] = [];
-    let total = 0;
-  
-    Object.keys(data).forEach((yearKey) => {
-      const yearData = data[yearKey];
-      total += yearData.total; // Sum up total contacts
-  
-      Object.keys(yearData.contacts).forEach((monthKey) => {
-        const monthContacts = yearData.contacts[monthKey];
-  
-        // Add year and month information for display
-        monthContacts.forEach((contact: any) => { // ✅ Explicitly define 'any'
-          contact.year = yearKey.replace("contacts_", ""); // Extract year from key
-          contact.month = monthKey; // Add month information
-        });
-  
-        contactsArray = [...contactsArray, ...monthContacts];
-      });
-    });
-  
-    this.totalContacts = total; // Assign total count to a variable
-    return contactsArray;
-}
+
 
   getAllContact() {
     this.whatsappActivityService.getAllContact().subscribe(
@@ -121,9 +114,8 @@ export class WhatsappActivityComponent {
         console.log('Contacts retrieved successfully:', response);
         
         if (response.status_code === 200) {
-          this.contacts = this.flattenContacts(response.data);
-          console.log('Flattened Contacts:', this.contacts);
-          console.log('Total Contacts:', this.totalContacts);
+          this.contacts = response.contacts || [];
+        this.totalPages = Math.ceil(this.contacts.length / this.pageSize);
         } else {
           console.error('Unexpected response format:', response);
         }
@@ -132,6 +124,74 @@ export class WhatsappActivityComponent {
         console.error('Error while getting contacts:', error);
       }
     );
+  }
+  paginatedContacts(): any[] {
+    const start = (this.currentPage - 1) * this.pageSize;
+    const end = start + this.pageSize;
+    return this.contacts.slice(start, end);
+  }
+
+  nextPage(): void {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+    }
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+
+    if (file) {
+      const fileName = file.name;
+      const fileExtension = fileName.split('.').pop()?.toLowerCase();
+
+      if (fileExtension !== 'xls' && fileExtension !== 'xlsx') {
+        this.fileError = "Only Excel files (.xls, .xlsx) are allowed!";
+        return;
+      }
+
+      this.fileError = null;
+      this.selectedFile = file;
+    }
+  }
+
+  uploadFile() {
+    if (!this.selectedFile) {
+      this.fileError = "Please select a file first!";
+      return;
+    }
+    console.log(this.selectedFile);
+
+    const formData = new FormData();
+    formData.append("file", this.selectedFile);
+    
+    this.contactService.uploaduser(formData).subscribe(
+      (response) => {
+        this.successMessage = 'File uploaded successfully.';
+        this.openSnackBar(this.successMessage)
+        console.log('File uploaded successfully', response);
+        this.userType = response;
+      },
+      (error) => {
+        console.error('Error uploading file:', error);
+        this.fileError = 'Error uploading file. Please try again.';
+        this.openSnackBar(this.fileError)
+      }
+    );
+
+
+  }
+  openSnackBar(message: string) {
+    this._snackBar.open(message, 'Close', 
+    {
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    });
   }
   
 }

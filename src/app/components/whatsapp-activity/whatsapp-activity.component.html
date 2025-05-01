@@ -7,41 +7,11 @@
         <h2 class="whatsappac">Whatsapp Activity</h2>
         <form [formGroup]="filterForm" (ngSubmit)="submitForm()">
           <div class="row">
-            <!-- Country -->
-            <div class="col-md-4">
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Select Country</mat-label>
-                <mat-select formControlName="country" multiple>
-                  <mat-option *ngFor="let country of countries" [value]="country.name">
-                    {{ country.name }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
+            <div class="col-lg-4">
+            
             </div>
-  
-            <!-- State -->
-            <div class="col-md-4">
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Select States</mat-label>
-                <mat-select formControlName="state" multiple>
-                  <mat-option *ngFor="let state of states" [value]="state.name">
-                    {{ state.name }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-  
-            <!-- City -->
-            <div class="col-md-4">
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Select City</mat-label>
-                <mat-select formControlName="citie" multiple>
-                  <mat-option *ngFor="let city of cities" [value]="city.name">
-                    {{ city.name }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
+            <input type="file" (change)="onFileSelected($event)" accept=".xls, .xlsx">
+            <button (click)="uploadFile()">Upload</button>
           </div> <!-- End Row -->
             <br><br>
             <div class="row justify-content-center"> 
@@ -77,27 +47,49 @@
   
   
   
-  <div class="container">
-    <h3>Total Contacts: {{ totalContacts }}</h3>  
-    
-    <div class="row">
-      <div class="col-md-4" *ngFor="let contact of contacts">
-        <mat-card class="custom-card">
-          <mat-card-header>
-            <mat-card-title>{{ contact.fullname }}</mat-card-title>
-            <mat-card-subtitle>{{ contact.email }}</mat-card-subtitle>
-          </mat-card-header>
-          <mat-card-content>
-            <p><strong>Phone:</strong> {{ contact.phone_number }}</p>
-            <p><strong>City:</strong> {{ contact.city }}, {{ contact.state }}</p>
-            <p><strong>Country:</strong> {{ contact.country }}</p>
-            <p><strong>Courses:</strong> {{ contact.courses.join(', ') }}</p>
-            <p><strong>Year:</strong> {{ contact.year }}</p>
-            <p><strong>Month:</strong> {{ contact.month }}</p>
-          </mat-card-content>
-        </mat-card>
-      </div>
+  <div class="container mt-4">
+    <h2 class="mb-3">All Contacts</h2>
+  
+    <div *ngIf="contacts.length > 0">No contacts found.</div>
+  
+    <div *ngIf="contacts.length > 0">
+      <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Created At</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let contact of paginatedContacts(); let i = index">
+            <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+            <td>{{ contact.fullname }}</td>
+            <td>{{ contact.email }}</td>
+            <td>{{ contact.phone_number }}</td>
+            <td>{{ contact.createdAt | date: 'medium' }}</td>
+          </tr>
+        </tbody>
+      </table>
+  
+      <!-- Pagination Controls -->
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <button class="page-link" (click)="prevPage()">Previous</button>
+          </li>
+          <li class="page-item disabled">
+            <span class="page-link">Page {{ currentPage }} of {{ totalPages }}</span>
+          </li>
+          <li class="page-item" [class.disabled]="currentPage === totalPages">
+            <button class="page-link" (click)="nextPage()">Next</button>
+          </li>
+        </ul>
+      </nav>
     </div>
   </div>
+  
   
 </section>
