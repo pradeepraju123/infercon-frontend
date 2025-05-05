@@ -96,7 +96,6 @@ export class WhatsappActivityComponent {
     });
   }
   submitForm() {
-    
     this.whatsappActivityService.sendmessage_filtercontact(this.filterForm.value).subscribe(
       (response: any) => {
         console.log(response);
