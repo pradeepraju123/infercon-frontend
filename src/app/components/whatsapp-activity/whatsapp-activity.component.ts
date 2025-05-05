@@ -10,7 +10,7 @@ import { cities } from '../../model/cities-data-store';
 import { countries } from '../../model/country-data-store';
 import { Countries } from '../../model/country.model';
 import { IndianState, indianStates } from '../../model/state-data';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl,Validators } from '@angular/forms';
 import { ContactService } from '../../services/contact.service';
 
 
@@ -32,7 +32,7 @@ export class WhatsappActivityComponent {
   
   filterForm!: FormGroup;
   totalContacts: number = 0;
-  contacts: any[] = []; // ✅ this avoids the 'possibly undefined' error
+  contacts: any[] = []; 
   currentPage = 1;
   pageSize = 10;
   totalPages = 0;
@@ -87,18 +87,22 @@ export class WhatsappActivityComponent {
   // }
   initializeForm() {
     this.filterForm = new FormGroup({
-      // country: new FormControl([]), // Multi-select for country
-      // states: new FormControl([]), // Multi-select for states
-      // cities: new FormControl([]), // Multi-select for cities
-      startDate: new FormControl(''),
-      endDate: new FormControl('')
+      startDate: new FormControl('', Validators.required),
+      endDate: new FormControl('', Validators.required),
+      course_id: new FormControl('', Validators.required),
+      country: new FormControl(''),
+      experience: new FormControl(''),
+      course: new FormControl('')
     });
   }
   submitForm() {
+    
     this.whatsappActivityService.sendmessage_filtercontact(this.filterForm.value).subscribe(
       (response: any) => {
-        console.log('Contacts retrieved successfully:', response);
-        console.log(this.contacts);
+        console.log(response);
+        this.successMessage = 'File uploaded successfully.';
+        this.openSnackBar(this.successMessage)
+        
       },
       (error) => {
         console.error('Error while getting contacts:', error);
@@ -170,7 +174,7 @@ export class WhatsappActivityComponent {
     const formData = new FormData();
     formData.append("file", this.selectedFile);
     
-    this.contactService.uploaduser(formData).subscribe(
+    this.whatsappActivityService.uploaduser(formData).subscribe(
       (response) => {
         this.successMessage = 'File uploaded successfully.';
         this.openSnackBar(this.successMessage)

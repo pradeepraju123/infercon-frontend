@@ -78,32 +78,7 @@ export class ContactAdminComponent implements AfterViewInit {
     }
   }
 
-  uploadFile() {
-    if (!this.selectedFile) {
-      this.fileError = "Please select a file first!";
-      return;
-    }
-    console.log(this.selectedFile);
-
-    const formData = new FormData();
-    formData.append("file", this.selectedFile);
-    
-    this.contactService.uploaduser(formData).subscribe(
-      (response) => {
-        this.successMessage = 'File uploaded successfully.';
-        this.openSnackBar(this.successMessage)
-        console.log('File uploaded successfully', response);
-        this.userType = response;
-      },
-      (error) => {
-        console.error('Error uploading file:', error);
-        this.fileError = 'Error uploading file. Please try again.';
-        this.openSnackBar(this.fileError)
-      }
-    );
-
-
-  }
+  
   getUser() {
     this.getUsername.getAllUsers().subscribe(
       (data: any) => {
