@@ -43,7 +43,7 @@ import { AddPlacementComponent } from './controller/add-placement/add-placement.
 import { PlacementListComponent } from './controller/placement-list/placement-list.component';
 import { PlacementComponent } from './controller/placement/placement.component';
 import { WhatsappActivityComponent } from './components/whatsapp-activity/whatsapp-activity.component';
-// /Users/trstscore/Nanthini/infercon-frontend/src/app/components/whatsapp-activity/whatsapp-activity.component.ts
+import { TemplateManagerComponent } from './components/template-manager/template-manager.component';
 
 
 const routes: Routes = [
@@ -88,6 +88,8 @@ const routes: Routes = [
   {path: 'app-placement-list', component: PlacementListComponent},
   {path:'app-placement/:id', component:PlacementComponent},
    { path:'whatsappactivity', component: WhatsappActivityComponent },
+   { path:'whatsapptemplate', component: TemplateManagerComponent },
+
 
   { path: '**', redirectTo: 'home' },
   

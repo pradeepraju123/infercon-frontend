@@ -1,0 +1,65 @@
+<div class="template-container">
+    <h2>{{ editId ? 'Edit' : 'Create' }} Course Template</h2>
+  
+    <!-- Template ID -->
+    <input
+      type="text"
+      [(ngModel)]="newTemplate.id"
+      [readonly]="editId !== null"
+      placeholder="Enter Template ID"
+      class="input-field"
+    />
+  
+    <!-- Course Content Inputs -->
+    <div *ngFor="let content of newTemplate.course_content; let i = index; trackBy: trackByIndex" class="course-item">
+      <input
+        type="text"
+        [(ngModel)]="newTemplate.course_content[i]"
+        placeholder="Course Content"
+        class="input-field"
+      />
+      <button (click)="removeCourseItem(i)" class="btn btn-danger">Remove</button>
+    </div>
+  
+    <button (click)="addCourseItem()" class="btn btn-secondary full-width">Add Course Content</button>
+  <br>
+    <!-- Image Upload -->
+    <br>
+    <div class="image-upload">
+      <label for="imageInput">Select Image:</label>
+      <input id="imageInput" type="file" (change)="onImageSelected($event)" accept="image/*" />
+    </div>
+  
+    <!-- Show selected image preview -->
+    <br>
+    <div *ngIf="selectedImage" class="image-preview">
+      <p>Selected Image Preview:</p>
+      <img [src]="selectedImage ? (selectedImage | fileUrl) : null" alt="Image preview" style="max-width: 200px; max-height: 150px;" />
+    </div>
+  
+    <button (click)="saveTemplate()" class="btn btn-primary full-width">{{ editId ? 'Update' : 'Create' }}</button>
+    <button *ngIf="editId" (click)="cancelEdit()" class="btn btn-light full-width">Cancel</button>
+  
+    <hr />
+  
+    <h3>Existing Templates</h3>
+    <div class="row">
+    <div class="col-lg-12 col-md-12">
+    <ul class="template-list">
+      <li *ngFor="let temp of templates">
+        <div class="template-info">
+          <strong>{{ temp.id }}</strong> - {{ temp.course_content.join(', ') }}
+          <div *ngIf="temp.imageUrl">
+            <!-- <img [src]="temp.imageUrl" alt="Template Image" style="max-width: 150px; max-height: 100px; margin-top: 5px;" /> -->
+          </div>
+        </div>
+        <div class="template-actions">
+          <button (click)="editTemplate(temp)" class="btn btn-warning">Edit</button>
+          <button (click)="deleteTemplate(temp.id)" class="btn btn-danger">Delete</button>
+        </div>
+      </li>
+    </ul>
+  </div>
+  </div>
+  </div>
+  

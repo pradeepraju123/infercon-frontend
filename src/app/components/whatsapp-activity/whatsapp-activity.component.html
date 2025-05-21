@@ -38,17 +38,16 @@
           </mat-form-field>
         </div>
     
-        <div class="col-md-4 mb-2">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Course</mat-label>
-            <mat-select formControlName="course_id" required>
-              <mat-option [value]="">Please Select</mat-option>
-              <mat-option [value]="'course001'">PLC</mat-option>
-              <mat-option [value]="'course002'">SCADA</mat-option>
-              <mat-option [value]="'course003'">Embedded Systems</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Course</mat-label>
+          <mat-select formControlName="course_id" required>
+            <mat-option [value]="''">Please Select</mat-option>
+            <mat-option *ngFor="let template of templates" [value]="template.id">
+              {{ template.course_content.join(', ') || template.id }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        
         
     
         <div class="col-md-4 mb-2">

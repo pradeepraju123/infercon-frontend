@@ -1,4 +1,4 @@
-import { Component,ViewChild } from '@angular/core';
+import { Component,ViewChild ,OnInit} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import {LiveAnnouncer} from '@angular/cdk/a11y';
@@ -10,8 +10,9 @@ import { cities } from '../../model/cities-data-store';
 import { countries } from '../../model/country-data-store';
 import { Countries } from '../../model/country.model';
 import { IndianState, indianStates } from '../../model/state-data';
-import { FormGroup, FormControl,Validators } from '@angular/forms';
+import { FormGroup, FormControl,Validators,FormBuilder } from '@angular/forms';
 import { ContactService } from '../../services/contact.service';
+import { TemplateService, Template } from '../../services/templates/template.service';
 
 
 import {
@@ -37,6 +38,8 @@ export class WhatsappActivityComponent {
   pageSize = 10;
   totalPages = 0;
   userType: any
+  templates: Template[] = [];
+  form: FormGroup;
 
 
   successMessage: string | null = null;
@@ -57,8 +60,14 @@ export class WhatsappActivityComponent {
     private _snackBar: MatSnackBar,
     private contactService: ContactService,
     public dialog: MatDialog,
+    private service: TemplateService,
+    private fb: FormBuilder
 
-  ) {}
+  ) {
+    this.form = this.fb.group({
+      course_id: ['']
+    });
+  }
   selectedFile: File | null = null;
   fileError: string | null = null;
 
@@ -68,6 +77,14 @@ export class WhatsappActivityComponent {
      this.getAllContact();
     // this.loadStates();
     this.initializeForm();
+    this.service.getAll().subscribe({
+      next: (data) => {
+        this.templates = data;
+      },
+      error: (err) => {
+        console.error('Failed to load templates:', err);
+      }
+    });
     // this.sendmessage_filtercontact();
 
     console.log('hi');
@@ -112,7 +129,8 @@ export class WhatsappActivityComponent {
 
 
   getAllContact() {
-    this.whatsappActivityService.getAllContact().subscribe(
+    const data = {};
+    this.whatsappActivityService.getAllContact(data).subscribe(
       (response: any) => {
         console.log('Contacts retrieved successfully:', response);
         

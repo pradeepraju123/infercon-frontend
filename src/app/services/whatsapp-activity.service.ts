@@ -13,7 +13,7 @@ export class WhatsappActivityService {
   private excelUrl='https://api.inferconautomation.com/api/v1/users/getall';
   private excelUrl1='https://api.inferconautomation.com/api/v1/users/bulkwhatsmes';
   //private excelUrl='http://localhost:8081/api/v1/users/getall';
-  //private excelUrl1='http://localhost:8081/api/v1/users/bulkwhatsmes';
+  //rivate excelUrl1='http://localhost:8081/api/v1/users/bulkwhatsmes';
    private excelUrl_contacts='https://api.inferconautomation.com/api/v1/users/bulkupload';
     //private excelUrl_contacts='http://localhost:8081/api/v1/users/bulkupload';
 

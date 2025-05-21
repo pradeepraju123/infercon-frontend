@@ -46,6 +46,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { DialogComponent } from './components/dialog/dialog.component';
 import { NgxEditorModule } from 'ngx-editor';
+import { FileUrlPipe } from './pipes/file-url.pipe';
+
 import {
   MatDialogModule,
   MatDialog,
@@ -90,6 +92,7 @@ import { PlacementTableviewComponent } from './components/placement-tableview/pl
 import { PlacementListComponent } from './controller/placement-list/placement-list.component';
 import { PlacementEnquiryComponent } from './components/placement-enquiry/placement-enquiry.component';
 import { WhatsappActivityComponent } from './components/whatsapp-activity/whatsapp-activity.component';
+import { TemplateManagerComponent } from './components/template-manager/template-manager.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -150,7 +153,9 @@ import { WhatsappActivityComponent } from './components/whatsapp-activity/whatsa
     PlacementTableviewComponent,
     PlacementListComponent,
     PlacementEnquiryComponent,
-    WhatsappActivityComponent
+    WhatsappActivityComponent,
+    TemplateManagerComponent,
+    FileUrlPipe
   ],
   imports: [
     MatDividerModule,
