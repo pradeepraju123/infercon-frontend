@@ -15,6 +15,7 @@ import { ContactService } from '../../services/contact.service';
 import { TemplateService, Template } from '../../services/templates/template.service';
 
 
+
 import {
   MatDialog,
 } from '@angular/material/dialog';
@@ -40,12 +41,15 @@ export class WhatsappActivityComponent {
   userType: any
   templates: Template[] = [];
   form: FormGroup;
+  filteredData: any[] = [];
+  
+
 
 
   successMessage: string | null = null;
   errorMessage: string | null = null;
     
-  displayedColumns: string[] = ['year', 'data']; // Table column headers
+  displayedColumns: string[] = ['select', 'fullname', 'phone_number']; // Match backend data
   dataSource = new MatTableDataSource<any>(); // Data for Material Table
   selectedCity: string = ''; 
 
@@ -54,6 +58,8 @@ export class WhatsappActivityComponent {
   horizontalPosition: MatSnackBarHorizontalPosition = 'right';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   selection = new SelectionModel<any>(true, []);
+
+  
 
   constructor(
     private whatsappActivityService: WhatsappActivityService,
@@ -67,16 +73,19 @@ export class WhatsappActivityComponent {
     this.form = this.fb.group({
       course_id: ['']
     });
+    
+    
   }
   selectedFile: File | null = null;
   fileError: string | null = null;
 
   ngOnInit(): void {
     // this.loadCities();
-    // this.loadCountries();
-     this.getAllContact();
+    //  this.loadCountries();
+    //  this.getAllContact();
     // this.loadStates();
     this.initializeForm();
+   // this.submitForm();
     this.service.getAll().subscribe({
       next: (data) => {
         this.templates = data;
@@ -103,16 +112,62 @@ export class WhatsappActivityComponent {
   //   console.log('Loaded States:', this.states);
   // }
   initializeForm() {
-    this.filterForm = new FormGroup({
-      startDate: new FormControl('', Validators.required),
-      endDate: new FormControl('', Validators.required),
-      course_id: new FormControl('', Validators.required),
-      country: new FormControl(''),
-      experience: new FormControl(''),
-      course: new FormControl('')
+    this.filterForm = this.fb.group({
+      startDate: ['', Validators.required],
+      endDate: ['', Validators.required],
+      country: [''],
+      experience: [''],
+      course: ['']
     });
   }
   submitForm() {
+    if (this.filterForm.invalid) return;
+
+    this.whatsappActivityService.sendmessage_filtercontact(this.filterForm.value).subscribe({
+      next: (response: any) => {
+        this.filteredData = response.contacts || [];
+        this.dataSource.data = this.filteredData;
+        this.selection.clear(); // Reset selection
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.openSnackBar('Contacts loaded successfully');
+      },
+      error: (err) => {
+        console.error('Error filtering contacts', err);
+        this.openSnackBar('Error loading contacts');
+      }
+    });
+  }
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+  
+  masterToggle() {
+    this.isAllSelected()
+      ? this.selection.clear()
+      : this.dataSource.data.forEach(row => this.selection.select(row));
+  }
+  
+  sendToWhatsApp() {
+    this.whatsappActivityService.sendmessage_filtercontact(this.filterForm.value).subscribe(
+      (response: any) => {
+        console.log(response);
+        this.successMessage = 'File uploaded successfully.';
+        this.openSnackBar(this.successMessage)
+        
+      },
+      (error) => {
+        console.error('Error while getting contacts:', error);
+      }
+    );
+    console.log('Form Data:', this.filterForm.value);
+  }
+  filtercontact()
+  {
+    const filters = this.filterForm.value;
+
     this.whatsappActivityService.sendmessage_filtercontact(this.filterForm.value).subscribe(
       (response: any) => {
         console.log(response);
@@ -128,24 +183,24 @@ export class WhatsappActivityComponent {
   }
 
 
-  getAllContact() {
-    const data = {};
-    this.whatsappActivityService.getAllContact(data).subscribe(
-      (response: any) => {
-        console.log('Contacts retrieved successfully:', response);
+  // getAllContact() {
+  //   const data = {};
+  //   this.whatsappActivityService.getAllContact(data).subscribe(
+  //     (response: any) => {
+  //       console.log('Contacts retrieved successfully:', response);
         
-        if (response.status_code === 200) {
-          this.contacts = response.contacts || [];
-        this.totalPages = Math.ceil(this.contacts.length / this.pageSize);
-        } else {
-          console.error('Unexpected response format:', response);
-        }
-      },
-      (error) => {
-        console.error('Error while getting contacts:', error);
-      }
-    );
-  }
+  //       if (response.status_code === 200) {
+  //         this.contacts = response.contacts || [];
+  //       this.totalPages = Math.ceil(this.contacts.length / this.pageSize);
+  //       } else {
+  //         console.error('Unexpected response format:', response);
+  //       }
+  //     },
+  //     (error) => {
+  //       console.error('Error while getting contacts:', error);
+  //     }
+  //   );
+  // }
   paginatedContacts(): any[] {
     const start = (this.currentPage - 1) * this.pageSize;
     const end = start + this.pageSize;

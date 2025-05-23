@@ -10,4 +10,8 @@
   button {
     white-space: nowrap;
   }
+
+  table {
+    margin-top: 1rem;
+  }
 }

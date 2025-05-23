@@ -15,7 +15,7 @@ export class WhatsappActivityService {
   //private excelUrl='http://localhost:8081/api/v1/users/getall';
   //rivate excelUrl1='http://localhost:8081/api/v1/users/bulkwhatsmes';
    private excelUrl_contacts='https://api.inferconautomation.com/api/v1/users/bulkupload';
-    //private excelUrl_contacts='http://localhost:8081/api/v1/users/bulkupload';
+    private filter_contact='https://api.inferconautomation.com/api/v1/users/filtercontact';
 
 
   constructor(
@@ -45,47 +45,33 @@ export class WhatsappActivityService {
     }
    
    }
-  getAllContact(data: any): Observable<any> {
+   sendmessage_filtercontact(data: any): Observable<any> {
     const token = sessionStorage.getItem('authToken');
 
     if (token) {
       const headers = new HttpHeaders({
         'Authorization': 'Bearer ' + token
           });
-    return this.http.post(`${this.excelUrl}/get`, data, { headers });
+    return this.http.post(`${this.filter_contact}`, data, { headers });
   } else {
  
      return throwError('No authentication token found'); 
     }
   }
 
-  sendmessage_filtercontact(data: any): Observable<any> {
-    const token = sessionStorage.getItem('authToken');
+  // sendmessage_filtercontact(data: any): Observable<any> {
 
-    if (token) {
-      const headers = new HttpHeaders({
-        'Authorization': 'Bearer ' + token
-          });
-    return this.http.post(`${this.excelUrl1}/get`, data, { headers });
-  } else {
- 
-     return throwError('No authentication token found'); 
-    }
-  }
+  //   return this.http.post(`${this.urlget}`, data);
+
+  // }
+  
   // sendmessage_filtercontact(data: any): Observable<any> {
   //   const url = `${this.excelUrl1}`;
   //   return this.http.post(url,data);
 
   // }
 
-  // getAllContact(): Observable<any> {
-  //   const url = `${this.excelUrl}`;
-
-      
-  //   return this.http.get(url);
   
- 
-  // }
 
   
 }

@@ -14,8 +14,10 @@ export interface Template {
   providedIn: 'root'
 })
 export class TemplateService {
-  private apiUrl = 'https://api.inferconautomation.com/api/v1/templates'; // Change to your backend URL
-  //private excelUrl_contacts='https://api.inferconautomation.com/api/v1/users/bulkupload';
+  //private apiUrl = 'https://api.inferconautomation.com/api/v1/templates'; // Change to your backend URL
+  // private excelUrl_contacts='https://api.inferconautomation.com/api/v1/users/bulkupload';
+  private apiUrl = 'http://localhost:8060/api/v10/templates'; // Change to your backend URL
+
 
 
   constructor(private http: HttpClient) {}
