@@ -28,8 +28,14 @@ export class TemplateManagerComponent implements OnInit {
   }
 
   addCourseItem(): void {
+    console.log('Before push:', this.newTemplate.course_content);
+    if (!Array.isArray(this.newTemplate.course_content)) {
+      this.newTemplate.course_content = [];
+    }
     this.newTemplate.course_content.push('');
+    console.log('After push:', this.newTemplate.course_content);
   }
+  
 
   removeCourseItem(index: number): void {
     if (this.newTemplate.course_content.length > 1) {
@@ -130,7 +136,10 @@ export class TemplateManagerComponent implements OnInit {
     this.selectedImage = null;
     this.imagePreviewUrl = null;
   }
-
+  trackByIndex(index: number, item: any): any {
+    return index;
+  }
+  
   openSnackBar(msg: string): void {
     this.snackBar.open(msg, 'Close', { duration: 3000 });
   }
