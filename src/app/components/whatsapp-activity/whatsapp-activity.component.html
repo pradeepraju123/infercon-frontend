@@ -65,7 +65,7 @@
             <mat-select formControlName="course_id">
               <mat-option value="">Please Select</mat-option>
               <mat-option *ngFor="let template of templates" [value]="template.course_id">
-                {{ isArray(template.course_content) ? template.course_content.join(', ') : template.course_content || template.course_id }}
+                {{ template.course_id }}
               </mat-option>
             </mat-select>
           </mat-form-field>

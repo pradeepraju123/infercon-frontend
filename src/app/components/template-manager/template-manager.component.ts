@@ -40,25 +40,27 @@ export class TemplateManagerComponent implements OnInit {
   onImageSelected(event: any): void {
     const file: File = event.target.files[0];
     if (!file) return;
-
+  
     const objectUrl = URL.createObjectURL(file);
     const img = new Image();
-
+  
     img.onload = () => {
-      if (img.width === 470 && img.height === 705) {
-        this.selectedImage = file;
+      if (img.width === 500 && img.height === 850) {
+        this.selectedImage = file;  // <-- This must happen
         this.imagePreviewUrl = objectUrl;
       } else {
-        this.selectedImage = null;
-        this.imagePreviewUrl = null;
-        this.openSnackBar('Image must be exactly 470x705 pixels.');
+        this.selectedImage = file;
+        this.imagePreviewUrl = objectUrl;
+       // this.openSnackBar('Image must be exactly 470x705 pixels.');
       }
     };
-
+  
     img.src = objectUrl;
   }
+  
 
   saveTemplate(): void {
+    alert(this.selectedImage);
     const cleanContent = this.newTemplate.course_content.filter(item => item.trim() !== '');
     if (!this.newTemplate.course_id || cleanContent.length === 0) {
       this.openSnackBar('Please enter a template ID and at least one course content item.');
