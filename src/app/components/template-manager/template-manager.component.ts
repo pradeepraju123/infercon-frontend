@@ -1,15 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TemplateService, Template } from '../../services/templates/template.service';
-import { MatPaginator } from '@angular/material/paginator';
-
-import {
-  MatDialog,
-} from '@angular/material/dialog';
-import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
-import { MatSort, Sort } from '@angular/material/sort';
-import { FormGroup, FormControl,Validators } from '@angular/forms';
-
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-template-manager',
@@ -18,69 +9,21 @@ import { FormGroup, FormControl,Validators } from '@angular/forms';
 })
 export class TemplateManagerComponent implements OnInit {
   templates: Template[] = [];
-  newTemplate: Template = { id: '', course_content: [''], imageUrl: '' };
+  newTemplate: Template = { course_id: '', course_content: [''], imageUrl: '' };
   editId: string | null = null;
   selectedImage: File | null = null;
-  successMessage: string | null = null;
-  errorMessage: string | null = null;
-  imageError: string | null = null;
+  imagePreviewUrl: string | null = null;
 
-
-  
-  horizontalPosition: MatSnackBarHorizontalPosition = 'right';
-  verticalPosition: MatSnackBarVerticalPosition = 'top';
-  constructor(private service: TemplateService,
-    private _snackBar: MatSnackBar,
-    public dialog: MatDialog,) {}
+  constructor(private service: TemplateService, private snackBar: MatSnackBar) {}
 
   ngOnInit(): void {
-    this.service.getAll().subscribe({
-      next: (data) => {
-        this.templates = data;
-      },
-      error: (err) => {
-        console.error('Failed to load templates:', err);
-      }
-    });
     this.loadTemplates();
   }
 
-  onImageSelected(event: any): void {
-    const file: File = event.target.files[0];
-  
-    if (!file) return;
-  
-    const img = new Image();
-    const objectUrl = URL.createObjectURL(file);
-  
-    img.onload = () => {
-      if (img.width === 470 && img.height === 705) {
-        this.selectedImage = file;
-        // clear any previous error
-        this.imageError = null;
-      } else {
-        this.selectedImage = null;
-        this.errorMessage = 'Image must be exactly 470x705 pixels.';
-        this.openSnackBar(this.errorMessage);
-      }
-      URL.revokeObjectURL(objectUrl);
-    };
-  
-    img.onerror = () => {
-      this.selectedImage = null;
-      this.errorMessage = 'Invalid image file.';
-        this.openSnackBar(this.errorMessage);
-      URL.revokeObjectURL(objectUrl);
-    };
-  
-    img.src = objectUrl;
-  }
-  
-
   loadTemplates(): void {
     this.service.getAll().subscribe({
-      next: (data) => this.templates = data,
-      error: (err) => console.error('Failed to load templates:', err)
+      next: (data) => (this.templates = data),
+      error: (err) => console.error('Failed to load templates:', err),
     });
   }
 
@@ -94,20 +37,43 @@ export class TemplateManagerComponent implements OnInit {
     }
   }
 
+  onImageSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (!file) return;
+
+    const objectUrl = URL.createObjectURL(file);
+    const img = new Image();
+
+    img.onload = () => {
+      if (img.width === 470 && img.height === 705) {
+        this.selectedImage = file;
+        this.imagePreviewUrl = objectUrl;
+      } else {
+        this.selectedImage = null;
+        this.imagePreviewUrl = null;
+        this.openSnackBar('Image must be exactly 470x705 pixels.');
+      }
+    };
+
+    img.src = objectUrl;
+  }
+
   saveTemplate(): void {
     const cleanContent = this.newTemplate.course_content.filter(item => item.trim() !== '');
-    if (!this.newTemplate.id || cleanContent.length === 0) {
-      this.errorMessage = 'Please enter template ID and at least one course content item.';
-      this.openSnackBar(this.errorMessage)
+    if (!this.newTemplate.course_id || cleanContent.length === 0) {
+      this.openSnackBar('Please enter a template ID and at least one course content item.');
       return;
     }
 
-    this.newTemplate.course_content = cleanContent;
+    const isDuplicate = this.templates.some(t => t.course_id === this.newTemplate.course_id);
+    if (!this.editId && isDuplicate) {
+      this.openSnackBar('Template ID already exists.');
+      return;
+    }
 
-    // Prepare FormData for sending text + image
     const formData = new FormData();
-    formData.append('id', this.newTemplate.id);
-    formData.append('course_content', JSON.stringify(this.newTemplate.course_content));
+    formData.append('course_id', this.newTemplate.course_id);
+    formData.append('course_content', JSON.stringify(cleanContent));
     if (this.selectedImage) {
       formData.append('image', this.selectedImage);
     }
@@ -117,53 +83,53 @@ export class TemplateManagerComponent implements OnInit {
         next: () => {
           this.resetForm();
           this.loadTemplates();
+          this.openSnackBar('Template updated successfully');
         },
-        error: (err) => console.error('Update failed:', err)
+        error: () => this.openSnackBar('Update failed')
       });
     } else {
       this.service.create(formData).subscribe({
         next: () => {
           this.resetForm();
           this.loadTemplates();
+          this.openSnackBar('Template created successfully');
         },
-        error: (err) => console.error('Create failed:', err)
+        error: () => this.openSnackBar('Create failed')
       });
     }
   }
 
   editTemplate(template: Template): void {
-    this.newTemplate = { ...template, course_content: [...template.course_content] };
-    this.editId = template.id;
-    this.selectedImage = null; // Reset selected image on edit
+    this.newTemplate = {
+      course_id: template.course_id,
+      course_content: [...template.course_content],
+      imageUrl: template.imageUrl
+    };
+    this.editId = template.course_id;
+    this.imagePreviewUrl = template.imageUrl || null;
+    this.selectedImage = null;
   }
 
-  deleteTemplate(id: string): void {
-    if (confirm('Are you sure you want to delete this template?')) {
-      this.service.delete(id).subscribe({
-        next: () => this.loadTemplates(),
-        error: (err) => console.error('Delete failed:', err)
+  deleteTemplate(course_id: string): void {
+    if (confirm('Are you sure?')) {
+      this.service.delete(course_id).subscribe({
+        next: () => {
+          this.loadTemplates();
+          this.openSnackBar('Deleted successfully');
+        },
+        error: () => this.openSnackBar('Delete failed')
       });
     }
   }
 
-  cancelEdit(): void {
-    this.resetForm();
-  }
-
-  trackByIndex(index: number, item: any): number {
-    return index;
-  }
-  openSnackBar(message: string) {
-    this._snackBar.open(message, 'Close', 
-    {
-      horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition,
-    });
-  }
-
-  private resetForm(): void {
-    this.newTemplate = { id: '', course_content: [''], imageUrl: '' };
+  resetForm(): void {
+    this.newTemplate = { course_id: '', course_content: [''], imageUrl: '' };
     this.editId = null;
     this.selectedImage = null;
+    this.imagePreviewUrl = null;
+  }
+
+  openSnackBar(msg: string): void {
+    this.snackBar.open(msg, 'Close', { duration: 3000 });
   }
 }

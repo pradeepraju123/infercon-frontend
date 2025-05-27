@@ -1,91 +1,50 @@
-import { Component,ViewChild ,OnInit} from '@angular/core';
+// src/app/components/whatsapp-activity/whatsapp-activity.component.ts
+
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
-import {LiveAnnouncer} from '@angular/cdk/a11y';
-import {SelectionModel} from '@angular/cdk/collections';
-import { MatSort, Sort } from '@angular/material/sort';
-import { WhatsappActivityService } from '../../services/whatsapp-activity.service';
-import { Cities } from '../../model/cities.model';
-import { cities } from '../../model/cities-data-store';
-import { countries } from '../../model/country-data-store';
-import { Countries } from '../../model/country.model';
-import { IndianState, indianStates } from '../../model/state-data';
-import { FormGroup, FormControl,Validators,FormBuilder } from '@angular/forms';
-import { ContactService } from '../../services/contact.service';
-import { TemplateService, Template } from '../../services/templates/template.service';
-
-
-
-import {
-  MatDialog,
-} from '@angular/material/dialog';
-import { EditContactComponent } from '../../components/edit-contact/edit-contact.component';
-import { UserService } from '../../services/user.service';
-import { AuthService } from '../../services/auth.service';
+import { MatSort } from '@angular/material/sort';
+import { SelectionModel } from '@angular/cdk/collections';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 
+import { WhatsappActivityService } from '../../services/whatsapp-activity.service';
+import { ContactService } from '../../services/contact.service';
+import { TemplateService, Template } from '../../services/templates/template.service';
 
 @Component({
   selector: 'app-whatsapp-activity',
   templateUrl: './whatsapp-activity.component.html',
-  styleUrl: './whatsapp-activity.component.css'
+  styleUrls: ['./whatsapp-activity.component.css']
 })
-export class WhatsappActivityComponent {
-  
+export class WhatsappActivityComponent implements OnInit {
   filterForm!: FormGroup;
-  totalContacts: number = 0;
-  contacts: any[] = []; 
-  currentPage = 1;
-  pageSize = 10;
-  totalPages = 0;
-  userType: any
   templates: Template[] = [];
-  form: FormGroup;
-  filteredData: any[] = [];
-  
-
-
-
-  successMessage: string | null = null;
-  errorMessage: string | null = null;
-    
-  displayedColumns: string[] = ['select', 'fullname', 'phone_number']; // Match backend data
-  dataSource = new MatTableDataSource<any>(); // Data for Material Table
-  selectedCity: string = ''; 
-
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-  horizontalPosition: MatSnackBarHorizontalPosition = 'right';
-  verticalPosition: MatSnackBarVerticalPosition = 'top';
-  selection = new SelectionModel<any>(true, []);
-
-  
-
-  constructor(
-    private whatsappActivityService: WhatsappActivityService,
-    private _snackBar: MatSnackBar,
-    private contactService: ContactService,
-    public dialog: MatDialog,
-    private service: TemplateService,
-    private fb: FormBuilder
-
-  ) {
-    this.form = this.fb.group({
-      course_id: ['']
-    });
-    
-    
-  }
+  selectedCourseId: string = '';
   selectedFile: File | null = null;
   fileError: string | null = null;
 
+  displayedColumns: string[] = ['select', 'fullname', 'phone_number'];
+  dataSource = new MatTableDataSource<any>();
+  selection = new SelectionModel<any>(true, []);
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+
+  horizontalPosition: MatSnackBarHorizontalPosition = 'right';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
+
+  constructor(
+    private fb: FormBuilder,
+    private whatsappActivityService: WhatsappActivityService,
+    private contactService: ContactService,
+    private service: TemplateService,
+    private _snackBar: MatSnackBar
+  ) {}
+
   ngOnInit(): void {
-    // this.loadCities();
-    //  this.loadCountries();
-    //  this.getAllContact();
-    // this.loadStates();
     this.initializeForm();
-   // this.submitForm();
+
     this.service.getAll().subscribe({
       next: (data) => {
         this.templates = data;
@@ -94,143 +53,82 @@ export class WhatsappActivityComponent {
         console.error('Failed to load templates:', err);
       }
     });
-    // this.sendmessage_filtercontact();
+  }
 
-    console.log('hi');
-   }
-   
-  //  loadCities() {
-  //   this.cities = cities; // Assign imported cities array to the component property
-  //   console.log('Loaded Cities:', this.cities);
-  // }
-  // loadCountries() {
-  //   this.countries = countries; // Assign imported cities array to the component property
-  //   console.log('Loaded Cities:', this.countries);
-  // }
-  // loadStates() {
-  //   this.states = indianStates; // Assign data from state-data.ts
-  //   console.log('Loaded States:', this.states);
-  // }
   initializeForm() {
     this.filterForm = this.fb.group({
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
       country: [''],
       experience: [''],
-      course: ['']
+      course: [''],
+      course_id: ['', Validators.required]
     });
   }
+
   submitForm() {
     if (this.filterForm.invalid) return;
 
     this.whatsappActivityService.sendmessage_filtercontact(this.filterForm.value).subscribe({
       next: (response: any) => {
-        this.filteredData = response.contacts || [];
-        this.dataSource.data = this.filteredData;
-        this.selection.clear(); // Reset selection
+        this.dataSource.data = response.contacts || [];
+        this.selection.clear();
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.openSnackBar('Contacts loaded successfully');
       },
-      error: (err) => {
-        console.error('Error filtering contacts', err);
+      error: () => {
         this.openSnackBar('Error loading contacts');
       }
     });
   }
+
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
   }
-  
+
   masterToggle() {
     this.isAllSelected()
       ? this.selection.clear()
       : this.dataSource.data.forEach(row => this.selection.select(row));
   }
-  
+
   sendToWhatsApp() {
-    this.whatsappActivityService.sendmessage_filtercontact(this.filterForm.value).subscribe(
-      (response: any) => {
-        console.log(response);
-        this.successMessage = 'File uploaded successfully.';
-        this.openSnackBar(this.successMessage)
-        
+    const selectedContacts = this.selection.selected;
+    const mobileNumbers = selectedContacts.map(c => c.phone_number);
+
+    const courseId = this.selectedCourseId || this.filterForm.value.course_id;
+    alert(mobileNumbers);
+    alert(courseId);
+
+    if (!courseId || mobileNumbers.length === 0) {
+      alert('Please select contacts and a template.');
+      return;
+    }
+
+    this.whatsappActivityService.sendcontect_template({
+      mobileNumbers,
+      course_id: courseId
+    }).subscribe(
+      () => {
+        this.openSnackBar('Message sent successfully.');
       },
-      (error) => {
-        console.error('Error while getting contacts:', error);
+      () => {
+        this.openSnackBar('Error sending message.');
       }
     );
-    console.log('Form Data:', this.filterForm.value);
-  }
-  filtercontact()
-  {
-    const filters = this.filterForm.value;
-
-    this.whatsappActivityService.sendmessage_filtercontact(this.filterForm.value).subscribe(
-      (response: any) => {
-        console.log(response);
-        this.successMessage = 'File uploaded successfully.';
-        this.openSnackBar(this.successMessage)
-        
-      },
-      (error) => {
-        console.error('Error while getting contacts:', error);
-      }
-    );
-    console.log('Form Data:', this.filterForm.value);
-  }
-
-
-  // getAllContact() {
-  //   const data = {};
-  //   this.whatsappActivityService.getAllContact(data).subscribe(
-  //     (response: any) => {
-  //       console.log('Contacts retrieved successfully:', response);
-        
-  //       if (response.status_code === 200) {
-  //         this.contacts = response.contacts || [];
-  //       this.totalPages = Math.ceil(this.contacts.length / this.pageSize);
-  //       } else {
-  //         console.error('Unexpected response format:', response);
-  //       }
-  //     },
-  //     (error) => {
-  //       console.error('Error while getting contacts:', error);
-  //     }
-  //   );
-  // }
-  paginatedContacts(): any[] {
-    const start = (this.currentPage - 1) * this.pageSize;
-    const end = start + this.pageSize;
-    return this.contacts.slice(start, end);
-  }
-
-  nextPage(): void {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-    }
-  }
-
-  prevPage(): void {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-    }
   }
 
   onFileSelected(event: any) {
     const file = event.target.files[0];
-
     if (file) {
-      const fileName = file.name;
-      const fileExtension = fileName.split('.').pop()?.toLowerCase();
-
-      if (fileExtension !== 'xls' && fileExtension !== 'xlsx') {
-        this.fileError = "Only Excel files (.xls, .xlsx) are allowed!";
+      const extension = file.name.split('.').pop()?.toLowerCase();
+      if (extension !== 'xls' && extension !== 'xlsx') {
+        this.fileError = 'Only Excel files (.xls, .xlsx) are allowed!';
         return;
       }
-
       this.fileError = null;
       this.selectedFile = file;
     }
@@ -241,36 +139,30 @@ export class WhatsappActivityComponent {
       this.fileError = "Please select a file first!";
       return;
     }
-    console.log(this.selectedFile);
 
     const formData = new FormData();
     formData.append("file", this.selectedFile);
-    
+
     this.whatsappActivityService.uploaduser(formData).subscribe(
-      (response) => {
-        this.successMessage = 'File uploaded successfully.';
-        this.openSnackBar(this.successMessage)
-        console.log('File uploaded successfully', response);
-        this.userType = response;
+      () => {
+        this.openSnackBar('File uploaded successfully.');
       },
-      (error) => {
-        console.error('Error uploading file:', error);
+      () => {
         this.fileError = 'Error uploading file. Please try again.';
-        this.openSnackBar(this.fileError)
+        this.openSnackBar(this.fileError);
       }
     );
-
-
   }
+
   openSnackBar(message: string) {
-    this._snackBar.open(message, 'Close', 
-    {
+    this._snackBar.open(message, 'Close', {
       horizontalPosition: this.horizontalPosition,
       verticalPosition: this.verticalPosition,
+      duration: 3000
     });
   }
-  
+
+  isArray(value: any): boolean {
+    return Array.isArray(value);
+  }
 }
-
-
-

@@ -1,13 +1,13 @@
+<!-- src/app/components/whatsapp-activity/whatsapp-activity.component.html -->
+
 <section class="whatsapp_activity_table py-4">
   <div class="container">
-    <!-- Header -->
-    <div class="row mb-4">
-      <div class="col-12 text-center">
-        <h2 class="fw-bold">WhatsApp Activity</h2>
-      </div>
+
+    <div class="row mb-4 text-center">
+      <h2 class="fw-bold">WhatsApp Activity</h2>
     </div>
 
-    <!-- Section 1: File Upload -->
+    <!-- File Upload -->
     <div class="row mb-4">
       <div class="col-md-6 mb-2">
         <input type="file" (change)="onFileSelected($event)" accept=".xls,.xlsx" class="form-control">
@@ -17,87 +17,94 @@
       </div>
     </div>
 
-    <!-- Section 2: Filters -->
+    <!-- Filter Form -->
     <form [formGroup]="filterForm" (ngSubmit)="submitForm()">
       <div class="row mb-4">
-        <div class="col-md-4 mb-2">
+        <div class="col-md-4">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Start Date</mat-label>
-            <input matInput [matDatepicker]="startPicker" formControlName="startDate" required>
+            <input matInput [matDatepicker]="startPicker" formControlName="startDate">
             <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
             <mat-datepicker #startPicker></mat-datepicker>
           </mat-form-field>
         </div>
-    
-        <div class="col-md-4 mb-2">
+
+        <div class="col-md-4">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>End Date</mat-label>
-            <input matInput [matDatepicker]="endPicker" formControlName="endDate" required>
+            <input matInput [matDatepicker]="endPicker" formControlName="endDate">
             <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
             <mat-datepicker #endPicker></mat-datepicker>
           </mat-form-field>
         </div>
-    
-        <!-- <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Course</mat-label>
-          <mat-select formControlName="course_id" required>
-            <mat-option [value]="''">Please Select</mat-option>
-            <mat-option *ngFor="let template of templates" [value]="template.id">
-              {{ template.course_content.join(', ') || template.id }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field> -->
-        
-        
-    
-        <div class="col-md-4 mb-2">
+
+        <div class="col-md-4">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Country</mat-label>
             <input matInput formControlName="country">
           </mat-form-field>
         </div>
-    
-        <div class="col-md-4 mb-2">
+
+        <div class="col-md-4">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Experience</mat-label>
             <input matInput formControlName="experience">
           </mat-form-field>
         </div>
-    
-        <div class="col-md-4 mb-2">
+
+        <div class="col-md-4">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Course Name</mat-label>
+            <mat-label>Course</mat-label>
             <input matInput formControlName="course">
           </mat-form-field>
         </div>
-    
+
+        <div class="col-md-4">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Template</mat-label>
+            <mat-select formControlName="course_id">
+              <mat-option value="">Please Select</mat-option>
+              <mat-option *ngFor="let template of templates" [value]="template.course_id">
+                {{ isArray(template.course_content) ? template.course_content.join(', ') : template.course_content || template.course_id }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
         <div class="col-12 text-end">
           <button mat-raised-button color="primary" type="submit">Submit</button>
         </div>
       </div>
     </form>
-    
 
+    <!-- Course Selection After Contact Load -->
+    <div class="row mb-4" *ngIf="dataSource.data.length > 0">
+      <div class="col-md-6">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Select Template</mat-label>
+          <mat-select [(ngModel)]="selectedCourseId">
+            <mat-option value="">Please Select</mat-option>
+            <mat-option *ngFor="let template of templates" [value]="template.course_id">
+              {{ isArray(template.course_content) ? template.course_content.join(', ') : template.course_content || template.course_id }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
 
-     <!-- Contacts Table -->
-     <table *ngIf="filteredData.length" mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+    <!-- Contacts Table -->
+    <table *ngIf="dataSource.data.length > 0" mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
 
       <!-- Select Column -->
       <ng-container matColumnDef="select">
         <th mat-header-cell *matHeaderCellDef>
-          <mat-checkbox (change)="$event ? masterToggle() : null"
-                        [checked]="isAllSelected()"
-                        [indeterminate]="selection.hasValue() && !isAllSelected()">
-          </mat-checkbox>
+          <mat-checkbox (change)="masterToggle()" [checked]="isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()"></mat-checkbox>
         </th>
         <td mat-cell *matCellDef="let row">
-          <mat-checkbox (click)="$event.stopPropagation()"
-                        (change)="$event ? selection.toggle(row) : null"
-                        [checked]="selection.isSelected(row)">
-          </mat-checkbox>
+          <mat-checkbox (click)="$event.stopPropagation()" (change)="selection.toggle(row)" [checked]="selection.isSelected(row)"></mat-checkbox>
         </td>
       </ng-container>
-    
+
       <!-- Data Columns -->
       <ng-container *ngFor="let col of displayedColumns">
         <ng-container *ngIf="col !== 'select'" [matColumnDef]="col">
@@ -105,20 +112,14 @@
           <td mat-cell *matCellDef="let row">{{ row[col] }}</td>
         </ng-container>
       </ng-container>
-    
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
-    
-    
-    
-    
-    <button mat-raised-button color="accent" (click)="sendToWhatsApp()">
-      Send to WhatsApp
-    </button>
-    
-  </div> <!-- ✅ Correct closing of .container -->
+
+    <!-- Send to WhatsApp Button -->
+    <div class="mt-3 text-end" *ngIf="dataSource.data.length > 0">
+      <button mat-raised-button color="accent" (click)="sendToWhatsApp()">Send to WhatsApp</button>
+    </div>
+  </div>
 </section>
-
-
-
