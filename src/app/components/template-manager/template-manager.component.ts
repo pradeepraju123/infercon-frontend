@@ -66,7 +66,7 @@ export class TemplateManagerComponent implements OnInit {
   
 
   saveTemplate(): void {
-    alert(this.selectedImage);
+   // alert(this.selectedImage);
     const cleanContent = this.newTemplate.course_content.filter(item => item.trim() !== '');
     if (!this.newTemplate.course_id || cleanContent.length === 0) {
       this.openSnackBar('Please enter a template ID and at least one course content item.');

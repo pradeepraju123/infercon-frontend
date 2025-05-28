@@ -100,8 +100,8 @@ export class WhatsappActivityComponent implements OnInit {
     const mobileNumbers = selectedContacts.map(c => c.phone_number);
 
     const courseId = this.selectedCourseId || this.filterForm.value.course_id;
-    alert(mobileNumbers);
-    alert(courseId);
+   // alert(mobileNumbers);
+   // alert(courseId);
 
     if (!courseId || mobileNumbers.length === 0) {
       alert('Please select contacts and a template.');
