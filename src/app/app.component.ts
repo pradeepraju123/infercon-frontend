@@ -80,7 +80,9 @@ const routesWithoutDefault = [
   '/logout',
   '/app-list-admin',
   '/app-placement-admin',
-  '/whatsappactivity'
+  '/whatsappactivity',
+  '/whatsapptemplate'
+
 
 ];
 const routesWithDefault = [

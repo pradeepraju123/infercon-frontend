@@ -1,0 +1,48 @@
+<div class="template-container">
+  <h2>{{ editId ? 'Edit' : 'Create' }} Template</h2>
+
+  <!-- Template ID -->
+  <input
+    type="text"
+    [(ngModel)]="newTemplate.course_id"
+    [readonly]="editId !== null"
+    placeholder="Enter Template ID"
+  />
+
+  <!-- Course Content -->
+  <div *ngFor="let content of newTemplate.course_content; let i = index; trackBy: trackByIndex">
+    <input
+      type="text"
+      [(ngModel)]="newTemplate.course_content[i]"
+      placeholder="Course Content"
+      name="content-{{ i }}"
+    />
+    <button (click)="removeCourseItem(i)">Remove</button>
+  </div>
+
+  <button (click)="addCourseItem()">Add Course Content</button>
+
+  <!-- Image Upload -->
+  <input type="file" accept="image/*" (change)="onImageSelected($event)" />
+
+  <div *ngIf="imagePreviewUrl">
+    <img [src]="imagePreviewUrl" alt="Preview" width="200" />
+  </div>
+
+  <button (click)="saveTemplate()">{{ editId ? 'Update' : 'Create' }}</button>
+  <hr />
+
+  <h3>Existing Templates</h3>
+<ul>
+  <li *ngFor="let temp of templates">
+    <strong>{{ temp.course_id }}</strong> - {{ temp.course_content.join(', ') }}
+    <div *ngIf="temp.imageUrl">
+      <!-- <img [src]="'http://localhost:3000' + temp.imageUrl" alt="Template Image" width="150" /> -->
+    </div>
+    <button (click)="editTemplate(temp)">Edit</button>
+    <button (click)="deleteTemplate(temp.course_id)">Delete</button>
+  </li>
+</ul>
+</div>
+
+
