@@ -11,6 +11,9 @@ import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition
 import { WhatsappActivityService } from '../../services/whatsapp-activity.service';
 import { ContactService } from '../../services/contact.service';
 import { TemplateService, Template } from '../../services/templates/template.service';
+import { courses } from '../../model/course-data-store';
+
+
 
 @Component({
   selector: 'app-whatsapp-activity',
@@ -23,6 +26,8 @@ export class WhatsappActivityComponent implements OnInit {
   selectedCourseId: string = '';
   selectedFile: File | null = null;
   fileError: string | null = null;
+
+  public courses:any = courses
 
   displayedColumns: string[] = ['select', 'fullname', 'phone_number'];
   dataSource = new MatTableDataSource<any>();
@@ -62,7 +67,7 @@ export class WhatsappActivityComponent implements OnInit {
       country: [''],
       experience: [''],
       course: [''],
-      course_id: ['', Validators.required]
+      //course_id: ['', Validators.required]
     });
   }
 

@@ -13,10 +13,10 @@ export class WhatsappActivityService {
   private excelUrl='https://api.inferconautomation.com/api/v1/users/getall';
  private excelUrl1='https://api.inferconautomation.com/api/v1/users/bulkwhatsmes';
   //private excelUrl='http://localhost:8081/api/v1/users/getall';
- // private excelUrl1='http://localhost:8081/api/v1/users/bulkwhatsmes';
+  //private excelUrl1='http://localhost:8081/api/v1/users/bulkwhatsmes';
    private excelUrl_contacts='https://api.inferconautomation.com/api/v1/users/bulkupload';
    private filter_contact='https://api.inferconautomation.com/api/v1/users/filtercontact';
-    //private filter_contact='http://localhost:8081/api/v1/users/filtercontact';
+  // private filter_contact='http://localhost:8081/api/v1/users/filtercontact';
 
 
 
@@ -83,6 +83,15 @@ export class WhatsappActivityService {
   //   return this.http.post(`${this.filter_contact}`, data);
 
   // }
+  // sendcontect_template(data: any): Observable<any> {
+
+    
+  //   return this.http.post(`${this.excelUrl1}`, data);
+  
+  //   }
+    
+    //return this.http.post(`${this.excelUrl1}`, data);
+  
   
   // sendmessage_filtercontact(data: any): Observable<any> {
   //   const url = `${this.excelUrl1}`;
