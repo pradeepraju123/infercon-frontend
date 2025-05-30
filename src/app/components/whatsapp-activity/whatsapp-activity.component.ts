@@ -62,7 +62,7 @@ export class WhatsappActivityComponent implements OnInit {
       country: [''],
       experience: [''],
       course: [''],
-      course_id: ['', Validators.required]
+      //course_id: ['', Validators.required]
     });
   }
 

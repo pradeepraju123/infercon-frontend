@@ -14,9 +14,9 @@ export interface Template {
   providedIn: 'root'
 })
 export class TemplateService {
-  //private apiUrl = 'https://api.inferconautomation.com/api/v1/templates'; // Change to your backend URL
+  private apiUrl = 'https://api.inferconautomation.com/api/v1/templates'; // Change to your backend URL
    //private excelUrl_contacts='https://api.inferconautomation.com/api/v1/users/bulkupload';
-  private apiUrl = 'http://localhost:8081/api/v1/templates'; // Change to your backend URL
+  //private apiUrl = 'http://localhost:8081/api/v1/templates'; // Change to your backend URL
 
 
 
@@ -32,14 +32,14 @@ export class TemplateService {
     return null;
   }
 
-  // getAll(): Observable<any> {
-  //   const headers = this.getAuthHeaders();
-  //   if (headers) {
-  //     return this.http.get(this.apiUrl, { headers });
-  //   } else {
-  //     return throwError(() => new Error('No authentication token found'));
-  //   }
-  // }
+  getAll(): Observable<any> {
+    const headers = this.getAuthHeaders();
+    if (headers) {
+      return this.http.get(this.apiUrl, { headers });
+    } else {
+      return throwError(() => new Error('No authentication token found'));
+    }
+  }
  
 
   create(data: FormData): Observable<any> {
@@ -72,10 +72,10 @@ export class TemplateService {
 
 
   //LOCAL TESTING
-  getAll(): Observable<any> {
-      return this.http.get(this.apiUrl);
+  // getAll(): Observable<any> {
+  //     return this.http.get(this.apiUrl);
    
-  }
+  // }
 
   // create(data: FormData): Observable<any> {
   //     return this.http.post(this.apiUrl, data);

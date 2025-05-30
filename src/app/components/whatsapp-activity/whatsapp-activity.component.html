@@ -78,7 +78,7 @@
     </form>
 
     <!-- Course Selection After Contact Load -->
-    <div class="row mb-4" *ngIf="dataSource.data.length > 0">
+    <!-- <div class="row mb-4" *ngIf="dataSource.data.length > 0">
       <div class="col-md-6">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Select Template</mat-label>
@@ -90,7 +90,7 @@
           </mat-select>
         </mat-form-field>
       </div>
-    </div>
+    </div> -->
 
     <!-- Contacts Table -->
     <table *ngIf="dataSource.data.length > 0" mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
