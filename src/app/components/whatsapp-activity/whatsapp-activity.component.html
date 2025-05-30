@@ -52,14 +52,24 @@
           </mat-form-field>
         </div>
 
-        <div class="col-md-4">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Course</mat-label>
-            <input matInput formControlName="course">
-          </mat-form-field>
-        </div>
+
 
         <div class="col-md-4">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Courses</mat-label>
+              <mat-select formControlName="course" multiple>
+                <mat-option *ngFor="let course of courses" [value]="course.value">
+                  {{ course.label }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          <!-- <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Course</mat-label>
+            <input matInput formControlName="course">
+          </mat-form-field> -->
+        </div>
+
+        <!-- <div class="col-md-4">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Template</mat-label>
             <mat-select formControlName="course_id">
@@ -69,7 +79,7 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
-        </div>
+        </div> -->
 
         <div class="col-12 text-end">
           <button mat-raised-button color="primary" type="submit">Submit</button>
