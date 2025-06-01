@@ -9,7 +9,14 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class TemplateManagerComponent implements OnInit {
   templates: Template[] = [];
-  newTemplate: Template = { course_id: '', course_content: [''], imageUrl: '' };
+  newTemplate: Template = {
+    course_id: '',
+    course_content: [''],
+    imageUrl: '',
+    template_title_first: '',
+    template_title_second: '',
+    template_title_third: ''
+  };
   editId: string | null = null;
   selectedImage: File | null = null;
   imagePreviewUrl: string | null = null;
@@ -28,14 +35,11 @@ export class TemplateManagerComponent implements OnInit {
   }
 
   addCourseItem(): void {
-    console.log('Before push:', this.newTemplate.course_content);
     if (!Array.isArray(this.newTemplate.course_content)) {
       this.newTemplate.course_content = [];
     }
     this.newTemplate.course_content.push('');
-    console.log('After push:', this.newTemplate.course_content);
   }
-  
 
   removeCourseItem(index: number): void {
     if (this.newTemplate.course_content.length > 1) {
@@ -46,30 +50,23 @@ export class TemplateManagerComponent implements OnInit {
   onImageSelected(event: any): void {
     const file: File = event.target.files[0];
     if (!file) return;
-  
+
     const objectUrl = URL.createObjectURL(file);
     const img = new Image();
-  
+
     img.onload = () => {
-      if (img.width === 500 && img.height === 850) {
-        this.selectedImage = file;  // <-- This must happen
-        this.imagePreviewUrl = objectUrl;
-      } else {
-        this.selectedImage = file;
-        this.imagePreviewUrl = objectUrl;
-       // this.openSnackBar('Image must be exactly 470x705 pixels.');
-      }
+      // Optional: Validate image dimensions here
+      this.selectedImage = file;
+      this.imagePreviewUrl = objectUrl;
     };
-  
+
     img.src = objectUrl;
   }
-  
 
   saveTemplate(): void {
-   // alert(this.selectedImage);
     const cleanContent = this.newTemplate.course_content.filter(item => item.trim() !== '');
     if (!this.newTemplate.course_id || cleanContent.length === 0) {
-      this.openSnackBar('Please enter a template ID and at least one course content item.');
+      this.openSnackBar('Please enter a All Field.');
       return;
     }
 
@@ -81,37 +78,36 @@ export class TemplateManagerComponent implements OnInit {
 
     const formData = new FormData();
     formData.append('course_id', this.newTemplate.course_id);
+    formData.append('template_title_first', this.newTemplate.template_title_first);
+    formData.append('template_title_second', this.newTemplate.template_title_second);
+    formData.append('template_title_third', this.newTemplate.template_title_third);
     formData.append('course_content', JSON.stringify(cleanContent));
     if (this.selectedImage) {
       formData.append('image', this.selectedImage);
     }
 
-    if (this.editId) {
-      this.service.update(this.editId, formData).subscribe({
-        next: () => {
-          this.resetForm();
-          this.loadTemplates();
-          this.openSnackBar('Template updated successfully');
-        },
-        error: () => this.openSnackBar('Update failed')
-      });
-    } else {
-      this.service.create(formData).subscribe({
-        next: () => {
-          this.resetForm();
-          this.loadTemplates();
-          this.openSnackBar('Template created successfully');
-        },
-        error: () => this.openSnackBar('Create failed')
-      });
-    }
+    const request = this.editId
+      ? this.service.update(this.editId, formData)
+      : this.service.create(formData);
+
+    request.subscribe({
+      next: () => {
+        this.resetForm();
+        this.loadTemplates();
+        this.openSnackBar(this.editId ? 'Template updated successfully' : 'Template created successfully');
+      },
+      error: () => this.openSnackBar(this.editId ? 'Update failed' : 'Create failed')
+    });
   }
 
   editTemplate(template: Template): void {
     this.newTemplate = {
       course_id: template.course_id,
       course_content: [...template.course_content],
-      imageUrl: template.imageUrl
+      imageUrl: template.imageUrl,
+      template_title_first: template.template_title_first,
+      template_title_second: template.template_title_second,
+      template_title_third: template.template_title_third
     };
     this.editId = template.course_id;
     this.imagePreviewUrl = template.imageUrl || null;
@@ -131,15 +127,23 @@ export class TemplateManagerComponent implements OnInit {
   }
 
   resetForm(): void {
-    this.newTemplate = { course_id: '', course_content: [''], imageUrl: '' };
+    this.newTemplate = {
+      course_id: '',
+      course_content: [''],
+      imageUrl: '',
+      template_title_first: '',
+      template_title_second: '',
+      template_title_third: ''
+    };
     this.editId = null;
     this.selectedImage = null;
     this.imagePreviewUrl = null;
   }
-  trackByIndex(index: number, item: any): any {
+
+  trackByIndex(index: number): any {
     return index;
   }
-  
+
   openSnackBar(msg: string): void {
     this.snackBar.open(msg, 'Close', { duration: 3000 });
   }

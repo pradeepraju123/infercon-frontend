@@ -1,48 +1,72 @@
 <div class="template-container">
   <h2>{{ editId ? 'Edit' : 'Create' }} Template</h2>
 
-  <!-- Template ID -->
-  <input
-    type="text"
-    [(ngModel)]="newTemplate.course_id"
-    [readonly]="editId !== null"
-    placeholder="Enter Template ID"
-  />
+  <form class="template-form">
 
-  <!-- Course Content -->
-  <div *ngFor="let content of newTemplate.course_content; let i = index; trackBy: trackByIndex">
-    <input
-      type="text"
-      [(ngModel)]="newTemplate.course_content[i]"
-      placeholder="Course Content"
-      name="content-{{ i }}"
-    />
-    <button (click)="removeCourseItem(i)">Remove</button>
-  </div>
+    <!-- Template ID: full width -->
+    <div class="form-group full-width">
+      <label for="courseId">Template ID</label>
+      <input id="courseId" type="text" [(ngModel)]="newTemplate.course_id" [readonly]="editId !== null" placeholder="Enter Template ID" />
+    </div>
 
-  <button (click)="addCourseItem()">Add Course Content</button>
+    <!-- Title 1 and Title 2 side by side -->
+    <div class="form-group half-width">
+      <label>Title 1</label>
+      <input type="text" [(ngModel)]="newTemplate.template_title_first" placeholder="Enter Title 1" />
+    </div>
 
-  <!-- Image Upload -->
-  <input type="file" accept="image/*" (change)="onImageSelected($event)" />
+    <div class="form-group half-width">
+      <label>Title 2</label>
+      <input type="text" [(ngModel)]="newTemplate.template_title_second" placeholder="Enter Title 2" />
+    </div>
 
-  <div *ngIf="imagePreviewUrl">
-    <img [src]="imagePreviewUrl" alt="Preview" width="200" />
-  </div>
+    <!-- Title 3 full width -->
+    <div class="form-group full-width">
+      <label>Title 3</label>
+      <input type="text" [(ngModel)]="newTemplate.template_title_third" placeholder="Enter Title 3" />
+    </div>
 
-  <button (click)="saveTemplate()">{{ editId ? 'Update' : 'Create' }}</button>
+    <!-- Course Content full width -->
+    <div class="form-group full-width course-content-full">
+      <label>Course Content</label>
+      <div *ngFor="let content of newTemplate.course_content; let i = index; trackBy: trackByIndex" class="course-content-item">
+        <input type="text" [(ngModel)]="newTemplate.course_content[i]" placeholder="Course Content" />
+        <button type="button" class="btn btn-danger btn-sm" (click)="removeCourseItem(i)">Remove</button>
+      </div>
+      <button type="button" class="btn btn-primary btn-sm add-content-btn" (click)="addCourseItem()">+ Add Course Content</button>
+    </div>
+
+    <!-- Image Upload full width -->
+    <div class="form-group full-width course-content-full">
+      <label for="imageUpload">Upload Image</label>
+      <input id="imageUpload" type="file" accept="image/*" (change)="onImageSelected($event)" />
+      <div *ngIf="imagePreviewUrl" class="image-preview">
+        <img [src]="imagePreviewUrl" alt="Preview" />
+      </div>
+    </div>
+
+    <!-- Save button full width -->
+    <div class="form-actions full-width course-content-full">
+      <button type="button" class="btn btn-success save-btn" (click)="saveTemplate()">{{ editId ? 'Update' : 'Create' }}</button>
+    </div>
+  </form>
+
   <hr />
 
   <h3>Existing Templates</h3>
-<ul>
-  <li *ngFor="let temp of templates">
-    <strong>{{ temp.course_id }}</strong> - {{ temp.course_content.join(', ') }}
-    <div *ngIf="temp.imageUrl">
-      <!-- <img [src]="'http://localhost:3000' + temp.imageUrl" alt="Template Image" width="150" /> -->
-    </div>
-    <button (click)="editTemplate(temp)">Edit</button>
-    <button (click)="deleteTemplate(temp.course_id)">Delete</button>
-  </li>
-</ul>
+  <ul class="template-list">
+    <li *ngFor="let temp of templates">
+      <div class="template-header">
+        <strong>{{ temp.course_id }}</strong>
+        <div class="template-actions">
+          <button type="button" class="btn btn-edit" (click)="editTemplate(temp)">Edit</button>
+          <button type="button" class="btn btn-delete" (click)="deleteTemplate(temp.course_id)">Delete</button>
+        </div>
+      </div>
+      <p class="template-content">{{ temp.course_content.join(', ') }}</p>
+      <div *ngIf="temp.imageUrl" class="template-image">
+        <!-- <img [src]="'http://localhost:3000' + temp.imageUrl" alt="Template Image" /> -->
+      </div>
+    </li>
+  </ul>
 </div>
-
-

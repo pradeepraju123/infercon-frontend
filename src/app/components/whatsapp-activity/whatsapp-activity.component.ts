@@ -1,8 +1,6 @@
-// src/app/components/whatsapp-activity/whatsapp-activity.component.ts
-
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -13,21 +11,23 @@ import { ContactService } from '../../services/contact.service';
 import { TemplateService, Template } from '../../services/templates/template.service';
 import { courses } from '../../model/course-data-store';
 
-
-
 @Component({
   selector: 'app-whatsapp-activity',
   templateUrl: './whatsapp-activity.component.html',
   styleUrls: ['./whatsapp-activity.component.css']
 })
-export class WhatsappActivityComponent implements OnInit {
+export class WhatsappActivityComponent implements OnInit, AfterViewInit {
+
+  totalCount = 0;            // total contacts count from backend for paginator
+  pageSize = 2;              // default page size
+  pageIndex = 0;             // current page index (0-based)
   filterForm!: FormGroup;
   templates: Template[] = [];
   selectedCourseId: string = '';
   selectedFile: File | null = null;
   fileError: string | null = null;
 
-  public courses:any = courses
+  public courses: any = courses;
 
   displayedColumns: string[] = ['select', 'fullname', 'phone_number'];
   dataSource = new MatTableDataSource<any>();
@@ -50,14 +50,21 @@ export class WhatsappActivityComponent implements OnInit {
   ngOnInit(): void {
     this.initializeForm();
 
+    // Fetch templates once here
     this.service.getAll().subscribe({
       next: (data) => {
+        console.log('Templates loaded:', data);
         this.templates = data;
       },
       error: (err) => {
         console.error('Failed to load templates:', err);
       }
     });
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
   }
 
   initializeForm() {
@@ -67,25 +74,44 @@ export class WhatsappActivityComponent implements OnInit {
       country: [''],
       experience: [''],
       course: [''],
-      //course_id: ['', Validators.required]
     });
   }
 
   submitForm() {
     if (this.filterForm.invalid) return;
 
-    this.whatsappActivityService.sendmessage_filtercontact(this.filterForm.value).subscribe({
+    // Prepare payload with pagination info (page is 1-based)
+    const payload = {
+      ...this.filterForm.value,
+      page: this.pageIndex + 1,
+      pageSize: this.pageSize
+    };
+
+    this.whatsappActivityService.sendmessage_filtercontact(payload).subscribe({
       next: (response: any) => {
         this.dataSource.data = response.contacts || [];
         this.selection.clear();
+
+        this.totalCount = response.total || 0;
+
+        // Reassign paginator and sort after data change (optional)
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+
+        // Removed redundant templates fetch here
+
         this.openSnackBar('Contacts loaded successfully');
       },
       error: () => {
         this.openSnackBar('Error loading contacts');
       }
     });
+  }
+
+  onPageChange(event: PageEvent) {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.submitForm();
   }
 
   isAllSelected() {
@@ -104,10 +130,7 @@ export class WhatsappActivityComponent implements OnInit {
     const selectedContacts = this.selection.selected;
     const mobileNumbers = selectedContacts.map(c => c.phone_number);
 
-    const courseId = this.selectedCourseId || this.filterForm.value.course_id;
-   // alert(mobileNumbers);
-   // alert(courseId);
-
+    const courseId = this.selectedCourseId || this.filterForm.value.course;
     if (!courseId || mobileNumbers.length === 0) {
       alert('Please select contacts and a template.');
       return;
