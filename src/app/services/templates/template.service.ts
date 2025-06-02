@@ -8,6 +8,10 @@ export interface Template {
   course_id: string;
   course_content: string[];
   imageUrl?: string; // URL string for image stored on server
+  template_title_first:string;
+  template_title_second:string;
+  template_title_third:string;
+
 }
 
 @Injectable({
@@ -16,7 +20,7 @@ export interface Template {
 export class TemplateService {
   private apiUrl = 'https://api.inferconautomation.com/api/v1/templates'; // Change to your backend URL
    //private excelUrl_contacts='https://api.inferconautomation.com/api/v1/users/bulkupload';
-  //private apiUrl = 'http://localhost:8081/api/v1/templates'; // Change to your backend URL
+ // private apiUrl = 'http://localhost:8081/api/v1/templates'; // Change to your backend URL
 
 
 
