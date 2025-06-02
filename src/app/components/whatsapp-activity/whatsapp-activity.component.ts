@@ -80,12 +80,26 @@ export class WhatsappActivityComponent implements OnInit, AfterViewInit {
   submitForm() {
     if (this.filterForm.invalid) return;
 
-    // Prepare payload with pagination info (page is 1-based)
-    const payload = {
-      ...this.filterForm.value,
-      page: this.pageIndex + 1,
-      pageSize: this.pageSize
-    };
+    
+      const formValues = this.filterForm.value;
+
+      // Adjust start and end dates
+      const startDate = new Date(formValues.startDate);
+      startDate.setHours(0, 0, 0, 0); // Start of the day
+
+      const endDate = new Date(formValues.endDate);
+      endDate.setHours(23, 59, 59, 999); // End of the day
+
+      // Prepare updated payload
+      const payload = {
+        ...formValues,
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
+        page: this.pageIndex + 1,
+        pageSize: this.pageSize
+      };
+
+
 
     this.whatsappActivityService.sendmessage_filtercontact(payload).subscribe({
       next: (response: any) => {
