@@ -35,21 +35,21 @@ export class WhatsappActivityService {
    
   // }
   
-  // uploaduser(data: any): Observable<any> {
-  //   const token = sessionStorage.getItem('authToken');
-  //   const url = `${this.excelUrl_contacts}`;
-  //   if(token)
-  //   {
-  //     const headers = new HttpHeaders({
-  //       'Authorization': 'Bearer ' + token // Include the token in the request headers
-  //         });
-  //     return this.http.post(url, data, { headers });
-  //   }
-  //   else{
-  //     return throwError('No authentication token found'); 
-  //   }
+  uploaduser(data: any): Observable<any> {
+    const token = sessionStorage.getItem('authToken');
+    const url = `${this.excelUrl_contacts}`;
+    if(token)
+    {
+      const headers = new HttpHeaders({
+        'Authorization': 'Bearer ' + token // Include the token in the request headers
+          });
+      return this.http.post(url, data, { headers });
+    }
+    else{
+      return throwError('No authentication token found'); 
+    }
    
-  //  }
+   }
    sendmessage_filtercontact(data: any): Observable<any> {
     const token = sessionStorage.getItem('authToken');
 
@@ -78,12 +78,12 @@ export class WhatsappActivityService {
     }
     
   }
-  uploaduser(data: any): Observable<any> {
-    const url = `${this.excelUrl_contacts}`;
+  // uploaduser(data: any): Observable<any> {
+  //   const url = `${this.excelUrl_contacts}`;
     
-      return this.http.post(url, data);
+  //     return this.http.post(url, data);
     
-   }
+  //  }
   
 
   // sendmessage_filtercontact(data: any): Observable<any> {

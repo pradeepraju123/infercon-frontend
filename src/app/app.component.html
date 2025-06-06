@@ -101,6 +101,9 @@
               </li>
               <li class="nav-item" *ngIf="getUserType() === 'admin'">
                 <a class="nav-link" routerLink="whatsappactivity">whatsappactivity</a>
+              </li>   
+              <li class="nav-item" *ngIf="getUserType() === 'admin'">
+                <a class="nav-link" routerLink="whatsapptemplate">Template</a>
               </li>     
             </ul>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 profile-menu" *ngIf="getUserType() === 'staff' || getUserType() === 'admin'"> 
