@@ -93,6 +93,8 @@ import { PlacementListComponent } from './controller/placement-list/placement-li
 import { PlacementEnquiryComponent } from './components/placement-enquiry/placement-enquiry.component';
 import { WhatsappActivityComponent } from './components/whatsapp-activity/whatsapp-activity.component';
 import { TemplateManagerComponent } from './components/template-manager/template-manager.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 @NgModule({
   declarations: [
     AppComponent,
@@ -158,6 +160,9 @@ import { TemplateManagerComponent } from './components/template-manager/template
     FileUrlPipe
   ],
   imports: [
+    MatDialogTitle, 
+  MatDialogContent,
+    MatIconModule,
     MatDividerModule,
     BrowserModule,
     AppRoutingModule,

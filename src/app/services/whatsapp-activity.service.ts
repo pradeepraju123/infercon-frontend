@@ -17,7 +17,8 @@ export class WhatsappActivityService {
    private excelUrl_contacts='https://api.inferconautomation.com/api/v1/users/bulkupload';
 
    private filter_contact='https://api.inferconautomation.com/api/v1/users/filtercontact';
-  // private filter_contact='http://localhost:8081/api/v1/users/filtercontact';
+ //  private deletecontact='https://api.inferconautomation.com/api/v1/users/deletecontact'
+  private deletecontact='http://localhost:8081/api/v1/users/deletecontact';
   //   private excelUrl1='http://localhost:8081/api/v1/users/bulkwhatsmes';
 
 
@@ -72,6 +73,20 @@ export class WhatsappActivityService {
         'Authorization': 'Bearer ' + token
           });
     return this.http.post(`${this.excelUrl1}`, data, { headers });
+  } else {
+ 
+     return throwError('No authentication token found'); 
+    }
+    
+  }
+  deleteContact(data: any): Observable<any> {
+    const token = sessionStorage.getItem('authToken');
+
+    if (token) {
+      const headers = new HttpHeaders({
+        'Authorization': 'Bearer ' + token
+          });
+    return this.http.post(`${this.deletecontact}`, data, { headers });
   } else {
  
      return throwError('No authentication token found'); 

@@ -2,6 +2,7 @@ import { Component, ViewChild, OnInit, AfterViewInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+
 import { SelectionModel } from '@angular/cdk/collections';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
@@ -19,7 +20,7 @@ import { courses } from '../../model/course-data-store';
 export class WhatsappActivityComponent implements OnInit, AfterViewInit {
 
   totalCount = 0;            // total contacts count from backend for paginator
-  pageSize = 2;              // default page size
+  pageSize = 10;              // default page size
   pageIndex = 0;             // current page index (0-based)
   filterForm!: FormGroup;
   templates: Template[] = [];
@@ -76,6 +77,21 @@ export class WhatsappActivityComponent implements OnInit, AfterViewInit {
       course: [''],
     });
   }
+  deleteContact(id: string) {
+    //alert(id);
+    if (confirm('Are you sure you want to delete this contact?')) {
+      this.whatsappActivityService.deleteContact(id).subscribe({
+        next: () => {
+          this.openSnackBar('Contact deleted successfully');
+          this.submitForm(); // Reload the table
+        },
+        error: () => {
+          this.openSnackBar('Failed to delete contact');
+        }
+      });
+    }
+  }
+  
 
   submitForm() {
     if (this.filterForm.invalid) return;
