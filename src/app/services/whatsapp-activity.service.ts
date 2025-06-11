@@ -17,7 +17,8 @@ export class WhatsappActivityService {
    private excelUrl_contacts='https://api.inferconautomation.com/api/v1/users/bulkupload';
 
    private filter_contact='https://api.inferconautomation.com/api/v1/users/filtercontact';
-  // private filter_contact='http://localhost:8081/api/v1/users/filtercontact';
+  private deletecontact='https://api.inferconautomation.com/api/v1/users/deletecontact'
+  //private deletecontact='http://localhost:8081/api/v1/users/deletecontact';
   //   private excelUrl1='http://localhost:8081/api/v1/users/bulkwhatsmes';
 
 
@@ -35,21 +36,21 @@ export class WhatsappActivityService {
    
   // }
   
-  // uploaduser(data: any): Observable<any> {
-  //   const token = sessionStorage.getItem('authToken');
-  //   const url = `${this.excelUrl_contacts}`;
-  //   if(token)
-  //   {
-  //     const headers = new HttpHeaders({
-  //       'Authorization': 'Bearer ' + token // Include the token in the request headers
-  //         });
-  //     return this.http.post(url, data, { headers });
-  //   }
-  //   else{
-  //     return throwError('No authentication token found'); 
-  //   }
+  uploaduser(data: any): Observable<any> {
+    const token = sessionStorage.getItem('authToken');
+    const url = `${this.excelUrl_contacts}`;
+    if(token)
+    {
+      const headers = new HttpHeaders({
+        'Authorization': 'Bearer ' + token // Include the token in the request headers
+          });
+      return this.http.post(url, data, { headers });
+    }
+    else{
+      return throwError('No authentication token found'); 
+    }
    
-  //  }
+   }
    sendmessage_filtercontact(data: any): Observable<any> {
     const token = sessionStorage.getItem('authToken');
 
@@ -78,12 +79,26 @@ export class WhatsappActivityService {
     }
     
   }
-  uploaduser(data: any): Observable<any> {
-    const url = `${this.excelUrl_contacts}`;
+  deleteContact(data: any): Observable<any> {
+    const token = sessionStorage.getItem('authToken');
+
+    if (token) {
+      const headers = new HttpHeaders({
+        'Authorization': 'Bearer ' + token
+          });
+    return this.http.post(`${this.deletecontact}`, data, { headers });
+  } else {
+ 
+     return throwError('No authentication token found'); 
+    }
     
-      return this.http.post(url, data);
+  }
+  // uploaduser(data: any): Observable<any> {
+  //   const url = `${this.excelUrl_contacts}`;
     
-   }
+  //     return this.http.post(url, data);
+    
+  //  }
   
 
   // sendmessage_filtercontact(data: any): Observable<any> {
