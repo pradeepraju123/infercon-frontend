@@ -17,8 +17,8 @@ export class WhatsappActivityService {
    private excelUrl_contacts='https://api.inferconautomation.com/api/v1/users/bulkupload';
 
    private filter_contact='https://api.inferconautomation.com/api/v1/users/filtercontact';
- //  private deletecontact='https://api.inferconautomation.com/api/v1/users/deletecontact'
-  private deletecontact='http://localhost:8081/api/v1/users/deletecontact';
+  private deletecontact='https://api.inferconautomation.com/api/v1/users/deletecontact'
+  //private deletecontact='http://localhost:8081/api/v1/users/deletecontact';
   //   private excelUrl1='http://localhost:8081/api/v1/users/bulkwhatsmes';
 
 
