@@ -65,10 +65,11 @@ export class TemplateManagerComponent implements OnInit {
 
   saveTemplate(): void {
     const cleanContent = this.newTemplate.course_content.filter(item => item.trim() !== '');
-    if (!this.newTemplate.course_id || cleanContent.length === 0) {
-      this.openSnackBar('Please enter a All Field.');
+    if (cleanContent.length === 0) {
+      this.openSnackBar('Please enter all fields.');
       return;
     }
+    
 
     const isDuplicate = this.templates.some(t => t.course_id === this.newTemplate.course_id);
     if (!this.editId && isDuplicate) {
@@ -85,7 +86,13 @@ export class TemplateManagerComponent implements OnInit {
     if (this.selectedImage) {
       formData.append('image', this.selectedImage);
     }
+//     console.log('FormData contents:');
+// formData.forEach((value, key) => {
+//   console.log(`${key}:`, value);
+// });
 
+//     console.log(formData);
+//alert(formData);
     const request = this.editId
       ? this.service.update(this.editId, formData)
       : this.service.create(formData);

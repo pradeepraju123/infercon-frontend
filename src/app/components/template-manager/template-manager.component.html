@@ -6,31 +6,31 @@
     <!-- Template ID: full width -->
     <div class="form-group full-width">
       <label for="courseId">Template ID</label>
-      <input id="courseId" type="text" [(ngModel)]="newTemplate.course_id" [readonly]="editId !== null" placeholder="Enter Template ID" />
+      <input id="courseId" type="text" name="courseId" [(ngModel)]="newTemplate.course_id" [readonly]="editId !== null" placeholder="Enter Template ID" />
     </div>
 
     <!-- Title 1 and Title 2 side by side -->
     <div class="form-group half-width">
       <label>Title 1</label>
-      <input type="text" [(ngModel)]="newTemplate.template_title_first" placeholder="Enter Title 1" />
+      <input type="text" name="template_title_first" [(ngModel)]="newTemplate.template_title_first" placeholder="Enter Title 1" />
     </div>
 
     <div class="form-group half-width">
       <label>Title 2</label>
-      <input type="text" [(ngModel)]="newTemplate.template_title_second" placeholder="Enter Title 2" />
+      <input type="text" name="template_title_second" [(ngModel)]="newTemplate.template_title_second" placeholder="Enter Title 2" />
     </div>
 
     <!-- Title 3 full width -->
     <div class="form-group full-width">
       <label>Title 3</label>
-      <input type="text" [(ngModel)]="newTemplate.template_title_third" placeholder="Enter Title 3" />
+      <input type="text" name="template_title_third" [(ngModel)]="newTemplate.template_title_third" placeholder="Enter Title 3" />
     </div>
 
     <!-- Course Content full width -->
     <div class="form-group full-width course-content-full">
       <label>Course Content</label>
       <div *ngFor="let content of newTemplate.course_content; let i = index; trackBy: trackByIndex" class="course-content-item">
-        <input type="text" [(ngModel)]="newTemplate.course_content[i]" placeholder="Course Content" />
+        <input type="text" name="courseContent{{i}}" [(ngModel)]="newTemplate.course_content[i]" placeholder="Course Content" />
         <button type="button" class="btn btn-danger btn-sm" (click)="removeCourseItem(i)">Remove</button>
       </div>
       <button type="button" class="btn btn-primary btn-sm add-content-btn" (click)="addCourseItem()">+ Add Course Content</button>
