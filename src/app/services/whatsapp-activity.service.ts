@@ -18,8 +18,10 @@ export class WhatsappActivityService {
 
    private filter_contact='https://api.inferconautomation.com/api/v1/users/filtercontact';
   private deletecontact='https://api.inferconautomation.com/api/v1/users/deletecontact'
-  //private deletecontact='http://localhost:8081/api/v1/users/deletecontact';
+ // private deletecontact='http://localhost:8081/api/v1/users/deletecontact';
   //   private excelUrl1='http://localhost:8081/api/v1/users/bulkwhatsmes';
+   // private filter_contact='http://localhost:8081/api/v1/users/filtercontact';
+
 
 
 
@@ -79,18 +81,19 @@ export class WhatsappActivityService {
     }
     
   }
-  deleteContact(data: any): Observable<any> {
+
+  // deleteContact(id: string): Observable<any> {
+
+  //   return this.http.delete(`${this.deletecontact}/${id}`);
+
+  
+  // }
+  deleteContact(id: string): Observable<any> {
     const token = sessionStorage.getItem('authToken');
 
-    if (token) {
-      const headers = new HttpHeaders({
-        'Authorization': 'Bearer ' + token
-          });
-    return this.http.post(`${this.deletecontact}`, data, { headers });
-  } else {
- 
-     return throwError('No authentication token found'); 
-    }
+      
+   return this.http.delete(`${this.deletecontact}/${id}`);
+
     
   }
   // uploaduser(data: any): Observable<any> {

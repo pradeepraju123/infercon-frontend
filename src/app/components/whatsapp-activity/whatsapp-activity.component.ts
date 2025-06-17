@@ -67,6 +67,7 @@ export class WhatsappActivityComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
+  
 
   initializeForm() {
     this.filterForm = this.fb.group({
@@ -95,27 +96,18 @@ export class WhatsappActivityComponent implements OnInit, AfterViewInit {
 
   submitForm() {
     if (this.filterForm.invalid) return;
-
-    // Prepare payload with pagination info (page is 1-based)
+  
     const payload = {
       ...this.filterForm.value,
       page: this.pageIndex + 1,
       pageSize: this.pageSize
     };
-
+  
     this.whatsappActivityService.sendmessage_filtercontact(payload).subscribe({
       next: (response: any) => {
+        this.totalCount = response.total || 0;
         this.dataSource.data = response.contacts || [];
         this.selection.clear();
-
-        this.totalCount = response.total || 0;
-
-        // Reassign paginator and sort after data change (optional)
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-
-        // Removed redundant templates fetch here
-
         this.openSnackBar('Contacts loaded successfully');
       },
       error: () => {
@@ -123,6 +115,7 @@ export class WhatsappActivityComponent implements OnInit, AfterViewInit {
       }
     });
   }
+  
 
   onPageChange(event: PageEvent) {
     this.pageIndex = event.pageIndex;
