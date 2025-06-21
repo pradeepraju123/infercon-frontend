@@ -30,7 +30,7 @@ export class WhatsappActivityComponent implements OnInit, AfterViewInit {
 
   public courses: any = courses;
 
-  displayedColumns: string[] = ['select', 'fullname', 'phone_number'];
+  displayedColumns: string[] = ['select', 'fullname', 'phone'];
   dataSource = new MatTableDataSource<any>();
   selection = new SelectionModel<any>(true, []);
 
@@ -137,7 +137,7 @@ export class WhatsappActivityComponent implements OnInit, AfterViewInit {
 
   sendToWhatsApp() {
     const selectedContacts = this.selection.selected;
-    const mobileNumbers = selectedContacts.map(c => c.phone_number);
+    const mobileNumbers = selectedContacts.map(c => c.phone);
 
     const courseId = this.selectedCourseId || this.filterForm.value.course;
     if (!courseId || mobileNumbers.length === 0) {
