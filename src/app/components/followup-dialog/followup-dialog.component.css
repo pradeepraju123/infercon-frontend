@@ -1,0 +1,19 @@
+/* followup-dialog.component.css */
+.time-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.time-field {
+  width: 80px;
+}
+
+.ampm-field {
+  width: 100px;
+}
+
+.time-separator {
+  font-size: 1.2em;
+}

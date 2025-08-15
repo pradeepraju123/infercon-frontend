@@ -95,6 +95,12 @@ import { WhatsappActivityComponent } from './components/whatsapp-activity/whatsa
 import { TemplateManagerComponent } from './components/template-manager/template-manager.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { CommentsDialogComponent } from './components/comments-dialog/comments-dialog.component';
+
+import { CreateRegisteredDialogComponent } from './components/create-registered-dialog/create-registered-dialog.component';
+import { FollowupDialogComponent } from './components/followup-dialog/followup-dialog.component';
+import { UserRegisterComponent } from './controller/user-register/user-register.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -157,7 +163,14 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     PlacementEnquiryComponent,
     WhatsappActivityComponent,
     TemplateManagerComponent,
-    FileUrlPipe
+    FileUrlPipe,
+    CommentsDialogComponent,
+    
+    CreateRegisteredDialogComponent,
+          FollowupDialogComponent,
+          UserRegisterComponent
+    
+    
   ],
   imports: [
     MatDialogTitle, 

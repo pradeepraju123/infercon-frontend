@@ -60,7 +60,7 @@ createCareerList(data: any): Observable<any> {
 createPlacementEnquiryList(data: any): Observable<any> {
     const headers = new HttpHeaders({
     });
-    const url = 'https://api.inferconautomation.com/api/v1/placements';
+    const url = 'http://localhost:8081/api/v1/placements';
     return this.http.post(url, data, { headers });
 }
 

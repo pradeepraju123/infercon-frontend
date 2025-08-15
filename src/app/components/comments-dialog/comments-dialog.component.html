@@ -1,0 +1,78 @@
+<div class="comments-dialog">
+  <!-- Dialog Header -->
+  <div class="dialog-header">
+  <h2 mat-dialog-title>
+    <mat-icon class="header-icon">comment</mat-icon>
+    Comments - {{contactName}}
+  </h2>
+  <button class="floating-close" (click)="onClose()" aria-label="Close">&times;</button>
+</div>
+
+
+  <!-- Dialog Content -->
+  <div mat-dialog-content class="dialog-content">
+    <!-- Loading Spinner -->
+    <div *ngIf="loading" class="loading-container">
+      <div class="custom-spinner">
+        <div class="spinner"></div>
+        <p>Loading comments...</p>
+      </div>
+    </div>
+
+    <!-- Comments List -->
+    <div *ngIf="!loading" class="comments-list">
+      <div *ngIf="comments.length === 0" class="no-comments">
+        <mat-icon>comment</mat-icon>
+        <p>No comments yet. Be the first to add one!</p>
+      </div>
+
+      <div *ngFor="let comment of comments" class="comment-item">
+        <div class="comment-header">
+          <div class="comment-author">
+            <div class="avatar">
+              {{(comment.createdBy || 'System').substring(0, 2).toUpperCase()}}
+            </div>
+            <span>{{comment.createdBy || 'System'}}</span>
+          </div>
+          <div class="comment-time">
+            {{comment.createdAt | date:'MMM d, y, h:mm a'}}
+          </div>
+        </div>
+        <div class="comment-text">{{comment.texts}}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dialog Actions -->
+  <div mat-dialog-actions class="dialog-actions">
+    <div class="add-comment-section">
+      <mat-form-field appearance="outline" class="comment-input">
+        <mat-label>Add a comment</mat-label>
+        <textarea 
+          matInput 
+          [(ngModel)]="newComment" 
+          placeholder="Type your message..."
+          (keydown)="onKeyPress($event)"
+          rows="2"
+          maxlength="500">
+        </textarea>
+        <mat-hint>{{newComment.length}}/500</mat-hint>
+      </mat-form-field>
+      
+      <div class="action-buttons">
+        <button 
+          mat-raised-button 
+          color="primary" 
+          (click)="addComment()" 
+          [disabled]="!newComment.trim() || loading"
+          class="add-button">
+          Add Comment
+        </button>
+
+        <button mat-button (click)="onClose()" class="cancel-button">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

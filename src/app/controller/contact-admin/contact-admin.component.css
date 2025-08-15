@@ -1,29 +1,251 @@
-table {
-    width: 100%;
-  }
-
+/* --- General Container --- */
 .contact_table {
-  padding: 20px;
+  padding: 15px;
 }
-.lead_status {
-  padding-top: 15px;
-  width: 50px;
+
+/* Responsive table container */
+.mat-elevation-z2 {
+  overflow-x: auto;
+  margin: 0 -15px;
 }
+
+/* Table styling */
+table {
+  width: 100%;
+  min-width: 800px; /* Minimum width before scrolling */
+}
+
+/* --- Search Section --- */
+.search {
+  margin-bottom: 20px;
+}
+
+.title_field_card {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center; /* keeps vertical alignment on desktop */
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+/* Match mat-form-field height on desktop */
+.title_field_card .btn {
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* --- Button Row --- */
+.button-row {
+  display: flex;
+  flex-wrap: wrap; /* allow stacking on smaller screens */
+  gap: 8px;
+  margin-top: 5px;
+}
+
+.button-row .btn {
+  padding: 0 14px;
+  height: 40px;
+  font-size: 0.9rem;
+}
+
+/* --- Form Fields --- */
+.mat-form-field {
+  flex: 1 1 200px;
+  min-width: 150px;
+}
+
+/* --- Buttons --- */
 .search button {
   background: none;
   color: #000;
-  padding: 8px;
-  border-radius: 5px;
   border: 2px solid #000;
-  width: 150px !important;
+  height: 56px;
+  min-width: 120px;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
 }
+
 .search button:hover {
-  background: rgb(58, 167, 244);
-  border: 2px solid rgb(58, 167, 244);
+  background: #3aa7f4;
+  border-color: #3aa7f4;
   color: #fff;
 }
-.search button {
-  margin: 0px 0px 0px 10px;
-  width: 200px;
-  height: 56px;
+
+/* --- Lead Status --- */
+.lead_status {
+  min-width: 150px;
+}
+
+/* --- Comments Button --- */
+.comments-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  padding: 6px 12px;
+}
+
+.comment-count {
+  background: rgba(0, 0, 0, 0.1);
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+}
+
+/* --- Paginator --- */
+.mat-paginator {
+  margin-top: 15px;
+  background: transparent;
+}
+
+.mat-select-lead-status {
+  border-radius: 4px;
+  padding: 8px;
+}
+.mat-select-new-lead {
+  background-color: #E3F2FD;
+  color: #0D47A1;
+}
+.mat-select-contacted {
+  background-color: #FFF8E1;
+  color: #FF8F00;
+}
+.mat-select-followup {
+  background-color: #E8F5E9;
+  color: #2E7D32;
+}
+.mat-select-not-interested {
+  background-color: #FFEBEE;
+  color: #C62828;
+}
+.mat-select-finalized {
+  background-color: #F3E5F5;
+  color: #6A1B9A;
+}
+
+
+
+
+
+/* --- Responsive Adjustments --- */
+@media (min-width: 993px) {
+  /* Target Search and Download */
+  .title_field_card .btn:nth-of-type(1),
+  .title_field_card .btn:nth-of-type(2) {
+    margin-top: -10px; /* lift more */
+  }
+
+  /* Target Assign button */
+  .title_field_card .btn:nth-of-type(3) {
+    margin-top: -6px; /* lift slightly */
+  }
+}
+
+@media (max-width: 992px) {
+  .title_field_card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .title_field_card .btn {
+    width: 100%;
+    height: auto;
+    padding: 10px;
+  }
+
+  .button-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .button-row .btn {
+    width: 100%;
+    height: auto;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact_table {
+    padding: 10px;
+  }
+
+  table {
+    min-width: 100%;
+  }
+
+  .mat-form-field {
+    min-width: 100%;
+  }
+}
+
+/* --- Table Improvements --- */
+.mat-header-cell {
+  font-weight: 600;
+  color: #333;
+}
+
+.mat-cell,
+.mat-header-cell {
+  padding: 0 10px;
+}
+
+.mat-row:hover {
+  background-color: #f5f5f5;
+}
+
+/* --- Dialog Panel --- */
+::ng-deep .comments-dialog-panel .mat-dialog-container {
+  padding: 20px !important;
+  border-radius: 8px !important;
+  max-width: 95vw;
+}
+
+/* Followup dialog styling */
+.followup-dialog .mat-dialog-container {
+  padding: 20px;
+}
+
+.followup-dialog .mat-form-field {
+  width: 100%;
+}
+
+/* Table columns */
+.mat-column-followupDate, .mat-column-followupTime {
+  padding: 0 8px;
+  min-width: 100px;
+}
+button[disabled] {
+  cursor: not-allowed;
+}
+/* Pagination styles */
+.pagination-container {
+  margin-top: 20px;
+}
+.page-item {
+  cursor: pointer;
+}
+.page-number-container {
+  flex-wrap: wrap;
+}
+.pagination-info {
+  font-size: 0.9rem;
+}
+.page-link {
+  color: #0D6EFD;
+}
+.page-item.active .page-link {
+  background-color: #0D6EFD;
+  border-color: #0D6EFD;
+  color: white;
+}
+.page-item.disabled .page-link {
+  color: #6C757D;
+  pointer-events: none;
 }

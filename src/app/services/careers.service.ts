@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class CareersService {
 
-  private apiUrl = 'https://api.inferconautomation.com/api/v1/careers';
+  private apiUrl = 'http://localhost:8081/api/v1/careers';
 
   constructor(
     private http: HttpClient
