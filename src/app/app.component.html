@@ -100,7 +100,7 @@
                 <a class="nav-link" routerLink="app-placement-admin">Placement</a>
               </li>
 
-              <li class="nav-item" *ngIf="getUserType() === 'staff'">
+              <li class="nav-item" *ngIf="getUserType() === 'staff' || getUserType() ==='admin' ">
                 <a class="nav-link" routerLink="user-register">UserRegistration</a>
               </li>
               <li class="nav-item" *ngIf="getUserType() === 'admin'">

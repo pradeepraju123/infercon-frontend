@@ -1,5 +1,4 @@
-/* --- General Container --- */
-.contact_table {
+contact_table {
   padding: 15px;
 }
 
@@ -109,24 +108,24 @@ table {
   padding: 8px;
 }
 .mat-select-new-lead {
-  background-color: #E3F2FD;
-  color: #0D47A1;
+    background-color: rgba(58, 167, 244, 0.3) !important;
+ color:black !important;
 }
 .mat-select-contacted {
-  background-color: #FFF8E1;
-  color: #FF8F00;
+  background-color: rgba(173, 216, 230, 0.5) !important;
+    color:black !important;
 }
 .mat-select-followup {
-  background-color: #E8F5E9;
-  color: #2E7D32;
+   background-color: rgba(255, 255, 0, 0.3) !important; /* Green */
+  color:black !important;
 }
 .mat-select-not-interested {
-  background-color: #FFEBEE;
-  color: #C62828;
+ background-color: rgba(255, 0, 0, 0.3) !important; /* Red */
+  color:black !important;
 }
 .mat-select-finalized {
-  background-color: #F3E5F5;
-  color: #6A1B9A;
+  background-color: rgba(0, 128, 0, 0.3) !important; /* Green */
+  color:black !important;
 }
 
 
@@ -241,11 +240,88 @@ button[disabled] {
   color: #0D6EFD;
 }
 .page-item.active .page-link {
-  background-color: #0D6EFD;
-  border-color: #0D6EFD;
+  background-color: #0D47A1; /* Dark blue for active page */
+  border-color: #0D47A1;
   color: white;
 }
 .page-item.disabled .page-link {
   color: #6C757D;
   pointer-events: none;
+}
+
+/* Add these new styles at the end of your CSS file */
+
+/* Unified table and pagination container */
+.table-container {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+/* Table styling */
+.mat-elevation-z2 {
+  overflow-x: auto;
+  margin: 0;
+}
+
+.mat-elevation-z8 {
+  margin-bottom: 0;
+  box-shadow: none;
+  width: 100%;
+}
+
+/* Add these new styles */
+.pagination-container {
+  padding: 12px 16px;
+  background: white;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: flex-end;
+  margin-right: -200px;
+}
+
+.pagination-wrapper {
+  width: 100%;
+  max-width: fit-content;
+}
+
+.pagination-group {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.pagination {
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.pagination-info {
+  font-size: 0.9rem;
+  color: #666;
+  white-space: nowrap;
+}
+
+.page-number-container {
+  display: flex;
+  margin: 0 5px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .pagination-group {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+  }
+  
+  .pagination {
+    order: 1;
+  }
+  
+  .pagination-info {
+    order: 2;
+  }
 }

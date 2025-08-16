@@ -10,6 +10,7 @@ import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { EditContactComponent } from '../../components/edit-contact/edit-contact.component';
 import { AuthService } from '../../services/auth.service';
 import { CommentsDialogComponent } from '../../components/comments-dialog/comments-dialog.component';
+import { CreateRegisteredDialogComponent } from '../../components/create-registered-dialog/create-registered-dialog.component';
 @Component({
   selector: 'app-user-register',
   templateUrl: './user-register.component.html',
@@ -17,7 +18,7 @@ import { CommentsDialogComponent } from '../../components/comments-dialog/commen
 })
 export class UserRegisterComponent implements OnInit {
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
-  displayedColumns: string[] = ['select', 'fullname', 'email', 'phone', 'course','createdDate','createdTime','comments', 'action'];
+  displayedColumns: string[] = ['select', 'fullname', 'email', 'phone', 'course','createdDate','createdTime', 'action','Registration'];
   searchTerm: string = '';
   startDate: any = null;
   endDate: any = new Date();
@@ -55,7 +56,7 @@ export class UserRegisterComponent implements OnInit {
     start_date: this.formatDate(this.startDate),
     end_date: this.formatDate(this.endDate),
     page_size: this.pageSize,
-    page_num: this.pageNum
+    page_num: this.pageNum,
   };
 
   this.contactService.getRegisteredUsers().subscribe(
@@ -74,6 +75,9 @@ export class UserRegisterComponent implements OnInit {
         this.dataSource = new MatTableDataSource(formattedData);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.totalItems = data.pagination?.total_items || data.data.length;
+        this.totalPages = data.pagination?.total_pages || Math.ceil(this.totalItems / this.itemsPerPage);
+        
       }
     },
     (error) => {
@@ -225,5 +229,15 @@ goToLastPage(): void {
 
 }
 
-
+openCreateRegistrationDialog(user: any): void {
+    const dialogRef = this.dialog.open(CreateRegisteredDialogComponent, {
+      width: '600px',
+      data: { user } // Pass the user data to the dialog
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadRegisteredUsers(); // Refresh the list if a new registration was created
+      }
+    });
+  }
 }
