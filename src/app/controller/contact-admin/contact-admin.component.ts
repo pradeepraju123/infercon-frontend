@@ -35,7 +35,7 @@ export class ContactAdminComponent implements AfterViewInit {
   singleEndDate: Date | null = null;
   published: any;
   sortBy: any
-  pageSize = 10;
+  pageSize = 5;
   pageNum = 1;
   totalItems: number = 0;
 totalPages: number = 1;
@@ -109,7 +109,7 @@ itemsPerPage: number = 5;
     if (this.userType === 'staff') {
       this.displayedColumns = ['select', 'fullname', 'phone', 'course', 'createdDate', 'createdTime', 'leadSelection', 'followupDate', 'followupTime', 'comments', 'Action','MarkRegistered'];
     } else if(this.userType === 'admin') {
-      this.displayedColumns =  ['select', 'fullname', 'phone', 'course', 'createdDate', 'createdTime', 'assigneeSelection', 'followupDate', 'followupTime', 'comments', 'Action', 'SendMessage'];
+      this.displayedColumns =  ['select', 'fullname', 'phone', 'course', 'createdDate', 'createdTime', 'assigneeSelection', 'followupDate', 'followupTime', 'comments', 'Action'];
     }
     return this.userType;
   }
@@ -264,28 +264,37 @@ async onCourseSelectionChange(selectedLead: string, itemId: string) {
     console.log('Selected Assignee:', selectedAssignee);
   }
   
+   
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
 
   ngOnInit(): void {
-    this.loadContacts();
+    
     this.getUser();
     this.getUserType();
     this.getUserName()
+    this.loadContacts();
+    // this.loadRegisteredLeads();
   }
   loadContacts() {
-  const params = {
+  const params: any = {
     searchTerm: this.searchTerm,
     start_date: this.formatDate(this.startDate),
     end_date: this.formatDate(this.endDate),
     published: this.published,
     sort_by: this.sortBy,
-    page_size: this.pageSize,
+     page_size: this.itemsPerPage,
     page_num: this.pageNum,
-    assignee: this.getUserName()
+    // isRegistered: 1 // Only fetch registered leads
   };
-  
+
+  // If user is staff, only show their assigned registered leads
+  if (this.userType === 'staff') {
+    params.assignee = this.userName;
+  }
+  // For admin, don't set assignee param - will get all registered leads
+
   this.contactServices.getAllContact(params).subscribe(
     (data: any) => {
       if (data && data.data && data.data.length > 0) {
@@ -299,19 +308,20 @@ async onCourseSelectionChange(selectedLead: string, itemId: string) {
           return { ...contact, itemId: contact.id };
         });
         
-        this.dataSource = new MatTableDataSource(contactsWithSortedComments);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+         this.dataSource = new MatTableDataSource(contactsWithSortedComments);
+        this.totalItems = data.pagination?.total_items || data.data.length;
+        this.totalPages = data.pagination?.total_pages || Math.ceil(this.totalItems / this.itemsPerPage);
       } else {
-        console.log('No more data available.');
+        this.dataSource = new MatTableDataSource<any>([]);
+        console.log('No registered leads available.');
       }
     },
     (error) => {
-      console.error('Error fetching contact data:', error);
+      console.error('Error fetching registered leads:', error);
     }
   );
-
-  }
+}
+  
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -440,7 +450,7 @@ async bulkAction() {
   }
   // Function to handle page change event
   
-  onPageChange(event: any) {
+   onPageChange(event: any) {
     this.pageSize = event.pageSize;
     this.pageNum = event.pageNum;
     this.loadContacts(); // Call your search function to fetch data
@@ -561,51 +571,89 @@ getPageNumbers(): number[] {
   const maxPagesToShow = 5;
   let startPage = Math.max(1, this.pageNum - 2);
   let endPage = Math.min(this.totalPages, startPage + maxPagesToShow - 1);
+  
   // Adjust if we're at the end
   if (endPage - startPage < maxPagesToShow - 1 && startPage > 1) {
     startPage = Math.max(1, endPage - maxPagesToShow + 1);
   }
+  
   return Array.from({length: endPage - startPage + 1}, (_, i) => startPage + i);
 }
+
 getStartItem(): number {
   return (this.pageNum - 1) * this.itemsPerPage + 1;
 }
+
 getEndItem(): number {
   return Math.min(this.pageNum * this.itemsPerPage, this.totalItems);
 }
+
 goToPage(page: number): void {
   if (page >= 1 && page <= this.totalPages && page !== this.pageNum) {
     this.pageNum = page;
     this.loadContacts();
   }
 }
+
 goToFirstPage(): void {
   if (this.pageNum > 1) {
     this.goToPage(1);
   }
 }
+
 goToPreviousPage(): void {
   if (this.pageNum > 1) {
     this.goToPage(this.pageNum - 1);
   }
 }
+
 goToNextPage(): void {
   if (this.pageNum < this.totalPages) {
     this.goToPage(this.pageNum + 1);
   }
 }
+
 goToLastPage(): void {
   if (this.pageNum < this.totalPages) {
     this.goToPage(this.totalPages);
   }
+
 }
 markAsRegistered(contactId: string): void {
+  const contact = this.dataSource.data.find(item => item._id === contactId);
+  
+  if (!contact) {
+    this.errorMessage = 'Contact not found';
+    this.openSnackBar(this.errorMessage);
+    return;
+  }
+
+  // Add validation for lead status
+  if (contact.lead_status !== 'Finalized') {
+    this.errorMessage = 'Only Finalized leads can be marked as registered';
+    this.openSnackBar(this.errorMessage);
+    return;
+  }
+
   this.contactService.markAsRegistered(contactId).subscribe(
     (response) => {
+      console.log('API Response:', response);
       this.successMessage = 'Lead marked as registered successfully';
       this.openSnackBar(this.successMessage);
-      this.loadContacts(); // Refresh the list
-      this.router.navigate(['/user-register'])
+      
+      // Update the local data
+      const index = this.dataSource.data.findIndex(item => item._id === contactId);
+      if (index !== -1) {
+        this.dataSource.data[index].isRegistered = 1;
+        this.dataSource._updateChangeSubscription();
+        
+        // Add a small delay before navigation to ensure UI updates
+        setTimeout(() => {
+          this.router.navigate(['/user-register'], {
+            state: { registeredContact: this.dataSource.data[index] }
+          });
+        }, 500);
+      }
     },
     (error) => {
       this.errorMessage = 'Error marking lead as registered';
@@ -614,8 +662,6 @@ markAsRegistered(contactId: string): void {
     }
   );
 }
-
-
 formatTimeForDisplay(time24: string): string {
   if (!time24) return '';
   
@@ -642,5 +688,39 @@ sendLeadDetails(contactId: string) {
     );
   }
 }
+// loadRegisteredLeads() {
+//   const params: any = {
+//     page_size: this.pageSize,
+//     page_num: this.pageNum
+//   };
 
+//   // If user is staff, only show their assigned registered leads
+//   if (this.userType === 'staff') {
+//     params.assignee = this.userName;
+//   }
+
+//   this.contactService.getRegisteredUsers(params).subscribe(
+//     (data: any) => {
+//       if (data && data.data && data.data.length > 0) {
+//         const contactsWithSortedComments = data.data.map((contact: any) => {
+//           if (contact.comments && contact.comments.length > 0) {
+//             contact.comments.sort((a: any, b: any) => 
+//               new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+//             );
+//           }
+//           return { ...contact, itemId: contact.id };
+//         });
+        
+//         this.dataSource = new MatTableDataSource(contactsWithSortedComments);
+//         this.totalItems = data.total || data.data.length;
+//         this.totalPages = Math.ceil(this.totalItems / this.pageSize);
+//       } else {
+//         this.dataSource = new MatTableDataSource<any>([]);
+//       }
+//     },
+//     (error) => {
+//       console.error('Error fetching registered leads:', error);
+//     }
+//   );
+// }
 }

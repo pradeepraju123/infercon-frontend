@@ -101,6 +101,7 @@ import { CreateRegisteredDialogComponent } from './components/create-registered-
 import { FollowupDialogComponent } from './components/followup-dialog/followup-dialog.component';
 import { UserRegisterComponent } from './controller/user-register/user-register.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -168,7 +169,8 @@ import { UserRegisterComponent } from './controller/user-register/user-register.
     
     CreateRegisteredDialogComponent,
           FollowupDialogComponent,
-          UserRegisterComponent
+          UserRegisterComponent,
+    
     
     
   ],

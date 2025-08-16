@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ContactService } from '../../services/contact.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
+import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-comments-dialog',
   templateUrl: './comments-dialog.component.html',
@@ -18,7 +18,8 @@ export class CommentsDialogComponent implements OnInit {
     public dialogRef: MatDialogRef<CommentsDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private contactService: ContactService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private authService:AuthService
   ) {
     this.contactName = data.contactName || 'Contact';
   }
@@ -48,26 +49,33 @@ export class CommentsDialogComponent implements OnInit {
     );
   }
 
-  addComment(): void {
-    if (!this.newComment.trim()) {
-      return;
-    }
-
-    this.loading = true;
-    this.contactService.addComment(this.data.contactId, this.newComment.trim()).subscribe(
-      (response: any) => {
-        this.newComment = '';
-        this.loadComments(); // Reload comments to show the new one
-        this.snackBar.open('Comment added successfully', 'Close', { duration: 3000 });
-      },
-      (error: any) => {
-        console.error('Error adding comment:', error);
-        this.loading = false;
-        this.snackBar.open('Error adding comment', 'Close', { duration: 3000 });
-      }
-    );
+// Update the addComment method in comments-dialog.component.ts
+addComment(): void {
+  if (!this.newComment.trim()) {
+    return;
   }
 
+  this.loading = true;
+  const token = sessionStorage.getItem('authToken');
+  const createdBy = this.authService.getUserNameFromToken(token) || 'Anonymous';
+  
+  this.contactService.addComment(
+    this.data.contactId, 
+    this.newComment.trim(),
+    createdBy
+  ).subscribe(
+    (response: any) => {
+      this.newComment = '';
+      this.loadComments();
+      this.snackBar.open('Comment added successfully', 'Close', { duration: 3000 });
+    },
+    (error: any) => {
+      console.error('Error adding comment:', error);
+      this.loading = false;
+      this.snackBar.open('Error adding comment', 'Close', { duration: 3000 });
+    }
+  );
+}
   onClose(): void {
     this.dialogRef.close();
   }
