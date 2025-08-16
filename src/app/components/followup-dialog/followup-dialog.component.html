@@ -1,0 +1,36 @@
+<!-- followup-dialog.component.html -->
+<h2 mat-dialog-title>Schedule Followup</h2>
+<mat-dialog-content>
+  <mat-form-field appearance="outline" class="w-full">
+    <mat-label>Followup Date</mat-label>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="followupDate" required>
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <div class="time-container">
+    <mat-form-field appearance="outline" class="time-field">
+      <mat-label>Hours</mat-label>
+      <input matInput type="number" [(ngModel)]="hours" min="1" max="12" required>
+    </mat-form-field>
+    
+    <span class="time-separator">:</span>
+    
+    <mat-form-field appearance="outline" class="time-field">
+      <mat-label>Minutes</mat-label>
+      <input matInput type="number" [(ngModel)]="minutes" min="0" max="59" required>
+    </mat-form-field>
+    
+    <mat-form-field appearance="outline" class="ampm-field">
+      <mat-label>AM/PM</mat-label>
+      <mat-select [(ngModel)]="ampm">
+        <mat-option value="AM">AM</mat-option>
+        <mat-option value="PM">PM</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="getFollowupData()" cdkFocusInitial>Confirm</button>
+</mat-dialog-actions>

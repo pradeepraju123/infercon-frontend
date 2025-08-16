@@ -8,7 +8,7 @@ import { AuthService } from './auth.service';
 })
 export class ContactService {
 
-  private apiUrl = 'https://api.inferconautomation.com/api/v1/contact';
+  private apiUrl = 'http://localhost:8081/api/v1/contact';
 
 
 
@@ -88,7 +88,27 @@ export class ContactService {
              return throwError('No authentication token found'); // For example, using throwError from RxJS
             }
   }
-
+sendLeadNotification(staffName: string, staffMobile: string, leadName: string, leadEmail: string, leadPhone: string, leadCourse: string): Observable<any> {
+  const token = sessionStorage.getItem('authToken');
+  if (token) {
+    const headers = new HttpHeaders({
+      'Authorization': 'Bearer ' + token
+    });
+    
+    const payload = {
+      staff_name: staffName,
+      staff_mobile: staffMobile,
+      lead_name: leadName,
+      lead_email: leadEmail,
+      lead_phone: leadPhone,
+      lead_course: leadCourse
+    };
+    
+    return this.http.post<any>(`${this.apiUrl}/action/send-lead-notification`, payload, { headers });
+  } else {
+    return throwError('No authentication token found');
+  }
+}
   sendMessageToUser(contact_ids: string[], message: any) {
     const token = sessionStorage.getItem('authToken'); // Get the token from sessionStorage
 
@@ -104,6 +124,7 @@ export class ContactService {
              return throwError('No authentication token found'); // For example, using throwError from RxJS
             }
   }
+  
   updateContact(_id: string, data: any): Observable<any> {
     const token = sessionStorage.getItem('authToken'); // Get the token from sessionStorage
   
@@ -123,4 +144,48 @@ export class ContactService {
        }
     
   }
+
+  sendLeadDetailsToStaff(contact_ids: string[]): Observable<any> {
+  const token = sessionStorage.getItem('authToken');
+  
+  if (token) {
+    const headers = new HttpHeaders({
+      'Authorization': 'Bearer ' + token
+    });
+    return this.http.post<any>(`${this.apiUrl}/action/send-lead-details`, { contact_ids }, { headers });
+  } else {
+    return throwError('No authentication token found');
+  }
 }
+// Add these methods to your ContactService class
+getComments(contactId: string): Observable<any> {
+  // const token = sessionStorage.getItem('authToken');
+  // if (token) {
+  //   const headers = new HttpHeaders({
+  //     'Authorization': 'Bearer ' + token
+  //   });
+    return this.http.get(`${this.apiUrl}/contacts/${contactId}/comments`);
+  
+}
+
+addComment(contactId: string, comment: string): Observable<any> {
+  // const token = sessionStorage.getItem('authToken');
+  // if (token) {
+  //   const headers = new HttpHeaders({
+  //     'Authorization': 'Bearer ' + token
+  //   });
+    return this.http.post(`${this.apiUrl}/contacts/${contactId}/comments`, { texts: comment });
+  }
+
+createRegisteredContact(contactData: any): Observable<any> {
+  return this.http.post(`${this.apiUrl}/`, contactData);
+}
+getRegisteredUsers() {
+  return this.http.post(`${this.apiUrl}/filter/registered`,{});
+}
+markAsRegistered(contactId:string):Observable<any>{
+  return this.http.post(`${this.apiUrl}/${contactId}/mark-registered`,{})
+}
+}
+
+

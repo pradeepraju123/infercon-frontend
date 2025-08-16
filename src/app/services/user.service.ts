@@ -9,7 +9,7 @@ import { AuthService } from './auth.service';
 })
 export class UserService {
 
-  private apiUrl = 'https://api.inferconautomation.com/api/v1/users';
+  private apiUrl = 'http://localhost:8081/api/v1/users';
 
   constructor(
     private http: HttpClient,

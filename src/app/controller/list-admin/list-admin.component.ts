@@ -3,6 +3,7 @@ import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';  // Import the Router
 import { MatDialog } from '@angular/material/dialog';
 import { AddAdminComponent } from '../add-admin/add-admin.component';
+import { PhoneNumber } from 'libphonenumber-js';
 @Component({
   selector: 'app-list-admin',
   templateUrl: './list-admin.component.html',
@@ -30,13 +31,13 @@ export class ListAdminComponent {
   ngOnInit(): void {
     this.fetchAllUsers();
   }
-  openDialog(_id: String) {
-    this.dialog.open(AddAdminComponent, {
-      data: {
-        itemId: _id,
-      }
-    });
-  }
+  openDialog(user: any) {
+  this.dialog.open(AddAdminComponent, {
+    data: { itemId: user._id   
+     }
+  });
+}
+
   openDialogAdd() {
     this.dialog.open(AddAdminComponent);
   }

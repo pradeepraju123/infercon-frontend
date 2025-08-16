@@ -1,38 +1,146 @@
-<h2 mat-dialog-title>Booking</h2>
-<form class="example-form" [formGroup]="editForm" (submit)="onSubmit()" ><mat-dialog-content class="mat-typography">
-<div class="container">
-    <div class="row">
-        <mat-form-field class="example-full-width" appearance="outline">
+<h2 mat-dialog-title>Contact Details</h2>
+<form class="example-form" [formGroup]="editForm" (submit)="onSubmit()">
+  <mat-dialog-content class="mat-typography">
+    <div class="container">
+      <div class="two-column-grid">
+        <!-- First Column -->
+        <div class="column">
+          <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>Name</mat-label>
-            <input matInput class="form-control" id="fullname" name="fullname" formControlName="fullname" type="text" placeholder="Ex. John doe">
-        </mat-form-field>
-        <mat-form-field class="example-full-width" appearance="outline">
+            <input matInput formControlName="fullname" placeholder="Full Name">
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>Email</mat-label>
-            <input type="text" id="email" name="email" formControlName="email" matInput placeholder="Ex. johndoe@gmail.com">
-        </mat-form-field>
-        <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Phone number</mat-label>
-            <input type="tel" id="phone" name="phone" formControlName="phone" matInput placeholder="Ex. 9893239893">
-        </mat-form-field>
-        <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>City</mat-label>
-            <input type="text" matInput  id="city" name="city" formControlName="city" placeholder="Ex. Nammakal...">
-        </mat-form-field>
-        <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>State</mat-label>
-            <input type="text" matInput  id="state" name="state" formControlName="state" placeholder="Ex. Tamil nadu...">
-        </mat-form-field>
-        <mat-form-field class="example-full-width" appearance="outline">
+            <input type="email" formControlName="email" matInput placeholder="Email">
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Phone</mat-label>
+            <input type="tel" formControlName="phone" matInput placeholder="Phone">
+          </mat-form-field>
+        </div>
+
+        <!-- Second Column -->
+        <div class="column">
+          <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>Country</mat-label>
-            <input type="text" matInput  id="country" name="country" formControlName="country" placeholder="Ex. India...">
+            <input type="text" formControlName="country" matInput placeholder="Country">
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>State</mat-label>
+            <input type="text" formControlName="state" matInput placeholder="State">
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>City</mat-label>
+            <input type="text" formControlName="city" matInput placeholder="City">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Full width fields -->
+      <div class="full-width-fields">
+        <mat-form-field class="example-full-width" appearance="outline">
+          <mat-label>Message</mat-label>
+          <textarea matInput formControlName="message" placeholder="Message"></textarea>
         </mat-form-field>
+
+        <mat-form-field class="example-full-width" appearance="outline">
+          <mat-label>Source</mat-label>
+          <input type="text" formControlName="source" matInput placeholder="Source">
+        </mat-form-field>
+      </div>
+
+      <div class="array-section">
+        <h4>Courses</h4>
+        <div formArrayName="courses">
+          <div *ngFor="let course of coursesControls; let i = index" class="array-row">
+            <mat-form-field appearance="outline" class="array-input">
+              <mat-label>Course {{ i + 1 }}</mat-label>
+              <input matInput [formControlName]="i" placeholder="Enter course name">
+            </mat-form-field>
+            <button mat-button color="warn" (click)="removeCourse(i)" class="remove-btn">
+              Delete
+            </button>
+          </div>
+        </div>
+        <button 
+          mat-raised-button 
+          color="primary" 
+          (click)="addCourse()" 
+          class="add-btn" 
+          type="button"
+        >
+          Add Course
+        </button>
+      </div>
+
+      <!-- Rest of the array sections remain the same -->
+      <div class="array-section">
+        <h4>Location</h4>
+        <div formArrayName="location">
+          <div *ngFor="let loc of locationControls; let i = index" class="array-row">
+            <mat-form-field appearance="outline" class="array-input">
+              <mat-label>Location {{i + 1}}</mat-label>
+              <input matInput [formControlName]="i">
+            </mat-form-field>
+            <button mat-button color="warn" (click)="removeLocation(i)" class="remove-btn">
+              Delete
+            </button>
+          </div>
+        </div>
+        <button mat-raised-button color="primary" (click)="addLocation()" class="add-btn" type="button">
+          Add Location
+        </button>
+      </div>
+
+      <!-- Languages Section -->
+      <div class="array-section">
+        <h4>Languages</h4>
+        <div formArrayName="languages">
+          <div *ngFor="let lang of languagesControls; let i = index" class="array-row">
+            <mat-form-field appearance="outline" class="array-input">
+              <mat-label>Language {{i + 1}}</mat-label>
+              <input matInput [formControlName]="i">
+            </mat-form-field>
+            <button mat-button color="warn" (click)="removeLanguage(i)" class="remove-btn">
+              Delete
+            </button>
+          </div>
+        </div>
+        <button mat-raised-button color="primary" (click)="addLanguage()" class="add-btn" type="button">
+          Add Language
+        </button>
+      </div>
+
+      <!-- Comments Section -->
+      <div class="array-section">
+        <h4>Comments</h4>
+        <div formArrayName="comments">
+          <div *ngFor="let comment of commentsControls; let i = index" [formGroupName]="i" class="comment-row">
+            <mat-form-field appearance="outline" class="comment-input">
+              <mat-label>Comment {{i + 1}}</mat-label>
+              <textarea matInput formControlName="texts"></textarea>
+            </mat-form-field>
+            <div class="comment-meta">
+              <span class="comment-date">{{comment.value.createdAt | date:'medium'}}</span>
+              <button mat-button color="warn" (click)="removeComment(i)" class="remove-btn">
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+        <button mat-raised-button color="primary" (click)="addComment()" class="add-btn" type="button">
+          Add Comment
+        </button>
+      </div>
     </div>
-</div>
-</mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-button cdkFocusInitial type="submit">Submit</button>
-</mat-dialog-actions>
+  </mat-dialog-content>
+  
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancel</button>
+    <button mat-button cdkFocusInitial type="submit">Update</button>
+  </mat-dialog-actions>
 </form>
-
-
