@@ -20,7 +20,7 @@ export interface Template {
 export class TemplateService {
   private apiUrl = 'https://api.inferconautomation.com/api/v1/templates'; // Change to your backend URL
    //private excelUrl_contacts='https://api.inferconautomation.com/api/v1/users/bulkupload';
-  //private apiUrl = 'http://localhost:8081/api/v1/templates'; // Change to your backend URL
+ // private apiUrl = 'http://localhost:8081/api/v1/templates'; // Change to your backend URL
 
 
 
@@ -38,6 +38,8 @@ export class TemplateService {
 
   getAll(): Observable<any> {
     const headers = this.getAuthHeaders();
+    // return this.http.get(this.apiUrl);
+
     if (headers) {
       return this.http.get(this.apiUrl, { headers });
     } else {
