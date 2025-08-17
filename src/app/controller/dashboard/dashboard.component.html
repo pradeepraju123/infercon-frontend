@@ -11,14 +11,14 @@
                 <div class="row">
                     <div class="col-md-4">
                         <div class="card_content bg-c-yellow">
-                            <h4>Training</h4>
+                            <h4>Total Users</h4>
                             <div class="card_inner_content">
-                                    <h6 class="first">Total : 534</h6>
-                                    <h6>Completed : 534</h6>
+                                    <h6 class="first">Total leads : {{trainingStats.totalLeads}}</h6>
+                                    <h6>Registered: {{ trainingStats.registeredLeads }}</h6>
                             </div>
                             <div class="card_inner_content">
-                                <h6 class="first">running : 534</h6>
-                                <h6>Upcoming : 534</h6>
+                                <h6 class="first">Paid: {{ trainingStats.paidLeads }}</h6>
+                                <h6>Rejected: {{ trainingStats.rejectedLeads }}</h6>
                             </div>
                         </div>
                     </div>
@@ -51,58 +51,37 @@
                 </div>
                 <div class="row margin_top">
                     <div class="col-md-8">
-                        
-                        <div class="table_cont">
-                            <div class="top_table_cont">
-                            <h5>New Enrollment</h5>
+                       <div class="table_cont">
+                        <div class="top_table_cont">
+                            <h5>Upcoming Followups</h5>
                             <button>View more</button>
-                            </div>
-                            <table class="">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Role</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>John Doe</td>
-                                        <td>john&#64;example.com</td>
-                                        <td>Admin</td>
-                                        <td>
-                                            <img src="assets/eye.png" alt="">
-                                            <img src="assets/edit-2.png" alt="">
-                                            <img src="assets/trash.png" alt="">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Jane Smith</td>
-                                        <td>jane&#64;example.com</td>
-                                        <td>User</td>
-                                        <td>
-                                            <img src="assets/eye.png" alt="">
-                                            <img src="assets/edit-2.png" alt="">
-                                            <img src="assets/trash.png" alt="">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Bob Johnson</td>
-                                        <td>bob&#64;example.com</td>
-                                        <td>Editor</td>
-                                        <td>
-                                            <img src="assets/eye.png" alt="">
-                                            <img src="assets/edit-2.png" alt="">
-                                            <img src="assets/trash.png" alt="">
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        </div>
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Course</th>
+                                <th>Followup Date</th>
+                                <th>Followup Time</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                           <tr *ngFor="let lead of followupLeads; let i = index">
+                            <td>{{ i + 1 }}</td>
+                            <td>{{ lead.fullname }}</td>
+                            <td>{{ lead.phone }}</td>
+                            <td>{{ lead.courses?.join(', ') }}</td> <!-- join array into string -->
+                            <td>
+                                {{ lead.followup_date ? (lead.followup_date | date:'shortDate') : '—' }}
+                            </td>
+                           <td>
+  {{ lead.followup_time ? formatTime(lead.followup_time) : '—' }}
+</td>
+                            </tr>
+                            </tbody>
+                        </table>
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -121,7 +100,7 @@
                                 </label>
                                 </div>
                             </div>
-                        </div>  
+                        </div>
                         <div class="card_content bg-c-yellow">
                             <div class="full_content">
                                <div class="left_side">
@@ -136,7 +115,7 @@
                                 </label>
                                 </div>
                             </div>
-                        </div>  
+                        </div>
                         <div class="card_content bg-c-yellow">
                             <div class="full_content">
                                <div class="left_side">
@@ -151,61 +130,37 @@
                                 </label>
                                 </div>
                             </div>
-                        </div>  
+                        </div>
                     </div>
                 </div>
                 <div class="row margin_top">
-                    <div class="table_cont">
-                        <div class="top_table_cont">
-                        <h5>New Enrollment</h5>
+                    <div class="table_cont margin_top">
+                    <div class="top_table_cont">
+                        <h5>New Enrollments</h5>
                         <button>View more</button>
-                        </div>
-                        <table class="">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Role</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>John Doe</td>
-                                    <td>john&#64;example.com</td>
-                                    <td>Admin</td>
-                                    <td>
-                                        <img src="assets/eye.png" alt="">
-                                        <img src="assets/edit-2.png" alt="">
-                                        <img src="assets/trash.png" alt="">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Jane Smith</td>
-                                    <td>jane&#64;example.com</td>
-                                    <td>User</td>
-                                    <td>
-                                        <img src="assets/eye.png" alt="">
-                                        <img src="assets/edit-2.png" alt="">
-                                        <img src="assets/trash.png" alt="">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>3</td>
-                                    <td>Bob Johnson</td>
-                                    <td>bob&#64;example.com</td>
-                                    <td>Editor</td>
-                                    <td>
-                                        <img src="assets/eye.png" alt="">
-                                        <img src="assets/edit-2.png" alt="">
-                                        <img src="assets/trash.png" alt="">
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    </div>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Course</th>
+                            <th>Created At</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                      <tr *ngFor="let lead of newEnrollments; let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ lead.fullname }}</td>
+                        <td>{{ lead.phone }}</td>
+                        <td>{{ lead.courses?.join(', ') }}</td>
+                        <td>
+                            {{ lead.createdAt ? (lead.createdAt | date:'short') : '—' }}
+                        </td>
+                        </tr>
+                        </tbody>
+                    </table>
                     </div>
                 </div>
             </div>

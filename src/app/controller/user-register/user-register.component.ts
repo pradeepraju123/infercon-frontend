@@ -57,31 +57,25 @@ export class UserRegisterComponent implements OnInit {
     end_date: this.formatDate(this.endDate),
     page_size: this.pageSize,
     page_num: this.pageNum,
+    isRegistered: 1 // Add this filter
   };
 
-  this.contactService.getRegisteredUsers().subscribe(
+  this.contactService.getRegisteredUsers(params).subscribe( // Pass params
     (data: any) => {
       if (data && data.data) {
-        // Format the dates for each item
-        const formattedData = data.data.map((item: any) => {
-          const createdAt = new Date(item.createdAt);
-          return {
-            ...item,
-            created_date: createdAt.toISOString().split('T')[0], // YYYY-MM-DD format
-            created_time: createdAt.toTimeString().split(' ')[0] // HH:MM:SS format
-          };
-        });
+        const formattedData = data.data.map((item: any) => ({
+          ...item,
+          created_date: new Date(item.createdAt).toISOString().split('T')[0],
+          created_time: new Date(item.createdAt).toTimeString().split(' ')[0]
+        }));
         
         this.dataSource = new MatTableDataSource(formattedData);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
         this.totalItems = data.pagination?.total_items || data.data.length;
         this.totalPages = data.pagination?.total_pages || Math.ceil(this.totalItems / this.itemsPerPage);
-        
       }
     },
     (error) => {
-      console.error('Error fetching registered users:', error);
+      console.error('Error:', error);
       this.openSnackBar('Error loading registered users');
     }
   );

@@ -29,6 +29,7 @@ export class EditContactComponent implements OnInit, OnDestroy  {
   contactId: string | null = null; // Add a property to store the training ID
   horizontalPosition: MatSnackBarHorizontalPosition = 'right';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
+   isCreateMode: boolean = false;
 toolbar: Toolbar = [
   ['bold', 'italic'],
   ['underline', 'strike'],
@@ -40,6 +41,7 @@ toolbar: Toolbar = [
   ['align_left', 'align_center', 'align_right', 'align_justify'],
 ];
   public countries:any = countries
+  public sources = ['Facebook', 'Linkedin', 'Website', 'Direct Enquiry', 'Reference'];
   constructor(
     private contactService: ContactService,
     private location: Location,
