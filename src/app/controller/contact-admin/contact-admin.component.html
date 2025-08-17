@@ -36,9 +36,9 @@
 
 
 <div class="row align-items-center button-row">
-  <!-- <div class="col-auto" *ngIf="getUserType() === 'staff'">
-    <button class="btn" (click)="openCreateRegisteredDialog()">Create Registered</button>
-  </div> -->
+ <div class="col-auto">
+    <button class="btn" (click)="openCreateUserDialog()">Create User</button>
+  </div>
   <!-- <div class="col-auto">
     <button class="btn" *ngIf="getUserType() === 'admin'" (click)="SendBulkMessage()">Send Message</button>
   </div> -->
@@ -174,15 +174,14 @@
     </button>
   </td>
 </ng-container>
-    <ng-container matColumnDef="MarkRegistered">
-  <th mat-header-cell *matHeaderCellDef>Mark Registered</th>
+  <ng-container matColumnDef="MarkRegistered">
+  <th mat-header-cell *matHeaderCellDef>Status</th>
   <td mat-cell *matCellDef="let element">
-    <button 
-      mat-raised-button 
-      color="primary" 
-      [disabled]="element.isRegistered === 1"
-      (click)="markAsRegistered(element._id)">
-      {{ element.isRegistered === 1 ? 'Registered' : 'Mark Registered' }}
+    <button mat-raised-button 
+            [color]="element.isRegistered ? 'accent' : 'primary'"
+            [disabled]="element.isRegistered || element.lead_status !== 'Finalized'"
+            (click)="markAsRegistered(element._id)">
+      {{ element.isRegistered ? 'Registered' : 'Mark Registered' }}
     </button>
   </td>
 </ng-container>

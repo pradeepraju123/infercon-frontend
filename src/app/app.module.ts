@@ -100,6 +100,7 @@ import { CommentsDialogComponent } from './components/comments-dialog/comments-d
 import { CreateRegisteredDialogComponent } from './components/create-registered-dialog/create-registered-dialog.component';
 import { FollowupDialogComponent } from './components/followup-dialog/followup-dialog.component';
 import { UserRegisterComponent } from './controller/user-register/user-register.component';
+import { CreateUserComponent } from './components/create-user/create-user.component';
 
 
 @NgModule({
@@ -170,6 +171,7 @@ import { UserRegisterComponent } from './controller/user-register/user-register.
     CreateRegisteredDialogComponent,
           FollowupDialogComponent,
           UserRegisterComponent,
+          CreateUserComponent,
     
     
     

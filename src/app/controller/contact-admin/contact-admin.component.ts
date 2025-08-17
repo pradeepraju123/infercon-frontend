@@ -16,6 +16,7 @@ import { CommentsDialogComponent } from '../../components/comments-dialog/commen
 import { CreateRegisteredDialogComponent } from '../../components/create-registered-dialog/create-registered-dialog.component';
 import { FollowupDialogComponent } from '../../components/followup-dialog/followup-dialog.component';
 import { Router } from '@angular/router';
+import { CreateUserComponent } from '../../components/create-user/create-user.component';
 @Component({
   selector: 'app-contact-admin',
   templateUrl: './contact-admin.component.html',
@@ -546,7 +547,17 @@ openCreateRegisteredDialog(): void {
     }
   });
 }
+openCreateUserDialog(): void {
+  const dialogRef = this.dialog.open(CreateUserComponent, {
+    width: '800px'
+  });
 
+  dialogRef.afterClosed().subscribe(result => {
+    if (result) {
+      this.loadContacts(); // Refresh the list if a new user was created
+    }
+  });
+}
 // Add this method
 getRowColor(leadStatus: string): string {
   console.log('Lead status:', leadStatus); // Check console for output
@@ -619,49 +630,47 @@ goToLastPage(): void {
   }
 
 }
+// contact-admin.component.ts
 markAsRegistered(contactId: string): void {
+  // Find the contact in current data
   const contact = this.dataSource.data.find(item => item._id === contactId);
   
+  // Validation checks
   if (!contact) {
-    this.errorMessage = 'Contact not found';
-    this.openSnackBar(this.errorMessage);
+    this.openSnackBar('Contact not found!');
     return;
   }
 
-  // Add validation for lead status
   if (contact.lead_status !== 'Finalized') {
-    this.errorMessage = 'Only Finalized leads can be marked as registered';
-    this.openSnackBar(this.errorMessage);
+    this.openSnackBar('Only Finalized leads can be registered!');
     return;
   }
 
-  this.contactService.markAsRegistered(contactId).subscribe(
-    (response) => {
-      console.log('API Response:', response);
-      this.successMessage = 'Lead marked as registered successfully';
-      this.openSnackBar(this.successMessage);
-      
-      // Update the local data
+  this.contactService.markAsRegistered(contactId).subscribe({
+    next: (response) => {
+      // Update local data immediately
       const index = this.dataSource.data.findIndex(item => item._id === contactId);
       if (index !== -1) {
-        this.dataSource.data[index].isRegistered = 1;
+        // Update ALL returned fields to stay in sync
+        this.dataSource.data[index] = response.data;
         this.dataSource._updateChangeSubscription();
         
-        // Add a small delay before navigation to ensure UI updates
+        // Navigate after UI updates
         setTimeout(() => {
           this.router.navigate(['/user-register'], {
-            state: { registeredContact: this.dataSource.data[index] }
+            state: { registeredContact: response.data }
           });
-        }, 500);
+        }, 100);
       }
+      this.openSnackBar(response.message);
     },
-    (error) => {
-      this.errorMessage = 'Error marking lead as registered';
-      this.openSnackBar(this.errorMessage);
-      console.error('Error marking lead as registered:', error);
+    error: (err) => {
+      this.openSnackBar('Registration failed!');
+      console.error(err);
     }
-  );
+  });
 }
+
 formatTimeForDisplay(time24: string): string {
   if (!time24) return '';
   
