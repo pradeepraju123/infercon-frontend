@@ -95,6 +95,8 @@ import { WhatsappActivityComponent } from './components/whatsapp-activity/whatsa
 import { TemplateManagerComponent } from './components/template-manager/template-manager.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { InstallmentComponent } from './components/installment/installment.component';
+import { InstallmentPopupComponent } from './components/installment-popup/installment-popup.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -157,7 +159,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     PlacementEnquiryComponent,
     WhatsappActivityComponent,
     TemplateManagerComponent,
-    FileUrlPipe
+    FileUrlPipe,
+    InstallmentComponent,
+    InstallmentPopupComponent
   ],
   imports: [
     MatDialogTitle, 
