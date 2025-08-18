@@ -660,10 +660,9 @@ markAsRegistered(contactId: string): void {
       this.errorMessage = 'Error marking lead as registered';
       this.openSnackBar(this.errorMessage);
       console.error('Error marking lead as registered:', error);
-    }
-  });
-}
-
+    });
+  }
+  
 formatTimeForDisplay(time24: string): string {
   if (!time24) return '';
   
@@ -690,6 +689,8 @@ sendLeadDetails(contactId: string) {
     );
   }
 }
+}
+
 // loadRegisteredLeads() {
 //   const params: any = {
 //     page_size: this.pageSize,
@@ -725,4 +726,4 @@ sendLeadDetails(contactId: string) {
 //     }
 //   );
 // }
-}
+// }

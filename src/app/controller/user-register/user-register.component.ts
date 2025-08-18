@@ -51,7 +51,6 @@ export class UserRegisterComponent implements OnInit {
   }
 
 loadRegisteredUsers() {
-loadRegisteredUsers() {
   const params = {
     searchTerm: this.searchTerm,
     start_date: this.formatDate(this.startDate),
@@ -59,7 +58,7 @@ loadRegisteredUsers() {
     page_size: this.pageSize,
     page_num: this.pageNum,
   };
-  this.contactService.getRegisteredUsers().subscribe(
+  this.contactService.getRegisteredUsers(params).subscribe(
     (data: any) => {
       if (data && data.data) {
         // Format the dates for each item
