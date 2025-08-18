@@ -45,6 +45,7 @@ import { PlacementComponent } from './controller/placement/placement.component';
 import { WhatsappActivityComponent } from './components/whatsapp-activity/whatsapp-activity.component';
 import { TemplateManagerComponent } from './components/template-manager/template-manager.component';
 import { UserRegisterComponent } from './controller/user-register/user-register.component';
+import { InstallmentComponent } from './components/installment/installment.component';
 
 
 const routes: Routes = [
@@ -90,6 +91,9 @@ const routes: Routes = [
   {path:'app-placement/:id', component:PlacementComponent},
    { path:'whatsappactivity', component: WhatsappActivityComponent },
    { path:'whatsapptemplate', component: TemplateManagerComponent },
+   { path:'installment', component: InstallmentComponent },
+
+
 {path:'user-register',component:UserRegisterComponent},
 
   { path: '**', redirectTo: 'home' },

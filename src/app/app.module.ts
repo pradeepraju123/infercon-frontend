@@ -103,6 +103,8 @@ import { UserRegisterComponent } from './controller/user-register/user-register.
 import { CreateUserComponent } from './components/create-user/create-user.component';
 
 
+import { InstallmentComponent } from './components/installment/installment.component';
+import { InstallmentPopupComponent } from './components/installment-popup/installment-popup.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -166,6 +168,8 @@ import { CreateUserComponent } from './components/create-user/create-user.compon
     WhatsappActivityComponent,
     TemplateManagerComponent,
     FileUrlPipe,
+    InstallmentComponent,
+    InstallmentPopupComponent,
     CommentsDialogComponent,
     
     CreateRegisteredDialogComponent,
