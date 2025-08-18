@@ -71,7 +71,7 @@
     </div>
      -->
    
-    <div class="mat-elevation-z2">
+    <div class="mat-elevation-z2 table-container">
       <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
          <!-- Checkbox Column -->
         <ng-container matColumnDef="select">
@@ -197,7 +197,9 @@
        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
-   <div class="pagination-container">
+<!-- ... (previous code remains unchanged until the pagination section) ... -->
+
+<div class="pagination-container">
   <nav aria-label="Contact pagination">
     <div class="pagination-wrapper">
       <div class="pagination-group">
@@ -238,7 +240,8 @@
     </div>
   </nav>
 </div>
-</div>
-    </div>
 
+<!-- ... (remaining code stays the same) ... -->
+    </div>
+  </div>
 </section>

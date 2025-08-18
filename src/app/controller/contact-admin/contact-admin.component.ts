@@ -279,23 +279,19 @@ async onCourseSelectionChange(selectedLead: string, itemId: string) {
     // this.loadRegisteredLeads();
   }
   loadContacts() {
-  const params: any = {
+  const params:any = {
     searchTerm: this.searchTerm,
     start_date: this.formatDate(this.startDate),
     end_date: this.formatDate(this.endDate),
     published: this.published,
     sort_by: this.sortBy,
-     page_size: this.itemsPerPage,
+   page_size: this.itemsPerPage,
     page_num: this.pageNum,
-    // isRegistered: 1 // Only fetch registered leads
+    assignee: this.getUserName()
   };
-
-  // If user is staff, only show their assigned registered leads
-  if (this.userType === 'staff') {
+   if (this.userType === 'staff') {
     params.assignee = this.userName;
   }
-  // For admin, don't set assignee param - will get all registered leads
-
   this.contactServices.getAllContact(params).subscribe(
     (data: any) => {
       if (data && data.data && data.data.length > 0) {
@@ -309,13 +305,12 @@ async onCourseSelectionChange(selectedLead: string, itemId: string) {
           return { ...contact, itemId: contact.id };
         });
         
-         this.dataSource = new MatTableDataSource(contactsWithSortedComments);
+        this.dataSource = new MatTableDataSource(contactsWithSortedComments);
         this.totalItems = data.pagination?.total_items || data.data.length;
         this.totalPages = data.pagination?.total_pages || Math.ceil(this.totalItems / this.itemsPerPage);
       } else {
         this.dataSource = new MatTableDataSource<any>([]);
-        console.log('No registered leads available.');
-      }
+      } 
     },
     (error) => {
       console.error('Error fetching registered leads:', error);
@@ -631,17 +626,16 @@ goToLastPage(): void {
 
 }
 markAsRegistered(contactId: string): void {
-  // Find the contact in current data
   const contact = this.dataSource.data.find(item => item._id === contactId);
-  
-  // Validation checks
   if (!contact) {
-    this.openSnackBar('Contact not found!');
+    this.errorMessage = 'Contact not found';
+    this.openSnackBar(this.errorMessage);
     return;
   }
-
+  // Add validation for lead status
   if (contact.lead_status !== 'Finalized') {
-    this.openSnackBar('Only Finalized leads can be registered!');
+    this.errorMessage = 'Only Finalized leads can be marked as registered';
+    this.openSnackBar(this.errorMessage);
     return;
   }
 

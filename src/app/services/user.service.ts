@@ -90,27 +90,39 @@ private getUserTypeFromToken(token: string | null): string | null {
   }
   return null;
 }
+
 // Fetch dashboard data (followups + new enrollments)
-getDashboardData(): Observable<{
-  data: {
-    followupLeads: any[],
-    newEnrollments: any[],
-    trainingStats?: {
-      totalLeads: number,
-      registeredLeads: number,
-      paidLeads: number,
-      rejectedLeads: number
+getDashboardData(params?: { page?: number; limit?: number }): Observable<{
+    data: {
+      followupLeads: any[],
+      newEnrollments: any[],
+      followupPagination?: {
+        total: number,
+        currentPage: number,
+        totalPages: number
+      },
+      newEnrollmentPagination?: {
+        total: number,
+        currentPage: number,
+        totalPages: number
+      },
+      trainingStats?: {
+        totalLeads: number,
+        registeredLeads: number,
+        paidLeads: number,
+        rejectedLeads: number
+      }
+    }
+  }> {
+    const token = sessionStorage.getItem('authToken');
+    if (token) {
+      const headers = new HttpHeaders({
+        'Authorization': 'Bearer ' + token
+      });
+      return this.http.get<any>('http://localhost:8081/api/v1/dashboard', { headers, params });
+    } else {
+      return throwError(() => 'No authentication token found');
     }
   }
-}> {
-  const token = sessionStorage.getItem('authToken');
-  if (token) {
-    const headers = new HttpHeaders({
-      'Authorization': 'Bearer ' + token
-    });
-    return this.http.get<any>('http://localhost:8081/api/v1/dashboard', { headers });
-  } else {
-    return throwError('No authentication token found');
-  }
 }
-}
+

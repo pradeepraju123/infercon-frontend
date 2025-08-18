@@ -10,8 +10,9 @@ contact_table {
 
 /* Table styling */
 table {
-  width: 100%;
-  min-width: 800px; /* Minimum width before scrolling */
+  width: auto;             /* shrink to fit content */
+  min-width: 100%;         /* still responsive */
+  table-layout: auto;      /* auto adjust column width */
 }
 
 /* --- Search Section --- */
@@ -22,13 +23,12 @@ table {
 .title_field_card {
   display: flex;
   flex-wrap: nowrap;
-  align-items: center; /* keeps vertical alignment on desktop */
+  align-items: center;
   gap: 10px;
   overflow-x: auto;
   padding-bottom: 10px;
 }
 
-/* Match mat-form-field height on desktop */
 .title_field_card .btn {
   height: 56px;
   display: flex;
@@ -42,7 +42,7 @@ table {
 /* --- Button Row --- */
 .button-row {
   display: flex;
-  flex-wrap: wrap; /* allow stacking on smaller screens */
+  flex-wrap: wrap;
   gap: 8px;
   margin-top: 5px;
 }
@@ -107,42 +107,36 @@ table {
   border-radius: 4px;
   padding: 8px;
 }
+
 .mat-select-new-lead {
-    background-color: rgba(58, 167, 244, 0.3) !important;
- color:black !important;
+  background-color: rgba(58, 167, 244, 0.3) !important;
+  color: black !important;
 }
 .mat-select-contacted {
   background-color: rgba(173, 216, 230, 0.5) !important;
-    color:black !important;
+  color: black !important;
 }
 .mat-select-followup {
-   background-color: rgba(255, 255, 0, 0.3) !important; /* Green */
-  color:black !important;
+  background-color: rgba(255, 255, 0, 0.3) !important;
+  color: black !important;
 }
 .mat-select-not-interested {
- background-color: rgba(255, 0, 0, 0.3) !important; /* Red */
-  color:black !important;
+  background-color: rgba(255, 0, 0, 0.3) !important;
+  color: black !important;
 }
 .mat-select-finalized {
-  background-color: rgba(0, 128, 0, 0.3) !important; /* Green */
-  color:black !important;
+  background-color: rgba(0, 128, 0, 0.3) !important;
+  color: black !important;
 }
-
-
-
-
 
 /* --- Responsive Adjustments --- */
 @media (min-width: 993px) {
-  /* Target Search and Download */
   .title_field_card .btn:nth-of-type(1),
   .title_field_card .btn:nth-of-type(2) {
-    margin-top: -10px; /* lift more */
+    margin-top: -10px;
   }
-
-  /* Target Assign button */
   .title_field_card .btn:nth-of-type(3) {
-    margin-top: -6px; /* lift slightly */
+    margin-top: -6px;
   }
 }
 
@@ -151,18 +145,15 @@ table {
     flex-direction: column;
     align-items: stretch;
   }
-
   .title_field_card .btn {
     width: 100%;
     height: auto;
     padding: 10px;
   }
-
   .button-row {
     flex-direction: column;
     align-items: stretch;
   }
-
   .button-row .btn {
     width: 100%;
     height: auto;
@@ -174,11 +165,9 @@ table {
   .contact_table {
     padding: 10px;
   }
-
   table {
     min-width: 100%;
   }
-
   .mat-form-field {
     min-width: 100%;
   }
@@ -206,7 +195,6 @@ table {
   max-width: 95vw;
 }
 
-/* Followup dialog styling */
 .followup-dialog .mat-dialog-container {
   padding: 20px;
 }
@@ -215,41 +203,75 @@ table {
   width: 100%;
 }
 
-/* Table columns */
-.mat-column-followupDate, .mat-column-followupTime {
-  padding: 0 8px;
-  min-width: 100px;
+/* Table columns fix (remove extra space) */
+.mat-column-followupDate,
+.mat-column-followupTime,
+.mat-column-SendMessage,
+.mat-column-MarkRegistered,
+.mat-column-Action,
+.mat-column-comments {
+  white-space: nowrap;
+  width: 1%; /* shrink to fit */
 }
+
 button[disabled] {
   cursor: not-allowed;
 }
+
 /* Pagination styles */
 .pagination-container {
   margin-top: 20px;
+  padding: 12px 16px;
+  background: white;
+  border-top: 1px solid #e0e0e0;
+  display: flex;
+  justify-content: flex-end; /* centered instead of right-shift */
 }
+
+.pagination-wrapper {
+  width: auto;   /* shrink to content */
+}
+
+.pagination-group {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.pagination {
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
 .page-item {
   cursor: pointer;
 }
+
 .page-number-container {
   flex-wrap: wrap;
 }
+
 .pagination-info {
   font-size: 0.9rem;
+  color: #666;
+  white-space: nowrap;
 }
+
 .page-link {
   color: #0D6EFD;
 }
+
 .page-item.active .page-link {
-  background-color: #0D47A1; /* Dark blue for active page */
+  background-color: #0D47A1;
   border-color: #0D47A1;
   color: white;
 }
+
 .page-item.disabled .page-link {
   color: #6C757D;
   pointer-events: none;
 }
-
-/* Add these new styles at the end of your CSS file */
 
 /* Unified table and pagination container */
 .table-container {
@@ -259,7 +281,6 @@ button[disabled] {
   margin-bottom: 20px;
 }
 
-/* Table styling */
 .mat-elevation-z2 {
   overflow-x: auto;
   margin: 0;
@@ -271,16 +292,7 @@ button[disabled] {
   width: 100%;
 }
 
-/* Add these new styles */
-.pagination-container {
-  padding: 12px 16px;
-  background: white;
-  border-top: 1px solid #e0e0e0;
-  display: flex;
-  justify-content: flex-end;
-  margin-right: -200px;
-}
-
+/* Pagination wrapper */
 .pagination-wrapper {
   width: 100%;
   max-width: fit-content;
@@ -309,18 +321,16 @@ button[disabled] {
   margin: 0 5px;
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments for pagination */
 @media (max-width: 768px) {
   .pagination-group {
     flex-direction: column;
     align-items: flex-end;
     gap: 10px;
   }
-  
   .pagination {
     order: 1;
   }
-  
   .pagination-info {
     order: 2;
   }

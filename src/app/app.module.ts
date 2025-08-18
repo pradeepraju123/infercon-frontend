@@ -48,6 +48,7 @@ import { DialogComponent } from './components/dialog/dialog.component';
 import { NgxEditorModule } from 'ngx-editor';
 import { FileUrlPipe } from './pipes/file-url.pipe';
 
+
 import {
   MatDialogModule,
   MatDialog,
@@ -171,6 +172,8 @@ import { InstallmentPopupComponent } from './components/installment-popup/instal
     InstallmentComponent,
     InstallmentPopupComponent,
     CommentsDialogComponent,
+    
+    
     
     CreateRegisteredDialogComponent,
           FollowupDialogComponent,

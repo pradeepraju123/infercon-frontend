@@ -6,11 +6,11 @@ import { ContactService } from '../../services/contact.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { EditContactComponent } from '../../components/edit-contact/edit-contact.component';
 import { AuthService } from '../../services/auth.service';
 import { CommentsDialogComponent } from '../../components/comments-dialog/comments-dialog.component';
 import { CreateRegisteredDialogComponent } from '../../components/create-registered-dialog/create-registered-dialog.component';
+
 @Component({
   selector: 'app-user-register',
   templateUrl: './user-register.component.html',
@@ -25,13 +25,13 @@ export class UserRegisterComponent implements OnInit {
   pageSize = 10;
   pageNum = 1;
   published: any;
-  sortBy: any
-  userType: any
-  userName : any
-  userId: any
-  totalItems = 0;
-totalPages = 1;
-  itemsPerPage = 10;
+  sortBy: any;
+  userType: any;
+  userName: any;
+  userId: any;
+  totalItems: number = 0;
+  totalPages: number = 1;
+  itemsPerPage: number = 5;
   horizontalPosition: MatSnackBarHorizontalPosition = 'right';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   
@@ -43,7 +43,7 @@ totalPages = 1;
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private router: Router,
-    private authService:AuthService
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
@@ -51,15 +51,15 @@ totalPages = 1;
   }
 
 loadRegisteredUsers() {
+loadRegisteredUsers() {
   const params = {
     searchTerm: this.searchTerm,
     start_date: this.formatDate(this.startDate),
     end_date: this.formatDate(this.endDate),
-    page_size: this.itemsPerPage,
-    page_num: this.pageNum
+    page_size: this.pageSize,
+    page_num: this.pageNum,
   };
-
-  this.contactService.getRegisteredUsers(params).subscribe(
+  this.contactService.getRegisteredUsers().subscribe(
     (data: any) => {
       if (data && data.data) {
         // Format the dates for each item
@@ -71,8 +71,9 @@ loadRegisteredUsers() {
             created_time: createdAt.toTimeString().split(' ')[0] // HH:MM:SS format
           };
         });
-        
         this.dataSource = new MatTableDataSource(formattedData);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
         this.totalItems = data.pagination?.total_items || data.data.length;
         this.totalPages = data.pagination?.total_pages || Math.ceil(this.totalItems / this.itemsPerPage);
       }
@@ -83,6 +84,8 @@ loadRegisteredUsers() {
     }
   );
 }
+
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -149,7 +152,7 @@ loadRegisteredUsers() {
     });
   }
 
-  onPageChange(event: any) {
+onPageChange(event: any) {
     this.pageSize = event.pageSize;
     this.pageNum = event.pageNum;
     this.loadRegisteredUsers();
@@ -176,72 +179,56 @@ loadRegisteredUsers() {
   const maxPagesToShow = 5;
   let startPage = Math.max(1, this.pageNum - 2);
   let endPage = Math.min(this.totalPages, startPage + maxPagesToShow - 1);
-  
+  // Adjust if we're at the end
   if (endPage - startPage < maxPagesToShow - 1 && startPage > 1) {
     startPage = Math.max(1, endPage - maxPagesToShow + 1);
   }
-  
   return Array.from({length: endPage - startPage + 1}, (_, i) => startPage + i);
 }
-
 getStartItem(): number {
   return (this.pageNum - 1) * this.itemsPerPage + 1;
 }
-
 getEndItem(): number {
   return Math.min(this.pageNum * this.itemsPerPage, this.totalItems);
 }
-
 goToPage(page: number): void {
   if (page >= 1 && page <= this.totalPages && page !== this.pageNum) {
     this.pageNum = page;
     this.loadRegisteredUsers();
   }
 }
-
 goToFirstPage(): void {
   if (this.pageNum > 1) {
     this.goToPage(1);
   }
 }
-
 goToPreviousPage(): void {
   if (this.pageNum > 1) {
     this.goToPage(this.pageNum - 1);
   }
 }
-
 goToNextPage(): void {
   if (this.pageNum < this.totalPages) {
     this.goToPage(this.pageNum + 1);
   }
 }
-
 goToLastPage(): void {
   if (this.pageNum < this.totalPages) {
     this.goToPage(this.totalPages);
   }
 }
 
-openCreateRegistrationDialog(user: any): void {
-  const dialogRef = this.dialog.open(CreateRegisteredDialogComponent, {
-    width: '600px',
-    data: { user }
-  });
+ openCreateRegistrationDialog(user: any): void {
+    const dialogRef = this.dialog.open(CreateRegisteredDialogComponent, {
+      width: '600px',
+      data: { user } // Pass the user data to the dialog
+    });
 
-  dialogRef.afterClosed().subscribe(result => {
-    if (result) {
-      // ✅ Always update total count
-      this.totalItems++;
-      this.totalPages = Math.ceil(this.totalItems / this.pageSize);
-
-      // ✅ Always move to the last page (so new record is visible)
-      this.pageNum = this.totalPages;
-
-      // Reload users from server
-      this.loadRegisteredUsers();
-    }
-  });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadRegisteredUsers(); // Refresh the list if a new registration was created
+      }
+    });
+  }
 }
 
-}
