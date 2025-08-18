@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { HttpClient } from '@angular/common/http';
-import { HttpClient } from '@angular/common/http';
 import Chart from 'chart.js/auto';
 import { Router } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
@@ -496,8 +495,7 @@ updateEnrollmentPagination(): void {
     // Implement sorting if needed
     console.log('Sort changed:', sortState);
   }
-}
-  // Add this method to your DashboardComponent class
+    // Add this method to your DashboardComponent class
 formatTime(time24: string): string {
   if (!time24) return '—';
   const [hours, minutes] = time24.split(':');
@@ -508,6 +506,8 @@ formatTime(time24: string): string {
   return `${hoursNum}:${minutes} ${ampm}`;
 }
 }
+
+
 
 
 
