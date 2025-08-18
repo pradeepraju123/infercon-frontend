@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
-
+import { catchError } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
@@ -179,15 +179,13 @@ addComment(contactId: string, comment: string, createdBy: string): Observable<an
 createRegisteredContact(contactData: any): Observable<any> {
   return this.http.post(`${this.apiUrl}/`, contactData);
 }
-getRegisteredUsers(params: any = {}): Observable<any> {
+getRegisteredUsers(data: any): Observable<any> {
   const token = sessionStorage.getItem('authToken');
-  
   if (token) {
     const headers = new HttpHeaders({
       'Authorization': 'Bearer ' + token
     });
-    
-    return this.http.post(`${this.apiUrl}/filter/registered`, params, { headers });
+    return this.http.post(`${this.apiUrl}/filter/registered`, data, { headers });
   } else {
     return throwError('No authentication token found');
   }
@@ -195,6 +193,17 @@ getRegisteredUsers(params: any = {}): Observable<any> {
 markAsRegistered(contactId:string):Observable<any>{
   return this.http.post(`${this.apiUrl}/${contactId}/mark-registered`,{})
 }
+
+filterByRegistrationStatus(params: any): Observable<any> {
+  return this.http.post(`${this.apiUrl}/filter-by-registration-status`, params)
+    .pipe(
+      catchError((error: any) => {
+        console.error('API Error:', error);
+        return throwError(() => error);
+      })
+    );
+}
+
 
 
 }

@@ -1,13 +1,16 @@
-<section class="user-register">
+<div class="user-register">
   <div class="container">
     <div class="search">
       <div class="row">
         <div class="col-lg-8">
           <div class="title_field_card">
+            <!-- Search -->
             <mat-form-field appearance="outline" class="example-full-width" style="margin: 10px">
               <mat-label>Search</mat-label>
               <input matInput placeholder="Search users" [(ngModel)]="searchTerm">
             </mat-form-field>
+
+            <!-- Date Range -->
             <mat-form-field appearance="outline">
               <mat-label>Enter a date range</mat-label>
               <mat-date-range-input [rangePicker]="picker">
@@ -17,15 +20,19 @@
               <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-date-range-picker #picker></mat-date-range-picker>
             </mat-form-field>
+
             <button class="btn" (click)="loadRegisteredUsers()">Search</button>
             <button class="btn" (click)="downloadUsers()">Download</button>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Table -->
     <div class="mat-elevation-z2">
       <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
-        <!-- Checkbox Column -->
+        
+        <!-- Checkbox -->
         <ng-container matColumnDef="select">
           <th mat-header-cell *matHeaderCellDef>
             <mat-checkbox></mat-checkbox>
@@ -34,111 +41,125 @@
             <mat-checkbox></mat-checkbox>
           </td>
         </ng-container>
-        <!-- Full Name Column -->
+
+        <!-- Full Name -->
         <ng-container matColumnDef="fullname">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Full Name</th>
           <td mat-cell *matCellDef="let user">{{ user.fullname }}</td>
         </ng-container>
-        <!-- Email Column -->
+
+        <!-- Email -->
         <ng-container matColumnDef="email">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
           <td mat-cell *matCellDef="let user">{{ user.email }}</td>
         </ng-container>
-        <!-- Phone Column -->
+
+        <!-- Phone -->
         <ng-container matColumnDef="phone">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Phone</th>
           <td mat-cell *matCellDef="let user">{{ user.phone }}</td>
         </ng-container>
-        <!-- Course Column -->
+
+        <!-- Course -->
         <ng-container matColumnDef="course">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Course</th>
           <td mat-cell *matCellDef="let user">{{ user.courses }}</td>
         </ng-container>
+
+        <!-- Date -->
         <ng-container matColumnDef="createdDate">
-          <th mat-header-cell mat-sort-header *matHeaderCellDef> Date </th>
-          <td mat-cell *matCellDef="let user"> {{user.created_date }} </td>
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>Date</th>
+          <td mat-cell *matCellDef="let user">{{ user.created_date }}</td>
         </ng-container>
+
+        <!-- Time -->
         <ng-container matColumnDef="createdTime">
-          <th mat-header-cell mat-sort-header *matHeaderCellDef> Time </th>
-          <td mat-cell *matCellDef="let user"> {{ user.created_time }} </td>
+          <th mat-header-cell mat-sort-header *matHeaderCellDef>Time</th>
+          <td mat-cell *matCellDef="let user">{{ user.created_time }}</td>
         </ng-container>
- <ng-container matColumnDef="comments">
-    <th mat-header-cell *matHeaderCellDef>Comments</th>
-    <td mat-cell *matCellDef="let user">
-      <button
-        mat-raised-button
-        color="primary"
-        class="comments-button"
-        (click)="openCommentsDialog(user._id, user.fullname)">
-        Comments
-        <span *ngIf="user.comments && user.comments.length > 0" class="comment-count">
-          ({{user.comments.length}})
-        </span>
-      </button>
-    </td>
-  </ng-container>
-        <!-- Action Column -->
-        <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef>Actions</th>
+
+        <!-- Comments -->
+        <ng-container matColumnDef="comments">
+          <th mat-header-cell *matHeaderCellDef>Comments</th>
           <td mat-cell *matCellDef="let user">
-            <button mat-raised-button  (click)="openDialog(user._id)">
-              View
+            <button
+              mat-raised-button
+              color="primary"
+              class="comments-button"
+              (click)="openCommentsDialog(user._id, user.fullname)">
+              Comments
+              <span *ngIf="user.comments?.length > 0" class="comment-count">
+                ({{ user.comments.length }})
+              </span>
             </button>
           </td>
         </ng-container>
 
-        <ng-container matColumnDef="Registration">
-            <th mat-header-cell *matHeaderCellDef>Create Registration</th>
-            <td mat-cell *matCellDef="let user">
-              <button mat-raised-button  (click)="openCreateRegistrationDialog(user)">
-                Registration
-              </button>
-            </td>
-          </ng-container>
+        <!-- Actions -->
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let user">
+            <button mat-raised-button (click)="openDialog(user._id)">View</button>
+          </td>
+        </ng-container>
 
+        <!-- Registration -->
+        <ng-container matColumnDef="Registration">
+          <th mat-header-cell *matHeaderCellDef>Create Registration</th>
+          <td mat-cell *matCellDef="let user">
+            <button mat-raised-button (click)="openCreateRegistrationDialog(user)">
+              Registration
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- Render rows -->
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
-      <div class="pagination-container">
-  <nav aria-label="Contact pagination">
-    <ul class="pagination justify-content-end my-4">
-      <li class="page-item" [class.disabled]="pageNum === 1" (click)="goToFirstPage()">
-        <button class="page-link" type="button" aria-label="First">
-          <span aria-hidden="true">&laquo;</span>
-        </button>
-      </li>
-      <li class="page-item" [class.disabled]="pageNum === 1" (click)="goToPreviousPage()">
-        <button class="page-link" type="button" aria-label="Previous">
-          <span aria-hidden="true">&lsaquo;</span>
-        </button>
-      </li>
-      <!-- Page numbers -->
-      <div class="page-number-container d-flex">
-        <li *ngFor="let page of getPageNumbers()"
-            class="page-item"
-            [class.active]="page === pageNum"
-            (click)="goToPage(page)">
-          <button class="page-link" type="button">{{page}}</button>
-        </li>
+
+      <!-- Pagination -->
+ <div class="pagination-container">
+  <nav aria-label="User pagination">
+    <div class="pagination-wrapper">
+      <div class="pagination-group">
+        <ul class="pagination">
+          <li class="page-item" [class.disabled]="pageNum === 1" (click)="goToFirstPage()">
+            <button class="page-link" type="button" aria-label="First">
+              <span aria-hidden="true">&laquo;</span>
+            </button>
+          </li>
+          <li class="page-item" [class.disabled]="pageNum === 1" (click)="goToPreviousPage()">
+            <button class="page-link" type="button" aria-label="Previous">
+              <span aria-hidden="true">&lsaquo;</span>
+            </button>
+          </li>
+          <div class="page-number-container">
+            <li *ngFor="let page of getPageNumbers()"
+                class="page-item"
+                [class.active]="page === pageNum"
+                (click)="goToPage(page)">
+              <button class="page-link" type="button">{{page}}</button>
+            </li>
+          </div>
+          <li class="page-item" [class.disabled]="pageNum === totalPages" (click)="goToNextPage()">
+            <button class="page-link" type="button" aria-label="Next">
+              <span aria-hidden="true">&rsaquo;</span>
+            </button>
+          </li>
+          <li class="page-item" [class.disabled]="pageNum === totalPages" (click)="goToLastPage()">
+            <button class="page-link" type="button" aria-label="Last">
+              <span aria-hidden="true">&raquo;</span>
+            </button>
+          </li>
+        </ul>
+        <div class="pagination-info">
+          <span>{{getStartItem()}}</span>-<span>{{getEndItem()}}</span> of <span>{{totalItems}}</span>
+        </div>
       </div>
-      <li class="page-item" [class.disabled]="pageNum === totalPages" (click)="goToNextPage()">
-        <button class="page-link" type="button" aria-label="Next">
-          <span aria-hidden="true">&rsaquo;</span>
-        </button>
-      </li>
-      <li class="page-item" [class.disabled]="pageNum === totalPages" (click)="goToLastPage()">
-        <button class="page-link" type="button" aria-label="Last">
-          <span aria-hidden="true">&raquo;</span>
-        </button>
-      </li>
-    </ul>
+    </div>
   </nav>
-  <div class="pagination-info text-center text-muted mb-4">
-    <span>{{getStartItem()}}</span>-<span>{{getEndItem()}}</span> of <span>{{totalItems}}</span>
-  </div>
 </div>
     </div>
   </div>
-</section>
-
-
+</div>
