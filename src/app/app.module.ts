@@ -48,6 +48,7 @@ import { DialogComponent } from './components/dialog/dialog.component';
 import { NgxEditorModule } from 'ngx-editor';
 import { FileUrlPipe } from './pipes/file-url.pipe';
 
+
 import {
   MatDialogModule,
   MatDialog,
@@ -165,6 +166,8 @@ import { UserRegisterComponent } from './controller/user-register/user-register.
     TemplateManagerComponent,
     FileUrlPipe,
     CommentsDialogComponent,
+    
+    
     
     CreateRegisteredDialogComponent,
           FollowupDialogComponent,

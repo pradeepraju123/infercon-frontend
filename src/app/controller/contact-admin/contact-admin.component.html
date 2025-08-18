@@ -70,7 +70,7 @@
     </div>
      -->
    
-    <div class="mat-elevation-z2">
+    <div class="mat-elevation-z2 table-container">
       <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
          <!-- Checkbox Column -->
         <ng-container matColumnDef="select">
@@ -198,44 +198,51 @@
        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
-     <div class="pagination-container">
+<!-- ... (previous code remains unchanged until the pagination section) ... -->
+
+<div class="pagination-container">
   <nav aria-label="Contact pagination">
-    <ul class="pagination justify-content-end my-4">
-      <li class="page-item" [class.disabled]="pageNum === 1" (click)="goToFirstPage()">
-        <button class="page-link" type="button" aria-label="First">
-          <span aria-hidden="true">&laquo;</span>
-        </button>
-      </li>
-      <li class="page-item" [class.disabled]="pageNum === 1" (click)="goToPreviousPage()">
-        <button class="page-link" type="button" aria-label="Previous">
-          <span aria-hidden="true">&lsaquo;</span>
-        </button>
-      </li>
-      <!-- Page numbers -->
-      <div class="page-number-container d-flex">
-        <li *ngFor="let page of getPageNumbers()"
-            class="page-item"
-            [class.active]="page === pageNum"
-            (click)="goToPage(page)">
-          <button class="page-link" type="button">{{page}}</button>
-        </li>
+    <div class="pagination-wrapper">
+      <div class="pagination-group">
+        <ul class="pagination">
+          <li class="page-item" [class.disabled]="pageNum === 1" (click)="goToFirstPage()">
+            <button class="page-link" type="button" aria-label="First">
+              <span aria-hidden="true">&laquo;</span>
+            </button>
+          </li>
+          <li class="page-item" [class.disabled]="pageNum === 1" (click)="goToPreviousPage()">
+            <button class="page-link" type="button" aria-label="Previous">
+              <span aria-hidden="true">&lsaquo;</span>
+            </button>
+          </li>
+          <div class="page-number-container">
+            <li *ngFor="let page of getPageNumbers()"
+                class="page-item"
+                [class.active]="page === pageNum"
+                (click)="goToPage(page)">
+              <button class="page-link" type="button">{{page}}</button>
+            </li>
+          </div>
+          <li class="page-item" [class.disabled]="pageNum === totalPages" (click)="goToNextPage()">
+            <button class="page-link" type="button" aria-label="Next">
+              <span aria-hidden="true">&rsaquo;</span>
+            </button>
+          </li>
+          <li class="page-item" [class.disabled]="pageNum === totalPages" (click)="goToLastPage()">
+            <button class="page-link" type="button" aria-label="Last">
+              <span aria-hidden="true">&raquo;</span>
+            </button>
+          </li>
+        </ul>
+        <div class="pagination-info">
+          <span>{{getStartItem()}}</span>-<span>{{getEndItem()}}</span> of <span>{{totalItems}}</span>
+        </div>
       </div>
-      <li class="page-item" [class.disabled]="pageNum === totalPages" (click)="goToNextPage()">
-        <button class="page-link" type="button" aria-label="Next">
-          <span aria-hidden="true">&rsaquo;</span>
-        </button>
-      </li>
-      <li class="page-item" [class.disabled]="pageNum === totalPages" (click)="goToLastPage()">
-        <button class="page-link" type="button" aria-label="Last">
-          <span aria-hidden="true">&raquo;</span>
-        </button>
-      </li>
-    </ul>
-  </nav>
-  <div class="pagination-info text-center text-muted mb-4">
-    <span>{{getStartItem()}}</span>-<span>{{getEndItem()}}</span> of <span>{{totalItems}}</span>
-  </div>
-</div>
     </div>
+  </nav>
 </div>
+
+<!-- ... (remaining code stays the same) ... -->
+    </div>
+  </div>
 </section>

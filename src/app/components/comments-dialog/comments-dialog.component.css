@@ -1,384 +1,167 @@
-/* Base dialog styles */
-.comments-dialog {
-  width: 100%;
-  position: relative;
-  max-width: 600px;
-  min-height: 400px;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-/* Header section */
+/* ============================
+   Dialog Header
+============================ */
 .dialog-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 0 12px 0;
-  border-bottom: 1px solid #e0e0e0;
 }
 
-.dialog-header h2 {
-  margin: 0;
-  font-size: 1.5rem;
-  font-weight: 500;
-  color: #333;
+.header-icon {
+  margin-right: 8px;
+  vertical-align: middle;
 }
 
-.close-button {
-  color: #666;
+.floating-close {
   background: none;
   border: none;
+  font-size: 22px;
   cursor: pointer;
+  color: #666;
+  line-height: 1;
 }
 
-.close-button:hover {
-  color: #333;
-  background-color: #f5f5f5;
-}
-
-/* Main content area */
+/* ============================
+   Dialog Content
+============================ */
 .dialog-content {
-  padding: 8px 0;
-  max-height: 400px;
+  max-height: 60vh;
   overflow-y: auto;
+  padding-right: 5px;
 }
 
-/* Loading state */
 .loading-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  height: 200px;
+  padding: 20px;
 }
 
 .custom-spinner {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .spinner {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #2196f3;
-  border-radius: 50%;
   width: 40px;
   height: 40px;
+  border: 4px solid #ddd;
+  border-top: 4px solid #3f51b5;
+  border-radius: 50%;
   animation: spin 1s linear infinite;
-  margin: 0 auto 16px auto;
+  margin-bottom: 10px;
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.custom-spinner p {
-  margin: 0;
-  color: #666;
-  font-size: 0.9rem;
-}
-
-/* Comments list */
-.comments-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 0 8px;
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .no-comments {
   text-align: center;
-  padding: 40px 20px;
-  color: #666;
+  color: #888;
+  padding: 20px;
 }
 
 .no-comments mat-icon {
-  font-size: 48px;
-  width: 48px;
-  height: 48px;
-  color: #ccc;
-  margin-bottom: 16px;
+  font-size: 40px;
+  margin-bottom: 8px;
+  display: block;
 }
 
-.no-comments p {
-  margin: 0;
-  font-size: 1.1rem;
-}
-
-/* Individual comment items */
+/* ============================
+   Comments List
+============================ */
 .comment-item {
-  background: #f8f9fa;
-  border-radius: 8px;
   padding: 12px;
-  border-left: 4px solid #2196f3;
-  transition: all 0.2s ease;
-}
-
-.comment-item:hover {
-  background: #f0f7ff;
-  border-left-color: #1976d2;
+  border-bottom: 1px solid #eee;
 }
 
 .comment-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 8px;
-  flex-wrap: wrap;
-  gap: 8px;
+  align-items: center;
+  margin-bottom: 6px;
 }
 
 .comment-author {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-weight: 500;
-  color: #333;
 }
 
 .avatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #2196f3;
+  background: #3f51b5;
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-weight: bold;
 }
 
 .comment-time {
-  font-size: 0.85rem;
-  color: #666;
-  font-style: italic;
+  font-size: 0.8rem;
+  color: #888;
 }
 
 .comment-text {
   font-size: 0.95rem;
-  line-height: 1.5;
-  color: #444;
-  white-space: pre-wrap;
-  word-wrap: break-word;
+  color: #333;
+  white-space: pre-line;
 }
 
-/* Add comment section */
+/* ============================
+   Add Comment Section
+============================ */
 .add-comment-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 10px;
   width: 100%;
-  margin-top: 16px;
 }
 
 .comment-input {
-  width: 100%;
-  margin-bottom: 16px;
+  flex: 1;
+  min-width: 250px;
 }
 
-.comment-input textarea {
-  width: 100%;
-  resize: vertical;
-  min-height: 80px;
-  font-size: 0.9rem;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-/* Action buttons */
+/* Buttons aligned consistently */
 .action-buttons {
   display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  align-items: center;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
 }
 
-.action-buttons button {
-  padding: 8px 16px;
-  font-size: 0.9rem;
-  min-height: 36px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.add-button {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background-color: #2196f3;
-  color: white;
-  border: none;
-}
-
-.add-button:hover {
-  background-color: #1976d2;
-}
-
+.add-button,
 .cancel-button {
-  color: #666;
-  background: none;
-  border: 1px solid #ddd;
+  min-width: 120px;
 }
 
-.cancel-button:hover {
-  background-color: #f5f5f5;
-}
-
-/* Scrollbar styling */
-.dialog-content::-webkit-scrollbar {
-  width: 6px;
-}
-
-.dialog-content::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 3px;
-}
-
-.dialog-content::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: 3px;
-}
-
-.dialog-content::-webkit-scrollbar-thumb:hover {
-  background: #a1a1a1;
-}
-
-/* ======================== */
-/* Responsive Breakpoints */
-/* ======================== */
-
-/* Large tablets and small laptops (768px - 1023px) */
-@media (max-width: 1023px) {
-  .comments-dialog {
-    padding: 16px;
-  }
-  
-  .dialog-header h2 {
-    font-size: 1.3rem;
-  }
-  
-  .comment-item {
-    padding: 10px;
-  }
-}
-
-/* Tablets (600px - 767px) */
-@media (max-width: 767px) {
-  .comments-dialog {
-    max-width: 90vw;
-    min-height: 300px;
-  }
-  
-  .dialog-content {
-    max-height: 50vh;
-  }
-  
-  .comment-header {
+/* ============================
+   Responsive Adjustments
+============================ */
+@media (max-width: 600px) {
+  .add-comment-section {
     flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
+    align-items: stretch;
   }
-  
-  .comment-time {
-    margin-left: 40px; /* align with text under avatar */
-  }
-}
 
-/* Large phones (480px - 599px) */
-@media (max-width: 599px) {
-  .comments-dialog {
-    padding: 12px;
-  }
-  
-  .dialog-header h2 {
-    font-size: 1.2rem;
-  }
-  
   .action-buttons {
-    flex-direction: column-reverse;
-    gap: 8px;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-top: 8px;
   }
-  
-  .action-buttons button {
-    width: 100%;
-  }
-  
-  .no-comments mat-icon {
-    font-size: 40px;
-    width: 40px;
-    height: 40px;
-  }
-  
-  .no-comments p {
-    font-size: 1rem;
-  }
-}
 
-/* Small phones (up to 479px) */
-@media (max-width: 479px) {
-  .comments-dialog {
-    padding: 10px;
-    min-height: 250px;
-  }
-  
-  .dialog-header h2 {
-    font-size: 1.1rem;
-  }
-  
-  .comment-item {
-    padding: 8px;
-    border-left-width: 3px;
-  }
-  
-  .avatar {
-    width: 28px;
-    height: 28px;
-    font-size: 0.7rem;
-  }
-  
-  .comment-text {
-    font-size: 0.85rem;
-  }
-  
-  .comment-input textarea {
-    min-height: 60px;
-    font-size: 0.85rem;
-  }
-  
-  .action-buttons button {
-    padding: 6px 12px;
-    font-size: 0.85rem;
-  }
-}
-
-/* Extra small devices (smartwatches, etc.) */
-@media (max-width: 320px) {
-  .comments-dialog {
-    padding: 8px;
-  }
-  
-  .dialog-header h2 {
-    font-size: 1rem;
-  }
-  
-  .comments-list {
-    gap: 12px;
-  }
-  
-  .comment-time {
-    font-size: 0.75rem;
-  }
-  
-  .no-comments {
-    padding: 20px 10px;
-  }
-  
-  .no-comments mat-icon {
-    font-size: 32px;
-    width: 32px;
-    height: 32px;
-    margin-bottom: 8px;
-  }
-  
-  .no-comments p {
-    font-size: 0.9rem;
+  .add-button,
+  .cancel-button {
+    flex: 1;
+    min-width: unset;
   }
 }

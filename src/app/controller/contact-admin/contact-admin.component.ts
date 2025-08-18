@@ -275,17 +275,19 @@ async onCourseSelectionChange(selectedLead: string, itemId: string) {
     this.getUserName()
   }
   loadContacts() {
-  const params = {
+  const params:any = {
     searchTerm: this.searchTerm,
     start_date: this.formatDate(this.startDate),
     end_date: this.formatDate(this.endDate),
     published: this.published,
     sort_by: this.sortBy,
-    page_size: this.pageSize,
+   page_size: this.itemsPerPage,
     page_num: this.pageNum,
     assignee: this.getUserName()
   };
-  
+   if (this.userType === 'staff') {
+    params.assignee = this.userName;
+  }
   this.contactServices.getAllContact(params).subscribe(
     (data: any) => {
       if (data && data.data && data.data.length > 0) {
@@ -300,11 +302,11 @@ async onCourseSelectionChange(selectedLead: string, itemId: string) {
         });
         
         this.dataSource = new MatTableDataSource(contactsWithSortedComments);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
+        this.totalItems = data.pagination?.total_items || data.data.length;
+        this.totalPages = data.pagination?.total_pages || Math.ceil(this.totalItems / this.itemsPerPage);
       } else {
-        console.log('No more data available.');
-      }
+        this.dataSource = new MatTableDataSource<any>([]);
+      } 
     },
     (error) => {
       console.error('Error fetching contact data:', error);
@@ -600,12 +602,35 @@ goToLastPage(): void {
   }
 }
 markAsRegistered(contactId: string): void {
+  const contact = this.dataSource.data.find(item => item._id === contactId);
+  if (!contact) {
+    this.errorMessage = 'Contact not found';
+    this.openSnackBar(this.errorMessage);
+    return;
+  }
+  // Add validation for lead status
+  if (contact.lead_status !== 'Finalized') {
+    this.errorMessage = 'Only Finalized leads can be marked as registered';
+    this.openSnackBar(this.errorMessage);
+    return;
+  }
   this.contactService.markAsRegistered(contactId).subscribe(
     (response) => {
+      console.log('API Response:', response);
       this.successMessage = 'Lead marked as registered successfully';
       this.openSnackBar(this.successMessage);
-      this.loadContacts(); // Refresh the list
-      this.router.navigate(['/user-register'])
+      // Update the local data
+      const index = this.dataSource.data.findIndex(item => item._id === contactId);
+      if (index !== -1) {
+        this.dataSource.data[index].isRegistered = 1;
+        this.dataSource._updateChangeSubscription();
+        // Add a small delay before navigation to ensure UI updates
+        setTimeout(() => {
+          this.router.navigate(['/user-register'], {
+            state: { registeredContact: this.dataSource.data[index] }
+          });
+        }, 500);
+      }
     },
     (error) => {
       this.errorMessage = 'Error marking lead as registered';

@@ -93,6 +93,8 @@ const routes: Routes = [
 {path:'user-register',component:UserRegisterComponent},
   { path: '**', redirectTo: 'home' },
   
+
+  
  
 
  
