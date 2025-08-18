@@ -1,5 +1,5 @@
 <section class="contact_table">
-  <div class="container">
+  <div class="container-fluid">
     <div class="search">
       <div class="row">
         <div class="col-lg-8">
@@ -107,14 +107,13 @@
             {{ element.courses }}
           </td>
         </ng-container>
-        <ng-container matColumnDef="createdDate">
-          <th mat-header-cell mat-sort-header *matHeaderCellDef> Date </th>
-          <td mat-cell *matCellDef="let element"> {{ element.created_date }} </td>
-        </ng-container>
-        <ng-container matColumnDef="createdTime">
-          <th mat-header-cell mat-sort-header *matHeaderCellDef> Time </th>
-          <td mat-cell *matCellDef="let element"> {{ element.created_time }} </td>
-        </ng-container>
+        <ng-container matColumnDef="createdDateTime">
+  <th mat-header-cell mat-sort-header *matHeaderCellDef> Date & Time </th>
+  <td mat-cell *matCellDef="let element"> 
+    {{ element.created_date | date:'shortDate' }} 
+    {{ element.created_time  }} 
+  </td>
+</ng-container>
        <ng-container *ngIf="getUserType() === 'staff'" matColumnDef="leadSelection">
   <th mat-header-cell *matHeaderCellDef> Lead status </th>
   <td class="lead_status" mat-cell *matCellDef="let element">

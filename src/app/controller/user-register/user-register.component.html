@@ -1,5 +1,5 @@
 <section class="user-register">
-  <div class="container">
+  <div class="container-fluid">
     <div class="search">
       <div class="row">
         <div class="col-lg-8">
@@ -54,14 +54,13 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Course</th>
           <td mat-cell *matCellDef="let user">{{ user.courses }}</td>
         </ng-container>
-        <ng-container matColumnDef="createdDate">
-          <th mat-header-cell mat-sort-header *matHeaderCellDef> Date </th>
-          <td mat-cell *matCellDef="let user"> {{user.created_date }} </td>
-        </ng-container>
-        <ng-container matColumnDef="createdTime">
-          <th mat-header-cell mat-sort-header *matHeaderCellDef> Time </th>
-          <td mat-cell *matCellDef="let user"> {{ user.created_time }} </td>
-        </ng-container>
+              <ng-container matColumnDef="createdDateTime">
+  <th mat-header-cell mat-sort-header *matHeaderCellDef> Date & Time </th>
+  <td mat-cell *matCellDef="let element"> 
+    {{ element.created_date | date:'shortDate' }} 
+    {{ element.created_time  }} 
+  </td>
+</ng-container>
  <ng-container matColumnDef="comments">
     <th mat-header-cell *matHeaderCellDef>Comments</th>
     <td mat-cell *matCellDef="let user">

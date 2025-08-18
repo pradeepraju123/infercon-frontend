@@ -108,9 +108,9 @@ itemsPerPage: number = 5;
     const token = sessionStorage.getItem('authToken'); // Assuming this function exists in your authService
     this.userType = this.authService.getUserTypeFromToken(token)
     if (this.userType === 'staff') {
-      this.displayedColumns = ['select', 'fullname', 'phone', 'course', 'createdDate', 'createdTime', 'leadSelection', 'followupDate', 'followupTime', 'comments', 'Action','MarkRegistered'];
+      this.displayedColumns = ['select', 'fullname', 'phone', 'course', 'createdDateTime', 'leadSelection', 'followupDate', 'followupTime', 'comments', 'Action','MarkRegistered'];
     } else if(this.userType === 'admin') {
-      this.displayedColumns =  ['select', 'fullname', 'phone', 'course', 'createdDate', 'createdTime', 'assigneeSelection', 'followupDate', 'followupTime', 'comments', 'Action'];
+      this.displayedColumns =  ['select', 'fullname', 'phone', 'course', 'createdDateTime', 'assigneeSelection', 'followupDate', 'followupTime', 'comments', 'Action'];
     }
     return this.userType;
   }
@@ -645,26 +645,19 @@ markAsRegistered(contactId: string): void {
     return;
   }
 
-  this.contactService.markAsRegistered(contactId).subscribe({
-    next: (response) => {
-      // Update local data immediately
-      const index = this.dataSource.data.findIndex(item => item._id === contactId);
-      if (index !== -1) {
-        this.dataSource.data[index] = response.data;
-        this.dataSource._updateChangeSubscription();
-        
-        // Navigate to user registration page with the registered contact
-        this.router.navigate(['/user-register'], {
-          state: { registeredContact: response.data }
-        });
-      }
-      this.openSnackBar(response.message);
+  this.contactService.markAsRegistered(contactId).subscribe(
+    (response) => {
+      this.successMessage = 'Lead marked as registered successfully';
+      this.openSnackBar(this.successMessage);
+      this.loadContacts(); // Refresh the list
+      this.router.navigate(['/user-register'])
     },
-    error: (err) => {
-      this.openSnackBar('Registration failed!');
-      console.error(err);
+    (error) => {
+      this.errorMessage = 'Error marking lead as registered';
+      this.openSnackBar(this.errorMessage);
+      console.error('Error marking lead as registered:', error);
     }
-  });
+  );
 }
 
 formatTimeForDisplay(time24: string): string {

@@ -18,7 +18,7 @@ import { CreateRegisteredDialogComponent } from '../../components/create-registe
 })
 export class UserRegisterComponent implements OnInit {
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
-  displayedColumns: string[] = ['select', 'fullname', 'email', 'phone', 'course','createdDate','createdTime', 'action','Registration'];
+  displayedColumns: string[] = ['select', 'fullname', 'email', 'phone', 'course','createdDateTime', 'action','Registration'];
   searchTerm: string = '';
   startDate: any = null;
   endDate: any = new Date();

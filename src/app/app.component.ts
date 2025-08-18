@@ -89,7 +89,7 @@ const routesWithoutDefault = [
   '/app-placement-admin',
   '/whatsappactivity',
   '/whatsapptemplate',
-  '/user-register',
+  '/app-user-register',
   '/installment'
 
 
