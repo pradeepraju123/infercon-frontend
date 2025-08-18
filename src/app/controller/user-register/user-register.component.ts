@@ -51,6 +51,7 @@ export class UserRegisterComponent implements OnInit {
   }
 
 loadRegisteredUsers() {
+loadRegisteredUsers() {
   const params = {
     searchTerm: this.searchTerm,
     start_date: this.formatDate(this.startDate),

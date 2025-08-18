@@ -1,0 +1,9 @@
+<div class="page-container">
+  <h1>Welcome to Installment Page</h1>
+  <button class="open-btn" (click)="openPopup()">Open Installment Form</button>
+</div>
+
+<!-- Show popup -->
+<app-installment-popup *ngIf="showPopup" (close)="closePopup()"></app-installment-popup>
+
+<!-- Installments List -->

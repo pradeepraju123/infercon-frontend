@@ -81,11 +81,9 @@
 .user-register {
   padding: 20px;
 }
-
 table {
   width: 100%;
 }
-
 .search button {
   background: none;
   color: #000;
@@ -94,21 +92,18 @@ table {
   border: 2px solid #000;
   width: 150px !important;
 }
-
 .search button:hover {
   background: rgb(58, 167, 244);
   border: 2px solid rgb(58, 167, 244);
   color: #fff;
 }
-
 .search button {
   margin: 0px 0px 0px 10px;
   width: 200px;
   height: 56px;
 }
-
 .mat-row:hover {
-  background-color: #f5f5f5;
+  background-color: #F5F5F5;
 }
 
 /* Responsive table columns */
@@ -117,7 +112,6 @@ table {
     display: none;
   }
 }
-
 @media (max-width: 480px) {
   .mat-column-phone {
     display: none;

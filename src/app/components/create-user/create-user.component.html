@@ -1,44 +1,52 @@
-<h2 mat-dialog-title>Contact Details</h2>
-<form class="example-form" [formGroup]="editForm" (submit)="onSubmit()">
+<h2 mat-dialog-title>Create New User</h2>
+<form [formGroup]="createForm" (ngSubmit)="onSubmit()">
   <mat-dialog-content class="mat-typography">
     <div class="container">
       <div class="two-column-grid">
         <!-- First Column -->
         <div class="column">
-          <mat-form-field class="example-full-width" appearance="outline">
+          <mat-form-field appearance="outline">
             <mat-label>Name</mat-label>
-            <input matInput formControlName="fullname" placeholder="Full Name">
+            <input matInput formControlName="fullname" placeholder="Full Name" required>
           </mat-form-field>
 
-          <mat-form-field class="example-full-width" appearance="outline">
+          <mat-form-field appearance="outline">
             <mat-label>Email</mat-label>
-            <input type="email" formControlName="email" matInput placeholder="Email">
+            <input type="email" formControlName="email" matInput placeholder="Email" required>
           </mat-form-field>
 
-          <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Phone</mat-label>
-            <input type="tel" formControlName="phone" matInput placeholder="Phone">
-          </mat-form-field>
+<mat-form-field appearance="outline">
+  <mat-label>Phone</mat-label>
+  <input type="tel" formControlName="phone" matInput required>
+  <mat-error *ngIf="createForm.get('phone')?.hasError('required')">
+    Phone number is required
+  </mat-error>
+  <mat-error *ngIf="createForm.get('phone')?.hasError('invalidPhone')">
+    Please enter a valid phone number for the selected country
+  </mat-error>
+  <mat-error *ngIf="createForm.get('phone')?.hasError('phoneExists')">
+    User with this phone number already exists!
+  </mat-error>
+</mat-form-field>
         </div>
 
         <!-- Second Column -->
         <div class="column">
-         <mat-form-field class="example-full-width" appearance="outline">
+          <mat-form-field appearance="outline">
             <mat-label>Country</mat-label>
             <mat-select formControlName="country">
               <mat-option *ngFor="let country of countries" [value]="country.name">
                 {{ country.name }}
               </mat-option>
             </mat-select>
-        </mat-form-field>
+          </mat-form-field>
 
-
-          <mat-form-field class="example-full-width" appearance="outline">
+          <mat-form-field appearance="outline">
             <mat-label>State</mat-label>
             <input type="text" formControlName="state" matInput placeholder="State">
           </mat-form-field>
 
-          <mat-form-field class="example-full-width" appearance="outline">
+          <mat-form-field appearance="outline">
             <mat-label>City</mat-label>
             <input type="text" formControlName="city" matInput placeholder="City">
           </mat-form-field>
@@ -47,21 +55,22 @@
 
       <!-- Full width fields -->
       <div class="full-width-fields">
-        <mat-form-field class="example-full-width" appearance="outline">
+        <mat-form-field appearance="outline">
           <mat-label>Message</mat-label>
           <textarea matInput formControlName="message" placeholder="Message"></textarea>
         </mat-form-field>
 
-        <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Source</mat-label>
-            <mat-select formControlName="source">
-              <mat-option *ngFor="let source of sources" [value]="source">
-                {{ source }}
-              </mat-option>
-            </mat-select>
-         </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Source</mat-label>
+          <mat-select formControlName="source">
+            <mat-option *ngFor="let source of sources" [value]="source">
+              {{ source }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
 
+      <!-- Courses Section -->
       <div class="array-section">
         <h4>Courses</h4>
         <div formArrayName="courses">
@@ -75,19 +84,11 @@
             </button>
           </div>
         </div>
-        <button 
-          mat-raised-button 
-          color="primary" 
-          (click)="addCourse()" 
-          class="add-btn" 
-          type="button"
-        >
+        <button mat-raised-button color="primary" (click)="addCourse()" class="add-btn" type="button">
           Add Course
         </button>
       </div>
-
-      <!-- Rest of the array sections remain the same -->
-      <div class="array-section">
+<div class="array-section">
         <h4>Location</h4>
         <div formArrayName="location">
           <div *ngFor="let loc of locationControls; let i = index" class="array-row">
@@ -104,9 +105,7 @@
           Add Location
         </button>
       </div>
-
-      <!-- Languages Section -->
-      <div class="array-section">
+            <div class="array-section">
         <h4>Languages</h4>
         <div formArrayName="languages">
           <div *ngFor="let lang of languagesControls; let i = index" class="array-row">
@@ -124,32 +123,13 @@
         </button>
       </div>
 
-      <!-- Comments Section -->
-      <div class="array-section">
-        <h4>Comments</h4>
-        <div formArrayName="comments">
-          <div *ngFor="let comment of commentsControls; let i = index" [formGroupName]="i" class="comment-row">
-            <mat-form-field appearance="outline" class="comment-input">
-              <mat-label>Comment {{i + 1}}</mat-label>
-              <textarea matInput formControlName="texts"></textarea>
-            </mat-form-field>
-            <div class="comment-meta">
-              <span class="comment-date">{{comment.value.createdAt | date:'medium'}}</span>
-              <button mat-button color="warn" (click)="removeComment(i)" class="remove-btn">
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
-        <button mat-raised-button color="primary" (click)="addComment()" class="add-btn" type="button">
-          Add Comment
-        </button>
-      </div>
+      <!-- Add other sections (Location, Languages) as needed -->
+      <!-- These would be identical to the ones in edit-contact.component.html -->
     </div>
   </mat-dialog-content>
   
   <mat-dialog-actions align="end">
     <button mat-button mat-dialog-close>Cancel</button>
-    <button mat-button cdkFocusInitial type="submit">Update</button>
+    <button mat-button cdkFocusInitial type="submit">Create</button>
   </mat-dialog-actions>
 </form>

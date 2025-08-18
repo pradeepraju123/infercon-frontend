@@ -135,28 +135,65 @@ export class WhatsappActivityComponent implements OnInit, AfterViewInit {
       : this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
+  // sendToWhatsApp() {
+  //   const selectedContacts = this.selection.selected;
+  //   const mobileNumbers = selectedContacts.map(c => c.phone);
+
+  //   const courseId = this.selectedCourseId || this.filterForm.value.course;
+  //   if (!courseId || mobileNumbers.length === 0) {
+  //     alert('Please select contacts and a template.');
+  //     return;
+  //   }
+
+  //   this.whatsappActivityService.sendcontect_template({
+  //     mobileNumbers,
+  //     course_id: courseId
+  //   }).subscribe(
+  //     () => {
+  //       this.openSnackBar('Message sent successfully.');
+  //     },
+  //     () => {
+  //       this.openSnackBar('Error sending message.');
+  //     }
+  //   );
+  // }
   sendToWhatsApp() {
     const selectedContacts = this.selection.selected;
     const mobileNumbers = selectedContacts.map(c => c.phone);
-
+  
     const courseId = this.selectedCourseId || this.filterForm.value.course;
+  
     if (!courseId || mobileNumbers.length === 0) {
       alert('Please select contacts and a template.');
       return;
     }
-
-    this.whatsappActivityService.sendcontect_template({
+  
+    const payload = {
       mobileNumbers,
       course_id: courseId
-    }).subscribe(
-      () => {
-        this.openSnackBar('Message sent successfully.');
+    };
+  
+    this.whatsappActivityService.sendcontect_template(payload).subscribe({
+      next: (response: Blob) => {
+        const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const url = window.URL.createObjectURL(blob);
+  
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'whatsapp-report.xlsx';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+  
+        this.openSnackBar('Message sent & report downloaded.');
       },
-      () => {
-        this.openSnackBar('Error sending message.');
+      error: () => {
+        this.openSnackBar('Error sending messages or downloading report.');
       }
-    );
+    });
   }
+  
 
   onFileSelected(event: any) {
     const file = event.target.files[0];

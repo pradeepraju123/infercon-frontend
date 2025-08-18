@@ -3,28 +3,22 @@ import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { User } from './user.model'
 import { AuthService } from './auth.service';
-
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-
   private apiUrl = 'http://localhost:8081/api/v1/users';
-
   constructor(
     private http: HttpClient,
     private authService: AuthService // Inject your authentication service
   ) {}
-  
   getAllUsers(): Observable<User[]> {
     const token = sessionStorage.getItem('authToken'); // Get the token from sessionStorage
-
     if (token) {
       // Set the headers with the bearer token
       const headers = new HttpHeaders({
         'Authorization': 'Bearer ' + token // Include the token in the request headers
       });
-  
       // Pass the headers as the second argument in the request
       return this.http.get<User[]>(this.apiUrl, { headers });
     } else {
@@ -35,13 +29,11 @@ export class UserService {
 }
 getAllUsersPost(data: any): Observable<any> {
   const token = sessionStorage.getItem('authToken'); // Get the token from sessionStorage
-
   if (token) {
     // Set the headers with the bearer token
     const headers = new HttpHeaders({
       'Authorization': 'Bearer ' + token // Include the token in the request headers
     });
-
     // Pass the headers as the second argument in the request
     return this.http.post<any>(`${this.apiUrl}/all`, data, { headers });
   } else {
@@ -67,7 +59,6 @@ getUserById(id: string): Observable<any> {
 updateUser(_id: string, data: any): Observable<any> {
   const token = sessionStorage.getItem('authToken');
   const userType = this.getUserTypeFromToken(token);
-
   if (token && userType === 'admin') {
     const headers = new HttpHeaders({
       'Authorization': 'Bearer ' + token
@@ -78,11 +69,9 @@ updateUser(_id: string, data: any): Observable<any> {
     return throwError('No authentication token found or user is not an admin');
   }
 }
-
 addUser( data: any): Observable<any> {
   const token = sessionStorage.getItem('authToken');
   const userType = this.getUserTypeFromToken(token);
-
   if (token && userType === 'admin') {
     const headers = new HttpHeaders({
       'Authorization': 'Bearer ' + token

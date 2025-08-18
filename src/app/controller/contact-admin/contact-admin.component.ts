@@ -16,6 +16,7 @@ import { CommentsDialogComponent } from '../../components/comments-dialog/commen
 import { CreateRegisteredDialogComponent } from '../../components/create-registered-dialog/create-registered-dialog.component';
 import { FollowupDialogComponent } from '../../components/followup-dialog/followup-dialog.component';
 import { Router } from '@angular/router';
+import { CreateUserComponent } from '../../components/create-user/create-user.component';
 @Component({
   selector: 'app-contact-admin',
   templateUrl: './contact-admin.component.html',
@@ -35,7 +36,7 @@ export class ContactAdminComponent implements AfterViewInit {
   singleEndDate: Date | null = null;
   published: any;
   sortBy: any
-  pageSize = 10;
+  pageSize = 5;
   pageNum = 1;
   totalItems: number = 0;
 totalPages: number = 1;
@@ -109,7 +110,7 @@ itemsPerPage: number = 5;
     if (this.userType === 'staff') {
       this.displayedColumns = ['select', 'fullname', 'phone', 'course', 'createdDate', 'createdTime', 'leadSelection', 'followupDate', 'followupTime', 'comments', 'Action','MarkRegistered'];
     } else if(this.userType === 'admin') {
-      this.displayedColumns =  ['select', 'fullname', 'phone', 'course', 'createdDate', 'createdTime', 'assigneeSelection', 'followupDate', 'followupTime', 'comments', 'Action', 'SendMessage'];
+      this.displayedColumns =  ['select', 'fullname', 'phone', 'course', 'createdDate', 'createdTime', 'assigneeSelection', 'followupDate', 'followupTime', 'comments', 'Action'];
     }
     return this.userType;
   }
@@ -264,15 +265,18 @@ async onCourseSelectionChange(selectedLead: string, itemId: string) {
     console.log('Selected Assignee:', selectedAssignee);
   }
   
+   
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
   }
 
   ngOnInit(): void {
-    this.loadContacts();
+    
     this.getUser();
     this.getUserType();
     this.getUserName()
+    this.loadContacts();
+    // this.loadRegisteredLeads();
   }
   loadContacts() {
   const params:any = {
@@ -309,11 +313,11 @@ async onCourseSelectionChange(selectedLead: string, itemId: string) {
       } 
     },
     (error) => {
-      console.error('Error fetching contact data:', error);
+      console.error('Error fetching registered leads:', error);
     }
   );
-
-  }
+}
+  
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -442,7 +446,7 @@ async bulkAction() {
   }
   // Function to handle page change event
   
-  onPageChange(event: any) {
+   onPageChange(event: any) {
     this.pageSize = event.pageSize;
     this.pageNum = event.pageNum;
     this.loadContacts(); // Call your search function to fetch data
@@ -538,7 +542,17 @@ openCreateRegisteredDialog(): void {
     }
   });
 }
+openCreateUserDialog(): void {
+  const dialogRef = this.dialog.open(CreateUserComponent, {
+    width: '800px'
+  });
 
+  dialogRef.afterClosed().subscribe(result => {
+    if (result) {
+      this.loadContacts(); // Refresh the list if a new user was created
+    }
+  });
+}
 // Add this method
 getRowColor(leadStatus: string): string {
   console.log('Lead status:', leadStatus); // Check console for output
@@ -563,43 +577,53 @@ getPageNumbers(): number[] {
   const maxPagesToShow = 5;
   let startPage = Math.max(1, this.pageNum - 2);
   let endPage = Math.min(this.totalPages, startPage + maxPagesToShow - 1);
+  
   // Adjust if we're at the end
   if (endPage - startPage < maxPagesToShow - 1 && startPage > 1) {
     startPage = Math.max(1, endPage - maxPagesToShow + 1);
   }
+  
   return Array.from({length: endPage - startPage + 1}, (_, i) => startPage + i);
 }
+
 getStartItem(): number {
   return (this.pageNum - 1) * this.itemsPerPage + 1;
 }
+
 getEndItem(): number {
   return Math.min(this.pageNum * this.itemsPerPage, this.totalItems);
 }
+
 goToPage(page: number): void {
   if (page >= 1 && page <= this.totalPages && page !== this.pageNum) {
     this.pageNum = page;
     this.loadContacts();
   }
 }
+
 goToFirstPage(): void {
   if (this.pageNum > 1) {
     this.goToPage(1);
   }
 }
+
 goToPreviousPage(): void {
   if (this.pageNum > 1) {
     this.goToPage(this.pageNum - 1);
   }
 }
+
 goToNextPage(): void {
   if (this.pageNum < this.totalPages) {
     this.goToPage(this.pageNum + 1);
   }
 }
+
 goToLastPage(): void {
   if (this.pageNum < this.totalPages) {
     this.goToPage(this.totalPages);
   }
+
 }
 markAsRegistered(contactId: string): void {
   const contact = this.dataSource.data.find(item => item._id === contactId);
@@ -637,9 +661,8 @@ markAsRegistered(contactId: string): void {
       this.openSnackBar(this.errorMessage);
       console.error('Error marking lead as registered:', error);
     }
-  );
+  });
 }
-
 
 formatTimeForDisplay(time24: string): string {
   if (!time24) return '';
@@ -667,5 +690,39 @@ sendLeadDetails(contactId: string) {
     );
   }
 }
+// loadRegisteredLeads() {
+//   const params: any = {
+//     page_size: this.pageSize,
+//     page_num: this.pageNum
+//   };
 
+//   // If user is staff, only show their assigned registered leads
+//   if (this.userType === 'staff') {
+//     params.assignee = this.userName;
+//   }
+
+//   this.contactService.getRegisteredUsers(params).subscribe(
+//     (data: any) => {
+//       if (data && data.data && data.data.length > 0) {
+//         const contactsWithSortedComments = data.data.map((contact: any) => {
+//           if (contact.comments && contact.comments.length > 0) {
+//             contact.comments.sort((a: any, b: any) => 
+//               new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+//             );
+//           }
+//           return { ...contact, itemId: contact.id };
+//         });
+        
+//         this.dataSource = new MatTableDataSource(contactsWithSortedComments);
+//         this.totalItems = data.total || data.data.length;
+//         this.totalPages = Math.ceil(this.totalItems / this.pageSize);
+//       } else {
+//         this.dataSource = new MatTableDataSource<any>([]);
+//       }
+//     },
+//     (error) => {
+//       console.error('Error fetching registered leads:', error);
+//     }
+//   );
+// }
 }
