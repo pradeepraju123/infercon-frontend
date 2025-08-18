@@ -92,9 +92,8 @@ const routes: Routes = [
    { path:'whatsappactivity', component: WhatsappActivityComponent },
    { path:'whatsapptemplate', component: TemplateManagerComponent },
    { path:'installment', component: InstallmentComponent },
-
-
-{path:'user-register',component:UserRegisterComponent},
+   {path:'app-user-register',component:UserRegisterComponent},
+ {path:'user-register',component:UserRegisterComponent},
 
   { path: '**', redirectTo: 'home' },
   

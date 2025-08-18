@@ -34,6 +34,12 @@ export class AddAdminComponent implements OnInit{
   userForm!: FormGroup
   userId: string | null = null; // Add a property to store the training ID
   contentLoaded: boolean | null = null;
+  // Add this property to your component class
+userTypes = [
+    { value: 'admin', label: 'admin' },
+    { value: 'staff', label: 'staff' },
+];
+
   toolbar: Toolbar = [
     ['bold', 'italic'],
     ['underline', 'strike'],

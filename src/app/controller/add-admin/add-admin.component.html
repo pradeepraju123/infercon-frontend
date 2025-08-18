@@ -36,12 +36,17 @@
               </div>
               
         </div>
-        <div class="col-lg-6">
-            <div class="form-group">
-                <label for="title">User Type</label>
-                <input type="text" id="userType" formControlName="userType" class="form-control">
-              </div>
-        </div>
+<div class="col-lg-6">
+    <div class="form-group">
+        <label for="userType">User Type</label>
+        <select id="userType" formControlName="userType" class="form-control">
+            <option value="">Select User Type</option>
+            <option *ngFor="let type of userTypes" [value]="type.value">
+                {{ type.label }}
+            </option>
+        </select>
+    </div>
+</div>
 
         <div class="col-lg-6">
   <div class="form-group">

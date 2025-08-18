@@ -17,12 +17,15 @@
 
 <mat-form-field appearance="outline">
   <mat-label>Phone</mat-label>
-  <input type="tel" formControlName="phone" matInput  required>
+  <input type="tel" formControlName="phone" matInput required>
   <mat-error *ngIf="createForm.get('phone')?.hasError('required')">
     Phone number is required
   </mat-error>
   <mat-error *ngIf="createForm.get('phone')?.hasError('invalidPhone')">
     Please enter a valid phone number for the selected country
+  </mat-error>
+  <mat-error *ngIf="createForm.get('phone')?.hasError('phoneExists')">
+    User with this phone number already exists!
   </mat-error>
 </mat-form-field>
         </div>

@@ -99,6 +99,9 @@
               <li class="nav-item" *ngIf="getUserType() === 'staff' || getUserType() === 'admin'">
                 <a class="nav-link" routerLink="app-placement-admin">Placement</a>
               </li>
+              <li class="nav-item" *ngIf="getUserType() === 'staff' || getUserType() === 'admin'">
+                <a class="nav-link" routerLink="app-user-register">UserRegistration</a>
+              </li>
               <!-- <li class="nav-item" *ngIf="getUserType() === 'admin'">
                 <a class="nav-link" routerLink="whatsappactivity">whatsappactivity</a>
               </li>    -->

@@ -56,7 +56,6 @@ validatePhoneNumber(control: any) {
       return;
     }
 
-    // Find the country code from your countries data
     const selectedCountry = this.countries.find((c: any) => c.name === countryControl.value);
     
     if (!selectedCountry) {
@@ -64,34 +63,56 @@ validatePhoneNumber(control: any) {
       return;
     }
 
-    const isValid = this.phonevalidationService.validatePhoneNumber(
-      selectedCountry.code as CountryCode,
-      phoneNumber
-    );
-
-    resolve(isValid ? null : { invalidPhone: true });
+    try {
+      const isValid = this.phonevalidationService.validatePhoneNumber(
+        selectedCountry.code as CountryCode,
+        phoneNumber
+      );
+      resolve(isValid ? null : { invalidPhone: true });
+    } catch (error:any) {
+      // Handle specific validation errors
+      if (error.message.includes('TOO_SHORT')) {
+        resolve({ phoneTooShort: true });
+      } else {
+        resolve({ invalidPhone: true });
+      }
+    }
   });
 }
-
-  onSubmit() {
-    if (this.createForm.valid) {
-      this.contactService.createContact(this.createForm.value).subscribe(
-        () => {
-          this._snackBar.open('User created successfully!', 'Close', {
-            horizontalPosition: this.horizontalPosition,
-            verticalPosition: this.verticalPosition,
-          });
-          this.dialogRef.close(true);
-        },
-        error => {
-          this._snackBar.open('Failed to create user!', 'Close', {
-            horizontalPosition: this.horizontalPosition,
-            verticalPosition: this.verticalPosition,
-          });
+onSubmit() {
+  if (this.createForm.valid) {
+    console.log('Form data being sent:', this.createForm.value);
+    this.contactService.createContact(this.createForm.value).subscribe(
+      () => {
+        this._snackBar.open('User created successfully!', 'Close', {
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
+        });
+        this.dialogRef.close(true);
+      },
+      error => {
+        let errorMessage = 'Failed to create user!';
+        
+        if (error.error && error.error.message) {
+          errorMessage = error.error.message;
+          
+          // Specific handling for phone number exists error
+          if (error.status === 409) {
+            // Highlight the phone field
+            this.createForm.get('phone')?.setErrors({ phoneExists: true });
+            // Show error under the phone field
+            errorMessage = "User with this phone number already exists!";
+          }
         }
-      );
-    }
+        
+        this._snackBar.open(errorMessage, 'Close', {
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
+        });
+      }
+    );
   }
+}
 
   // Form array methods (similar to edit-contact)
   get coursesControls() {

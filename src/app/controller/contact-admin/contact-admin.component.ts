@@ -630,7 +630,6 @@ goToLastPage(): void {
   }
 
 }
-// contact-admin.component.ts
 markAsRegistered(contactId: string): void {
   // Find the contact in current data
   const contact = this.dataSource.data.find(item => item._id === contactId);
@@ -651,16 +650,13 @@ markAsRegistered(contactId: string): void {
       // Update local data immediately
       const index = this.dataSource.data.findIndex(item => item._id === contactId);
       if (index !== -1) {
-        // Update ALL returned fields to stay in sync
         this.dataSource.data[index] = response.data;
         this.dataSource._updateChangeSubscription();
         
-        // Navigate after UI updates
-        setTimeout(() => {
-          this.router.navigate(['/user-register'], {
-            state: { registeredContact: response.data }
-          });
-        }, 100);
+        // Navigate to user registration page with the registered contact
+        this.router.navigate(['/user-register'], {
+          state: { registeredContact: response.data }
+        });
       }
       this.openSnackBar(response.message);
     },

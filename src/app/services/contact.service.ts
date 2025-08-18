@@ -195,6 +195,8 @@ getRegisteredUsers(params: any = {}): Observable<any> {
 markAsRegistered(contactId:string):Observable<any>{
   return this.http.post(`${this.apiUrl}/${contactId}/mark-registered`,{})
 }
+
+
 }
 
 
