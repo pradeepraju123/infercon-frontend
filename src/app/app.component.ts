@@ -8,7 +8,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -22,12 +21,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     ]),
   ],
 })
-
 export class AppComponent implements AfterViewInit {
-  
   title = 'infercon-angular-dev';
-  
-  
   constructor(private router: Router,private renderer: Renderer2, private el: ElementRef, private authService : AuthService) {}
   ngAfterViewInit() {
     // Use Renderer2 to select the element and set focus
@@ -48,7 +43,6 @@ export class AppComponent implements AfterViewInit {
       toggleButton.dispatchEvent(new Event('click'));
     }
   }
-
   // add a method to listen for route changes and close the navbar
   listenForRouteChanges() {
     this.router.events.subscribe((event) => {
@@ -64,14 +58,25 @@ export class AppComponent implements AfterViewInit {
     return routesWithDefault.includes(currentRoute) || currentRoute.startsWith('/app-blog-details/') || currentRoute.startsWith('/app-training-detail/') || currentRoute.startsWith('/app-training-list');
   }
   showAlternateNavbar(): boolean {
-    // Check the current route to determine whether to show the alternate navbar
-    const currentRoute = this.router.url;
-    // Define the logic to decide when to show the alternate navbar
-    return routesWithoutDefault.includes(currentRoute) || currentRoute.startsWith('/edit-training/') || currentRoute.startsWith('/app-edit-services/') || currentRoute.startsWith('/app-edit-blog/') || currentRoute.startsWith('/app-edit-general/');
+  const currentRoute = this.router.url;
+  // :red_circle: Hide navbar completely on login
+  if (currentRoute === '/login') {
+    return false;
   }
-    
+  return (
+    routesWithoutDefault.includes(currentRoute) ||
+    currentRoute.startsWith('/edit-training/') ||
+    currentRoute.startsWith('/app-edit-services/') ||
+    currentRoute.startsWith('/app-edit-blog/') ||
+    currentRoute.startsWith('/app-edit-general/')
+  );
 }
-
+  showFooter(): boolean {
+  const currentRoute = this.router.url;
+  // Hide footer only on login
+  return currentRoute !== '/login';
+}
+}
 const routesWithoutDefault = [
   '/login',
   '/dashboard',
@@ -91,8 +96,6 @@ const routesWithoutDefault = [
   '/whatsapptemplate',
   '/app-user-register',
   '/installment'
-
-
 ];
 const routesWithDefault = [
   '/home',
@@ -102,7 +105,7 @@ const routesWithDefault = [
   '/contact',
   '/career',
   '/testing',
-  '/registration',  
+  '/registration',
   '/app-privacy-policy',
   '/app-terms-conditions',
   '/training-landing',
@@ -110,3 +113,9 @@ const routesWithDefault = [
   '/iot',
   '/app-placement-list'
 ];
+
+
+
+
+
+

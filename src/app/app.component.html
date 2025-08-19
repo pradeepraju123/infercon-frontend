@@ -7,7 +7,6 @@
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-          
           <div class="collapse navbar-collapse mx-auto" id="navbarNav">
             <ul class="navbar-nav  mx-auto">
               <li class="nav-item">
@@ -21,10 +20,10 @@
               </li>
               <li class="nav-item">
                 <a class="nav-link" routerLink="iot">IOT</a>
-              </li>     
+              </li>
               <li class="nav-item">
                 <a class="nav-link" routerLink="events-list">Events</a>
-              </li>  
+              </li>
               <li class="nav-item">
                 <a class="nav-link" routerLink="blog">Blog</a>
               </li>
@@ -32,18 +31,14 @@
                 <a class="nav-link" routerLink="career">Career</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" routerLink="app-placement-list">Placement</a> 
-              </li>   
-             
+                <a class="nav-link" routerLink="app-placement-list">Placement</a>
+              </li>
               <li class="nav-item">
                 <a class="nav-link" routerLink="registration">Registration</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" routerLink="contact">Contact</a>
-              </li>     
-
-               
-                   
+              </li>
             </ul>
             <ul class="navbar-nav">
               <li class="nav-item contact_nav">
@@ -57,16 +52,17 @@
         </div>
       </nav>
     </div>
-  </section> 
+  </section>
   {{ listenForRouteChanges() }}
 </ng-container>
-
 <ng-container *ngIf="showAlternateNavbar()">
   <section class="secondary_navbar">
     <div class="container">
       <nav class="navbar navbar-expand-lg ftco_navbar ftco-navbar-light">
         <div class="container-fluid">
-          <a class="navbar-brand navbar_brand_new" routerLink="dashboard"><img src="assets/infercon-only.jpg" alt=""></a>
+          <a class="navbar-brand no-style-logo" routerLink="dashboard">
+  <img src="assets/INFERCON (2).png" alt="">
+</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -75,28 +71,25 @@
               <li class="nav-item">
                 <a class="nav-link" routerLink="dashboard">Dashboard</a>
               </li>
-              
               <li class="nav-item" *ngIf="getUserType() === 'admin'">
                 <a class="nav-link" routerLink="service-admin">Projects</a>
               </li>
               <li class="nav-item" *ngIf="getUserType() === 'admin'">
                 <a class="nav-link" routerLink="training-admin">Training</a>
               </li>
-
               <li class="nav-item" *ngIf="getUserType() === 'staff' || getUserType() === 'admin'">
                 <a class="nav-link" routerLink="app-contact-admin">Contact</a>
               </li>
-              <li class="nav-item " *ngIf="getUserType() === 'staff' || getUserType() === 'admin'">
+              <li class="nav-item " *ngIf=" getUserType() === 'admin'">
                 <a class="nav-link" routerLink="app-blog-admin">Blog</a>
               </li>
               <li class="nav-item " *ngIf="getUserType() === 'admin'">
                 <a class="nav-link" routerLink="app-list-admin">Sub admins</a>
               </li>
-              <li class="nav-item" *ngIf="getUserType() === 'staff' || getUserType() === 'admin'">
+              <li class="nav-item" *ngIf="getUserType() === 'admin'">
                 <a class="nav-link" routerLink="app-general-admin">General</a>
               </li>
-
-              <li class="nav-item" *ngIf="getUserType() === 'staff' || getUserType() === 'admin'">
+              <li class="nav-item" *ngIf=" getUserType() === 'admin'">
                 <a class="nav-link" routerLink="app-placement-admin">Placement</a>
               </li>
               <li class="nav-item" *ngIf="getUserType() === 'staff' || getUserType() === 'admin'">
@@ -105,14 +98,14 @@
               <!-- <li class="nav-item" *ngIf="getUserType() === 'admin'">
                 <a class="nav-link" routerLink="whatsappactivity">whatsappactivity</a>
               </li>    -->
-              <li class="nav-item" *ngIf="getUserType() === 'admin'">
+              <!-- <li class="nav-item" *ngIf="getUserType() === 'admin'">
                 <a class="nav-link" routerLink="installment">installment</a>
-              </li>   
+              </li> -->
               <li class="nav-item" *ngIf="getUserType() === 'admin'">
                 <a class="nav-link" routerLink="whatsapptemplate">Template</a>
-              </li>     
+              </li>
             </ul>
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 profile-menu" *ngIf="getUserType() === 'staff' || getUserType() === 'admin'"> 
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 profile-menu" *ngIf="getUserType() === 'staff' || getUserType() === 'admin'">
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   <i class="fa-solid fa-gear"></i>
@@ -131,4 +124,26 @@
     </div>
   </section>
 </ng-container>
-<router-outlet></router-outlet>  
+<div class="dashboard-container">
+  <div class="dashboard-content">
+    <router-outlet></router-outlet>
+  </div>
+<footer class="dashboard-footer" *ngIf="showAlternateNavbar() && showFooter()">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-links">
+          <a routerLink="dashboard" class="footer-link">Dashboard</a>
+          <a routerLink="app-contact-admin" class="footer-link">Contacts</a>
+          <a routerLink="app-user-register" class="footer-link">Registrations</a>
+          <a routerLink="app-blog-admin" class="footer-link" *ngIf="getUserType() === 'admin'">Blog</a>
+          <a routerLink="app-placement-admin" class="footer-link" *ngIf="getUserType() === 'admin'">Placement</a>
+          <a routerLink="installment" class="footer-link" *ngIf="getUserType() === 'admin'">Installments</a>
+          <a routerLink="whatsapptemplate" class="footer-link" *ngIf="getUserType() === 'admin'">Templates</a>
+        </div>
+        <div class="footer-info">
+          <span>© 2023 Infercon Automation. All rights reserved.</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>

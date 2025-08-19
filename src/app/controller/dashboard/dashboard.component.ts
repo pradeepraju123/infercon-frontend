@@ -50,9 +50,14 @@ export class DashboardComponent implements OnInit {
   enrollmentSelection = new SelectionModel<any>(true, []);
   
   leadOptions: string[] = ['New lead', 'Contacted', 'Followup', 'Not interested', 'Finalized'];
-  userType!: string;
+  userType!:string; 
   userName!: string;
   contactId!: string;
+
+ followupPage = 1;
+  followupLimit = 20;
+  totalFollowups = 0;
+  totalFollowupPages = 1;
   
   followupPageSize = 10;
   followupCurrentPage = 1;
@@ -80,10 +85,19 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userType = this.getUserType();
-    this.userName = this.getUserName();
-    this.loadDashboardData();
-  }
+  this.userService.getDashboardData().subscribe({
+    next: (res) => {
+      console.log('Raw backend data:', res.data.followupLeads); 
+      console.log('Count from backend:', res.data.followupLeads.length);
+      
+      this.followupLeads = res.data.followupLeads;
+      console.log('After assignment:', this.followupLeads.length); 
+    }
+  });
+  this.userType=this.getUserType();
+  this.userName=this.getUserName();
+  this.loadDashboardData();
+}
 
   getUserType(): string {
     const token = sessionStorage.getItem('authToken');
@@ -96,41 +110,36 @@ export class DashboardComponent implements OnInit {
   }
 
   loadDashboardData(): void {
-  this.userService.getDashboardData().subscribe({
+  this.userService.getDashboardData(this.followupCurrentPage, this.followupPageSize, this.newEnrollmentCurrentPage, this.newEnrollmentPageSize)
+  .subscribe({
     next: (res) => {
-      this.followupLeads = (res.data.followupLeads || []).map(lead => ({
-        ...lead,
-        createdDate: lead.createdAt,
-        createdTime: lead.createdAt,
-        courses: Array.isArray(lead.courses) ? lead.courses : [lead.courses]
-      }));
-      
-      this.newEnrollments = (res.data.newEnrollments || []).map(enrollment => ({
-        ...enrollment,
-        createdDate: enrollment.createdAt,
-        createdTime: enrollment.createdAt,
-        courses: Array.isArray(enrollment.courses) ? enrollment.courses : [enrollment.courses]
-      }));
-      
+      // Assign leads directly from backend (paginated)
+      this.followupLeads = res.data.followupLeads || [];
+      this.newEnrollments = res.data.newEnrollments || [];
+
       // Initialize data sources
       this.followupDataSource = new MatTableDataSource<any>(this.followupLeads);
       this.newEnrollmentDataSource = new MatTableDataSource<any>(this.newEnrollments);
 
-        this.followupDataSource.sort = this.sort;
+      this.followupDataSource.sort = this.sort;
       this.newEnrollmentDataSource.sort = this.sort;
-      
-      // Set up pagination
-      this.followupTotalItems = this.followupLeads.length;
-      this.newEnrollmentTotalItems = this.newEnrollments.length;
-      
-      this.updateFollowupPagination();
-      this.updateEnrollmentPagination();
-      
+
+      // Pagination metadata from backend
+      if (res.data.pagination) {
+        const followupPageData = res.data.pagination.followups;
+        const enrollmentPageData = res.data.pagination.enrollments;
+
+        this.followupTotalItems = followupPageData.total;
+        this.followupTotalPages = followupPageData.pages;
+
+        this.newEnrollmentTotalItems = enrollmentPageData.total;
+        this.newEnrollmentTotalPages = enrollmentPageData.pages;
+      }
+
+      // Training stats
       if (res.data.trainingStats) {
         this.trainingStats = res.data.trainingStats;
       }
-      
-      // this.buildChart();
     },
     error: (err) => {
       console.error('Error loading dashboard data:', err);
@@ -138,6 +147,8 @@ export class DashboardComponent implements OnInit {
     }
   });
 }
+
+
 
   getFollowupDisplayedColumns(): string[] {
     const baseColumns = [
@@ -350,33 +361,21 @@ export class DashboardComponent implements OnInit {
       if (page >= 1 && page <= this.followupTotalPages && page !== this.followupCurrentPage) {
         this.followupCurrentPage = page;
         this.updateFollowupPagination();
+        this.loadDashboardData();
       }
     } else {
       if (page >= 1 && page <= this.newEnrollmentTotalPages && page !== this.newEnrollmentCurrentPage) {
         this.newEnrollmentCurrentPage = page;
         this.updateEnrollmentPagination();
+        this.loadDashboardData();
       }
     }
   }
 
-  goToFirstPage(table: string): void {
-    this.goToPage(1, table);
-  }
-
-  goToPreviousPage(table: string): void {
-    const currentPage = table === 'followup' ? this.followupCurrentPage : this.newEnrollmentCurrentPage;
-    this.goToPage(currentPage - 1, table);
-  }
-
-  goToNextPage(table: string): void {
-    const currentPage = table === 'followup' ? this.followupCurrentPage : this.newEnrollmentCurrentPage;
-    this.goToPage(currentPage + 1, table);
-  }
-
-  goToLastPage(table: string): void {
-    const totalPages = table === 'followup' ? this.followupTotalPages : this.newEnrollmentTotalPages;
-    this.goToPage(totalPages, table);
-  }
+goToNextPage(table: string): void { this.goToPage((table === 'followup' ? this.followupCurrentPage : this.newEnrollmentCurrentPage) + 1, table); }
+goToPreviousPage(table: string): void { this.goToPage((table === 'followup' ? this.followupCurrentPage : this.newEnrollmentCurrentPage) - 1, table); }
+goToFirstPage(table: string): void { this.goToPage(1, table); }
+goToLastPage(table: string): void { this.goToPage((table === 'followup' ? this.followupTotalPages : this.newEnrollmentTotalPages), table); }
 
   updateFollowupPagination(): void {
   const startIndex = (this.followupCurrentPage - 1) * this.followupPageSize;

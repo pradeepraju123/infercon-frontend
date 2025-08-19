@@ -21,7 +21,18 @@ export class ContactService {
        return this.http.post(url, data);
   }
 
-  
+   createUser(data: any): Observable<any> {
+    const token = sessionStorage.getItem('authToken');
+    
+    if (token) {
+        const headers = new HttpHeaders({
+            'Authorization': 'Bearer ' + token
+        });
+        return this.http.post(`${this.apiUrl}/create-with-creator`, data, { headers });
+    } else {
+        return throwError('No authentication token found');
+    }
+}
 
 
   getContactById(id: string): Observable<any> {
@@ -179,17 +190,18 @@ addComment(contactId: string, comment: string, createdBy: string): Observable<an
 createRegisteredContact(contactData: any): Observable<any> {
   return this.http.post(`${this.apiUrl}/`, contactData);
 }
-getRegisteredUsers(data: any): Observable<any> {
+getRegisteredUsers(params?: any): Observable<any> {
   const token = sessionStorage.getItem('authToken');
   if (token) {
     const headers = new HttpHeaders({
       'Authorization': 'Bearer ' + token
     });
-    return this.http.post(`${this.apiUrl}/filter/registered`, data, { headers });
+    return this.http.post(`${this.apiUrl}/filter/registered`, params, { headers });
   } else {
     return throwError('No authentication token found');
   }
 }
+
 markAsRegistered(contactId:string):Observable<any>{
   return this.http.post(`${this.apiUrl}/${contactId}/mark-registered`,{})
 }

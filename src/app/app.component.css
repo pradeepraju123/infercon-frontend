@@ -8,7 +8,6 @@
     width: 93px;
 }
 .navbar-brand img {
-    
     border-radius: 21px;
     box-shadow: 0px 0px 10px 1px #e6e4e4b5;
 }
@@ -24,7 +23,6 @@
 .nav_section .contact_nav {
     background-color: #fff;
     padding : 0px 5px;
-
 }
 .nav_section .contact_nav a {
     color: #000;
@@ -33,22 +31,19 @@
     background-color: red;
     padding : 0px 10px;
     margin-left: 10px;
-
 }
 .nav_section .contact_nav:nth-child(2) a {
     color: #fff;
     padding: 10px;
-
 }
 .nav_section .contact_nav:nth-child(2) a img {
     width: 20px;
-
 }
 /* .nav_section .navbar {
-    padding: 30px; 
+    padding: 30px;
 } */
 .nav_section .navbar li {
-    padding: 0px 5px; 
+    padding: 0px 5px;
     font-weight: 500;
 }
 .nav_section .navbar-brand img {
@@ -58,7 +53,6 @@
 .nav_section .navbar-toggler {
     background: #d4d7935c
 }
-
 /*Secondary navbar*/
 .secondary_navbar {
     position: relative;
@@ -70,16 +64,15 @@
     background-color: #fff;
     padding : 0px 10px;
     border-radius: 25px;
-
 }
 .secondary_navbar .contact_nav a {
     color: #000;
 }
 .secondary_navbar .navbar {
-    padding: 5px; 
+    padding: 5px;
 }
 .secondary_navbar .navbar li {
-    padding: 0px 10px; 
+    padding: 0px 10px;
 }
 .secondary_navbar .navbar-brand img {
     width: 100%;
@@ -88,3 +81,163 @@
 .secondary_navbar .navbar-toggler {
     background: #d4d7935c
 }
+.navbar_brand_new {
+    width: 100px; /* increase width */
+}
+.nav_section .navbar-brand img {
+    max-width: 100px; /* increase max size */
+}
+/* Remove styling for this specific logo */
+/* Target only your second logo */
+.navbar-brand.no-style-logo img {
+  max-width: 100px !important;  /* decrease size */
+  width: auto !important;
+  height: auto !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+/* Dashboard Footer Styles */
+.dashboard-footer {
+  background-color: #343A40;
+  color: #fff;
+  padding: 0.8rem 0;
+  border-top: 1px solid #4B545C;
+  width: 100%;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  margin-top: 2rem; /* Push footer to bottom */
+}
+.dashboard-footer .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.footer-links {
+  display: flex;
+  gap: 1.2rem;
+  align-items: center;
+}
+.footer-link {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+  white-space: nowrap;
+}
+.footer-link:hover {
+  color: #fff;
+  text-decoration: none;
+}
+.footer-info {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+/* Mobile Responsive Styles */
+@media (max-width: 992px) {
+  .dashboard-footer {
+    padding: 1rem 0;
+    position: relative;
+  }
+  .footer-content {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .footer-links {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+}
+@media (max-width: 768px) {
+  .dashboard-footer {
+    padding: 1rem 0;
+    position: relative;
+    background-color: #2C3E50; /* Slightly different color for mobile */
+  }
+  .footer-links {
+    flex-direction: column;
+    gap: 0.8rem;
+    width: 100%;
+  }
+  .footer-link {
+    font-size: 0.9rem;
+    padding: 0.3rem 0;
+    text-align: center;
+    width: 100%;
+  }
+  .footer-info {
+    text-align: center;
+    order: -1;
+    margin-bottom: 0.8rem;
+    width: 100%;
+    font-size: 0.85rem;
+  }
+  .footer-content {
+    flex-direction: column;
+  }
+}
+@media (max-width: 480px) {
+  .dashboard-footer {
+    padding: 1.2rem 0;
+  }
+  .footer-link {
+    font-size: 0.85rem;
+  }
+  .footer-info {
+    font-size: 0.8rem;
+  }
+}
+/* Ensure proper layout for the entire app */
+app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+/* Main content area should grow to push footer down */
+router-outlet + * {
+  flex: 1 0 auto;
+  display: block;
+  width: 100%;
+}
+/* Specific container for dashboard pages */
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+.dashboard-content {
+  flex: 1 0 auto;
+  width: 100%;
+}
+/* Fix for potential overflow issues */
+body, html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Prevent horizontal scroll */
+}
+/* Ensure footer is always visible */
+.dashboard-footer {
+  position: relative;
+  bottom: 0;
+  left: 0;
+}
+
+
+
+
+
+
+
+
+

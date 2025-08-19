@@ -1,74 +1,237 @@
-<!-- create-registered-dialog.component.html -->
-<h2 mat-dialog-title>Create New Registration</h2>
-<mat-dialog-content>
-  <form [formGroup]="registrationForm">
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Name</mat-label>
-      <input matInput formControlName="name" required>
-      <mat-error *ngIf="registrationForm.get('name')?.hasError('required')">
-        Name is required
-      </mat-error>
-    </mat-form-field>
+<h2 mat-dialog-title class="dialog-header">
+  Create New Registration
+  <button class="close-btn" mat-dialog-close aria-label="Close"></button>
+</h2>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Email</mat-label>
-      <input matInput formControlName="email" required>
-      <mat-error *ngIf="registrationForm.get('email')?.hasError('required')">
-        Email is required
-      </mat-error>
-      <mat-error *ngIf="registrationForm.get('email')?.hasError('email')">
-        Please enter a valid email
-      </mat-error>
-    </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Country</mat-label>
-      <mat-select formControlName="country" required>
-        <mat-option *ngFor="let country of countries" [value]="country">
-          {{ country }}
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="registrationForm.get('country')?.hasError('required')">
-        Country is required
-      </mat-error>
-    </mat-form-field>
+<mat-dialog-content class="mat-dialog-content">
+  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+    <div class="dialog-boxes">
 
-    
+      
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Phone Number</mat-label>
-      <input matInput formControlName="phone" required>
-      <mat-error *ngIf="registrationForm.get('phone')?.hasError('required')">
-        Phone is required
-      </mat-error>
-      <mat-error *ngIf="registrationForm.get('phone')?.hasError('pattern')">
-        Please enter a valid phone number
-      </mat-error>
-    </mat-form-field>
+      <!-- ================= LEFT BOX ================= -->
+      <div class="dialog-box">
+        <h3 class="box-title">Personal & Education</h3>
+        <div class="row">
+          <!-- Mode of Education -->
+          <div class="col-lg-12">
+            <div class="mb-3 form_control" style="display: flex;">
+              <label for="modeOfEducation" class="form-label">Mode of Education</label>
+              <div>
+                <mat-radio-group formControlName="modeOfEducation">
+                  <mat-radio-button value="online">Online</mat-radio-button>
+                  <mat-radio-button value="offline">Offline</mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+          </div>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Course</mat-label>
-      <mat-select formControlName="course" required>
-        <mat-option *ngFor="let course of courses" [value]="course">
-          {{ course }}
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="registrationForm.get('course')?.hasError('required')">
-        Course is required
-      </mat-error>
-    </mat-form-field>
+          <!-- Courses -->
+          <div class="col-lg-12">
+            <div class="mb-3 form_control">
+              <mat-form-field appearance="outline" class="example-full-width">
+                <mat-label>Courses</mat-label>
+                <mat-select formControlName="courses" multiple>
+                  <mat-option *ngFor="let course of courses" [value]="course.value">
+                    {{ course.label }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Comments</mat-label>
-      <textarea matInput formControlName="comments" rows="3"></textarea>
-    </mat-form-field>
+          <!-- Name fields -->
+          <div class="col-lg-4">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>First Name</mat-label>
+              <input type="text" matInput formControlName="firstname" placeholder="Ex. John" required>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-4">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Middle Name</mat-label>
+              <input type="text" matInput formControlName="middlename" placeholder="Ex. Doe">
+            </mat-form-field>
+          </div>
+          <div class="col-lg-4">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Last Name</mat-label>
+              <input type="text" matInput formControlName="lastname" placeholder="Ex. R" required>
+            </mat-form-field>
+          </div>
+
+          <!-- DOB -->
+          <div class="col-lg-6">
+           <mat-form-field appearance="outline" class="example-full-width">
+            <mat-label>Date of Birth</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="bday">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+          </div>
+
+          <!-- Gender -->
+          <div class="mb-3 form_control">
+  <label class="form-label">Gender</label>
+  <mat-radio-group formControlName="gender">
+    <mat-radio-button value="Male">Male</mat-radio-button>
+    <mat-radio-button value="Female">Female</mat-radio-button>
+  </mat-radio-group>
+</div>
+
+
+          <!-- Education -->
+          <div class="col-lg-12">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Education</mat-label>
+              <input type="text" matInput formControlName="education" placeholder="Ex. Bachelor of Engg.">
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+       <div class="dialog-box">
+        <h3 class="box-title">Payment Plan</h3>
+        <div class="row">
+          <div class="col-lg-6">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Total Amount</mat-label>
+              <input type="number" matInput formControlName="totalAmount" required>
+            </mat-form-field>
+            </div>
+            <div class="col-lg-6">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>NumberofInstallation</mat-label>
+              <input type="number" matInput formControlName="numberOfInstallments" required>
+            </mat-form-field>
+          </div>
+          </div>
+          </div>
+      <!-- ================= RIGHT BOX ================= -->
+      <div class="dialog-box">
+        <h3 class="box-title">Contact & Other Info</h3>
+        <div class="row">
+
+          <!-- Email -->
+          <div class="col-lg-12">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Email</mat-label>
+              <input type="email" matInput formControlName="email" placeholder="Ex. pat@example.com" required>
+            </mat-form-field>
+          </div>
+
+          <!-- Address -->
+          <div class="col-lg-12">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Address</mat-label>
+              <textarea matInput formControlName="address" placeholder="Ex. No.11, 12th cross st..."></textarea>
+            </mat-form-field>
+          </div>
+
+          <!-- Country & Mobile -->
+          <div class="col-lg-6">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Select Country</mat-label>
+              <mat-select formControlName="country" required>
+                <mat-option *ngFor="let country of countries" [value]="country.dial_code">
+                  {{ country.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-6">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Mobile</mat-label>
+              <input type="text" matInput formControlName="mobile" placeholder="Ex. 9876543210">
+            </mat-form-field>
+          </div>
+
+          <!-- Other Mobiles -->
+          <div class="col-lg-6">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Additional Mobile</mat-label>
+              <input type="text" matInput formControlName="additionalMobile" placeholder="Ex. 9988776655">
+            </mat-form-field>
+          </div>
+          <div class="col-lg-6">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Work Mobile</mat-label>
+              <input type="text" matInput formControlName="workMobile" placeholder="Ex. 9123456789">
+            </mat-form-field>
+          </div>
+
+          <!-- Company & Fees -->
+          <div class="col-lg-6">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Company</mat-label>
+              <input type="text" matInput formControlName="company" placeholder="Ex. Infercon Automation">
+            </mat-form-field>
+          </div>
+          <div class="col-lg-6">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Fees Currency</mat-label>
+              <input type="text" matInput formControlName="feesCurrency" placeholder="Ex. 120000">
+            </mat-form-field>
+          </div>
+
+          <!-- Experience -->
+          <div class="col-lg-6">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Industry Experience</mat-label>
+              <input type="text" matInput formControlName="industryexp" placeholder="Ex. 12 years">
+            </mat-form-field>
+          </div>
+          <div class="col-lg-6">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Years of Experience</mat-label>
+              <input type="text" matInput formControlName="yearsOfExp" placeholder="Ex. 5 years">
+            </mat-form-field>
+          </div>
+          <!-- Govt ID -->
+          <div class="col-lg-12">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Government ID</mat-label>
+              <input type="text" matInput formControlName="governmentId" placeholder="Ex. 122EF4342">
+            </mat-form-field>
+          </div>
+
+          <!-- Currency Type -->
+          <div class="col-lg-12">
+            <label class="form-label">Currency Type</label>
+            <mat-radio-group formControlName="currencyType">
+              <mat-radio-button value="USD">USD</mat-radio-button>
+              <mat-radio-button value="INR">INR</mat-radio-button>
+              <mat-radio-button value="EUR">EUR</mat-radio-button>
+            </mat-radio-group>
+          </div>
+          
+          <!-- File Upload -->
+          <div class="col-lg-12">
+            <label class="form-label">Upload File</label>
+            <input type="file" class="custom-file-input" (change)="fileEvent($event)" accept=".pdf,.doc,.docx">
+          </div>
+
+          <!-- Comments -->
+          <div class="col-lg-12">
+            <mat-form-field class="example-full-width" appearance="outline">
+              <mat-label>Comments</mat-label>
+              <textarea matInput formControlName="comments" placeholder="Ex. Comments.."></textarea>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </form>
 </mat-dialog-content>
+
 <mat-dialog-actions align="end">
   <button mat-button (click)="onCancel()">Cancel</button>
-  <button mat-raised-button color="primary" 
-          (click)="onSubmit()" 
-          [disabled]="!registrationForm.valid">
-    Create
-  </button>
+<button mat-raised-button color="primary"
+        (click)="onSubmit()"
+        [disabled]="!registrationForm.valid || isSubmitting">
+  {{ isSubmitting ? 'Registering...' : 'Create Registration' }}
+</button>
+
 </mat-dialog-actions>

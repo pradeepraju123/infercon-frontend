@@ -1,87 +1,119 @@
-contact_table {
+.contact_table {
   padding: 15px;
 }
-
 /* Responsive table container */
 .mat-elevation-z2 {
   overflow-x: auto;
-  margin: 0 -15px;
+  margin: 0;
+  width: 100%;
 }
-
 /* Table styling */
-table {
-  width: auto;             /* shrink to fit content */
-  min-width: 100%;         /* still responsive */
-  table-layout: auto;      /* auto adjust column width */
+.table {
+  width: 100%;
+  table-layout: auto;
+  min-width: 100%;
 }
-
 /* --- Search Section --- */
 .search {
   margin-bottom: 20px;
 }
-
 .title_field_card {
   display: flex;
   flex-wrap: nowrap;
-  align-items: center;
+  align-items: center; /* Ensure all items are centered */
   gap: 10px;
-  overflow-x: auto;
-  padding-bottom: 10px;
+  padding: 10px 0;
 }
-
+/* Form fields - perfect alignment */
+.title_field_card .mat-form-field {
+  flex: 1 1 auto;
+  min-width: 150px;
+  margin: 0; /* Remove any margin */
+  display: flex;
+  align-items: center; /* Center vertically */
+}
+/* Input field alignment - PERFECTED */
+.title_field_card .mat-form-field-wrapper {
+  padding-bottom: 0;
+  width: 100%;
+  display: flex;
+  align-items: center; /* Center content */
+}
+.title_field_card .mat-form-field-infix {
+  border-top: 0;
+  padding: 0.7em 0;
+  display: flex;
+  align-items: center; /* Center content vertically */
+  min-height: 56px; /* Match button height */
+}
+.title_field_card .mat-form-field-flex {
+  align-items: center; /* Center content vertically */
+  height: 100%;
+}
+/* Date range specific adjustments */
+.title_field_card .mat-date-range-input {
+  align-items: center; /* Center date inputs */
+  display: flex;
+  height: 100%;
+}
+/* Buttons - perfect alignment */
 .title_field_card .btn {
   height: 56px;
+  padding: 0 16px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  background: none;
+  color: #000;
+  border: 2px solid #000;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 16px;
-  margin: 0;
-  white-space: nowrap;
+  margin: 0; /* Remove any margin */
+  margin-top: -20px;
+  box-sizing: border-box; /* Include padding and border in element's total dimensions */
 }
-
-/* --- Button Row --- */
+.title_field_card .btn:hover {
+  background: #3AA7F4;
+  border-color: #3AA7F4;
+  color: #fff;
+}
+/* Date picker toggle alignment */
+.mat-datepicker-toggle {
+  display: flex;
+  align-items: center; /* Center the toggle */
+}
+/* Material form field adjustments for perfect alignment */
+::ng-deep .title_field_card .mat-form-field-appearance-outline .mat-form-field-infix {
+  padding: 0.7em 0 0.7em 0; /* Consistent padding */
+}
+::ng-deep .title_field_card .mat-form-field-appearance-outline .mat-form-field-outline {
+  top: 0; /* Ensure outline doesn't create offset */
+}
+/* Input text alignment */
+::ng-deep .title_field_card .mat-form-field-appearance-outline .mat-input-element {
+  padding: 0; /* Remove any internal padding that might affect alignment */
+  margin: 0;
+}
+/* Label alignment */
+::ng-deep .title_field_card .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+  transform: translateY(-1.4em) scale(0.75); /* Standardize label position */
+}
+/* --- Rest of your existing styles --- */
 .button-row {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 5px;
 }
-
 .button-row .btn {
   padding: 0 14px;
   height: 40px;
   font-size: 0.9rem;
 }
-
-/* --- Form Fields --- */
-.mat-form-field {
-  flex: 1 1 200px;
-  min-width: 150px;
-}
-
-/* --- Buttons --- */
-.search button {
-  background: none;
-  color: #000;
-  border: 2px solid #000;
-  height: 56px;
-  min-width: 120px;
-  transition: all 0.3s ease;
-  flex-shrink: 0;
-}
-
-.search button:hover {
-  background: #3aa7f4;
-  border-color: #3aa7f4;
-  color: #fff;
-}
-
-/* --- Lead Status --- */
 .lead_status {
   min-width: 150px;
 }
-
-/* --- Comments Button --- */
 .comments-button {
   display: flex;
   align-items: center;
@@ -89,25 +121,20 @@ table {
   font-size: 0.85rem;
   padding: 6px 12px;
 }
-
 .comment-count {
   background: rgba(0, 0, 0, 0.1);
   padding: 2px 6px;
   border-radius: 10px;
   font-size: 0.75rem;
 }
-
-/* --- Paginator --- */
 .mat-paginator {
   margin-top: 15px;
   background: transparent;
 }
-
 .mat-select-lead-status {
   border-radius: 4px;
   padding: 8px;
 }
-
 .mat-select-new-lead {
   background-color: rgba(58, 167, 244, 0.3) !important;
   color: black !important;
@@ -128,27 +155,120 @@ table {
   background-color: rgba(0, 128, 0, 0.3) !important;
   color: black !important;
 }
-
-/* --- Responsive Adjustments --- */
-@media (min-width: 993px) {
-  .title_field_card .btn:nth-of-type(1),
-  .title_field_card .btn:nth-of-type(2) {
-    margin-top: -10px;
-  }
-  .title_field_card .btn:nth-of-type(3) {
-    margin-top: -6px;
-  }
+.mat-header-cell {
+  font-weight: 600;
+  color: #333;
 }
-
+.mat-cell,
+.mat-header-cell {
+  padding: 0 10px;
+}
+.mat-row:hover {
+  background-color: #F5F5F5;
+}
+::ng-deep .comments-dialog-panel .mat-dialog-container {
+  padding: 20px !important;
+  border-radius: 8px !important;
+  max-width: 95vw;
+}
+.followup-dialog .mat-dialog-container {
+  padding: 20px;
+}
+.followup-dialog .mat-form-field {
+  width: 100%;
+}
+.mat-column-followupDate,
+.mat-column-followupTime,
+.mat-column-SendMessage,
+.mat-column-MarkRegistered,
+.mat-column-Action,
+.mat-column-comments {
+  white-space: nowrap;
+  width: 1%;
+}
+button[disabled] {
+  cursor: not-allowed;
+}
+.pagination-container {
+  margin-top: 20px;
+  padding: 12px 16px;
+  background: white;
+  border-top: 1px solid #E0E0E0;
+  display: flex;
+  justify-content: flex-end;
+}
+.pagination-wrapper {
+  width: auto;
+}
+.pagination-group {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.pagination {
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+.page-item {
+  cursor: pointer;
+}
+.page-number-container {
+  flex-wrap: wrap;
+}
+.pagination-info {
+  font-size: 0.9rem;
+  color: #666;
+  white-space: nowrap;
+}
+.page-link {
+  color: #0D6EFD;
+}
+.page-item.active .page-link {
+  background-color: #0D47A1;
+  border-color: #0D47A1;
+  color: white;
+}
+.page-item.disabled .page-link {
+  color: #6C757D;
+  pointer-events: none;
+}
+.table-container {
+  border: 1px solid #E0E0E0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.mat-elevation-z8 {
+  margin-bottom: 0;
+  box-shadow: none;
+  width: 100%;
+}
+.table-container {
+  border: 1px solid #E0E0E0;
+  border-radius: 4px;
+  overflow-x: auto;
+  width: 100%;
+  margin-bottom: 20px;
+}
+.contact_table .container {
+  width: 100%;
+  max-width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
 @media (max-width: 992px) {
   .title_field_card {
     flex-direction: column;
     align-items: stretch;
   }
-  .title_field_card .btn {
+  .title_field_card > * {
     width: 100%;
     height: auto;
     padding: 10px;
+    margin: 5px 0 !important;
   }
   .button-row {
     flex-direction: column;
@@ -160,7 +280,6 @@ table {
     padding: 10px;
   }
 }
-
 @media (max-width: 768px) {
   .contact_table {
     padding: 10px;
@@ -171,158 +290,6 @@ table {
   .mat-form-field {
     min-width: 100%;
   }
-}
-
-/* --- Table Improvements --- */
-.mat-header-cell {
-  font-weight: 600;
-  color: #333;
-}
-
-.mat-cell,
-.mat-header-cell {
-  padding: 0 10px;
-}
-
-.mat-row:hover {
-  background-color: #f5f5f5;
-}
-
-/* --- Dialog Panel --- */
-::ng-deep .comments-dialog-panel .mat-dialog-container {
-  padding: 20px !important;
-  border-radius: 8px !important;
-  max-width: 95vw;
-}
-
-.followup-dialog .mat-dialog-container {
-  padding: 20px;
-}
-
-.followup-dialog .mat-form-field {
-  width: 100%;
-}
-
-/* Table columns fix (remove extra space) */
-.mat-column-followupDate,
-.mat-column-followupTime,
-.mat-column-SendMessage,
-.mat-column-MarkRegistered,
-.mat-column-Action,
-.mat-column-comments {
-  white-space: nowrap;
-  width: 1%; /* shrink to fit */
-}
-
-button[disabled] {
-  cursor: not-allowed;
-}
-
-/* Pagination styles */
-.pagination-container {
-  margin-top: 20px;
-  padding: 12px 16px;
-  background: white;
-  border-top: 1px solid #e0e0e0;
-  display: flex;
-  justify-content: flex-end; /* centered instead of right-shift */
-}
-
-.pagination-wrapper {
-  width: auto;   /* shrink to content */
-}
-
-.pagination-group {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.pagination {
-  margin: 0;
-  display: flex;
-  align-items: center;
-}
-
-.page-item {
-  cursor: pointer;
-}
-
-.page-number-container {
-  flex-wrap: wrap;
-}
-
-.pagination-info {
-  font-size: 0.9rem;
-  color: #666;
-  white-space: nowrap;
-}
-
-.page-link {
-  color: #0D6EFD;
-}
-
-.page-item.active .page-link {
-  background-color: #0D47A1;
-  border-color: #0D47A1;
-  color: white;
-}
-
-.page-item.disabled .page-link {
-  color: #6C757D;
-  pointer-events: none;
-}
-
-/* Unified table and pagination container */
-.table-container {
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  overflow: hidden;
-  margin-bottom: 20px;
-}
-
-.mat-elevation-z2 {
-  overflow-x: auto;
-  margin: 0;
-}
-
-.mat-elevation-z8 {
-  margin-bottom: 0;
-  box-shadow: none;
-  width: 100%;
-}
-
-/* Pagination wrapper */
-.pagination-wrapper {
-  width: 100%;
-  max-width: fit-content;
-}
-
-.pagination-group {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.pagination {
-  margin: 0;
-  display: flex;
-  align-items: center;
-}
-
-.pagination-info {
-  font-size: 0.9rem;
-  color: #666;
-  white-space: nowrap;
-}
-
-.page-number-container {
-  display: flex;
-  margin: 0 5px;
-}
-
-/* Responsive adjustments for pagination */
-@media (max-width: 768px) {
   .pagination-group {
     flex-direction: column;
     align-items: flex-end;
@@ -335,3 +302,12 @@ button[disabled] {
     order: 2;
   }
 }
+
+
+
+
+
+
+
+
+

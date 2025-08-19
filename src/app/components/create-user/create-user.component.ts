@@ -82,13 +82,30 @@ validatePhoneNumber(control: any) {
 onSubmit() {
   if (this.createForm.valid) {
     console.log('Form data being sent:', this.createForm.value);
-    this.contactService.createContact(this.createForm.value).subscribe(
-      () => {
-        this._snackBar.open('User created successfully!', 'Close', {
+    this.contactService.createUser(this.createForm.value).subscribe(
+      (response) => {
+        // Success - show the created user data
+        console.log('User created successfully:', response.data);
+        
+        // Show success message with user details
+        const user = response.data;
+        const successMessage = `
+          User Created Successfully!
+          Name: ${user.fullname}
+          Email: ${user.email}
+          Phone: ${user.phone}
+          ID: ${user._id}
+        `;
+        
+        this._snackBar.open(successMessage, 'Close', {
           horizontalPosition: this.horizontalPosition,
           verticalPosition: this.verticalPosition,
+          duration: 5000, // Show for 5 seconds
+          panelClass: ['success-snackbar']
         });
-        this.dialogRef.close(true);
+        
+        // Close the dialog and pass the created user data back to parent component
+        this.dialogRef.close(user);
       },
       error => {
         let errorMessage = 'Failed to create user!';
@@ -167,5 +184,4 @@ removeComment(index:number){
   const comments=this.createForm.get('comments') as FormArray;
   comments.removeAt(index)
 }
-
 }

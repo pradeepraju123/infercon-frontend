@@ -1,25 +1,77 @@
 .divider:after,
 .divider:before {
-content: "";
-flex: 1;
-height: 1px;
-background: #eee;
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #eee;
 }
 .h-custom {
-height: calc(100% - 73px);
+  height: calc(100% - 73px);
 }
 @media (max-width: 450px) {
-.h-custom {
-height: 100%;
-}
+  .h-custom {
+    height: 100%;
+  }
 }
 .nav_section {
-    display: none;
+  display: none;
 }
 .login_sect {
-    margin-top: 30px;
+  margin-top: 30px;
 }
-.login_sect img {
-    border-radius: 30px;
-    box-shadow: 1px 1px 7px #000;
+.login-img {
+  width: 100%;
+  height: 110vh;
+  object-fit: cover;
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
+  margin-left: 100px;
+  margin-top: -10px;
+}
+.form-column {
+  margin-right: 40px;
+}
+/* Position the eye icon inside the input */
+.eye-btn {
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 1.2rem;
+  color: #555;
+}
+.eye-btn:hover {
+  color: #000;
+}
+/* Placeholder styling */
+input::placeholder {
+  font-size: 1rem;
+  color: #888;
+  opacity: 1;
+}
+input::-webkit-input-placeholder {
+  font-size: 1rem;
+  color: #888;
+}
+input:-ms-input-placeholder {
+  font-size: 1rem;
+  color: #888;
+}
+input::-ms-input-placeholder {
+  font-size: 1rem;
+  color: #888;
+}
+/* Hide the image on smaller screens */
+@media (max-width: 768px) { /* Tablets and below */
+  .login-img {
+    display: none;
+  }
+  .form-column {
+    margin-right: 0;
+    max-width: 100%;
+  }
 }

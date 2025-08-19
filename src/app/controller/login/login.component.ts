@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../../services/auth.service'
+import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 @Component({
@@ -10,58 +10,64 @@ import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition
 export class LoginComponent {
   public username: string = '';
   public password: string = '';
+  public showPassword: boolean = false; // :small_blue_diamond: For password toggle
   public errorMessage: string | null = null;
   public successMessage: string | null = null;
   horizontalPosition: MatSnackBarHorizontalPosition = 'right';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
-  constructor(private authService: AuthService, private router: Router, private _snackBar: MatSnackBar, ) {}
-
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private _snackBar: MatSnackBar
+  ) {}
+  // :small_blue_diamond: Toggle password visibility
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
   onLogin() {
     this.authService.login(this.username, this.password).subscribe(
       (response) => {
         const token = response.access_token;
-  
         // Use sessionStorage instead of localStorage
         sessionStorage.setItem('authToken', token);
-  
         this.authService.setToken(response.access_token);
         this.errorMessage = null;
-  
-        // Check user type before navigating to the dashboard
+        // Check user type before navigating
         const userType = this.authService.getUserTypeFromToken(token);
-        if (userType === 'admin' || userType === 'staff' ) {
+        if (userType === 'admin' || userType === 'staff') {
           this.router.navigate(['dashboard']);
-            this.successMessage = 'Login successfully';
-            this.errorMessage = null;
-            this.openSnackBar(this.successMessage)
+          this.successMessage = 'Login successfully';
+          this.errorMessage = null;
+          this.openSnackBar(this.successMessage);
         } else {
           this.authService.clearToken();
           this.errorMessage = 'You do not have permission to access the dashboard.';
           this.successMessage = null;
-          this.openSnackBar(this.errorMessage)
+          this.openSnackBar(this.errorMessage);
         }
       },
       (error) => {
+        this.authService.clearToken();
         if (error.status === 401 && error.error.message === 'Token expired') {
-          this.authService.clearToken();
           this.errorMessage = 'Token expired. Please log in again.';
-          this.successMessage = null;
-          this.openSnackBar(this.errorMessage)
         } else {
-          this.authService.clearToken();
           this.errorMessage = 'Login failed. Please check your credentials.';
-          this.successMessage = null;
-          this.openSnackBar(this.errorMessage)
         }
+        this.successMessage = null;
+        this.openSnackBar(this.errorMessage);
       }
     );
   }
   openSnackBar(message: string) {
-    this._snackBar.open(message, 'Close', 
-    {
+    this._snackBar.open(message, 'Close', {
       horizontalPosition: this.horizontalPosition,
       verticalPosition: this.verticalPosition,
     });
   }
-  
+  onKeyPress(event: KeyboardEvent): void {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      this.onLogin();
+    }
+  }
 }

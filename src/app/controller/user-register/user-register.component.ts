@@ -18,7 +18,7 @@ import { CreateRegisteredDialogComponent } from '../../components/create-registe
 })
 export class UserRegisterComponent implements OnInit {
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
-  displayedColumns: string[] = ['select', 'fullname', 'email', 'phone', 'course','createdDateTime', 'action','Registration'];
+  displayedColumns: string[] = ['select', 'fullname', 'email', 'phone', 'course', 'createdDateTime', 'comments', 'action', 'Registration'];
   searchTerm: string = '';
   startDate: any = null;
   endDate: any = new Date();
@@ -31,7 +31,7 @@ export class UserRegisterComponent implements OnInit {
   userId: any;
   totalItems: number = 0;
   totalPages: number = 1;
-  itemsPerPage: number = 5;
+  itemsPerPage: number = 4;
   horizontalPosition: MatSnackBarHorizontalPosition = 'right';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   
@@ -55,26 +55,30 @@ loadRegisteredUsers() {
     searchTerm: this.searchTerm,
     start_date: this.formatDate(this.startDate),
     end_date: this.formatDate(this.endDate),
-    page_size: this.pageSize,
+    page_size: this.itemsPerPage,  // Use itemsPerPage consistently
     page_num: this.pageNum,
   };
-  this.contactService.getRegisteredUsers(params).subscribe(
+
+  this.contactService.getRegisteredUsers(params).subscribe(  // Pass params here
     (data: any) => {
       if (data && data.data) {
-        // Format the dates for each item
         const formattedData = data.data.map((item: any) => {
           const createdAt = new Date(item.createdAt);
           return {
             ...item,
-            created_date: createdAt.toISOString().split('T')[0], // YYYY-MM-DD format
-            created_time: createdAt.toTimeString().split(' ')[0] // HH:MM:SS format
+            created_date: createdAt.toISOString().split('T')[0],
+            created_time: createdAt.toTimeString().split(' ')[0]
           };
         });
+        
         this.dataSource = new MatTableDataSource(formattedData);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        
+        // Update pagination info from backend response
         this.totalItems = data.pagination?.total_items || data.data.length;
         this.totalPages = data.pagination?.total_pages || Math.ceil(this.totalItems / this.itemsPerPage);
+        this.itemsPerPage = data.pagination?.items_per_page || this.itemsPerPage;
       }
     },
     (error) => {
@@ -83,7 +87,6 @@ loadRegisteredUsers() {
     }
   );
 }
-
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -230,4 +233,13 @@ goToLastPage(): void {
     });
   }
 }
+
+
+
+
+
+
+
+
+
 

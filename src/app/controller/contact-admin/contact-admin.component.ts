@@ -52,6 +52,7 @@ itemsPerPage: number = 5;
   errorMessage: string | null = null;
   testMessage: string = 'Test Message'
   selectedContactId: string = '';
+  
   newComment: string = '';
   showComments: string | null = null;
   contactComments: any[] = [];
@@ -108,9 +109,9 @@ itemsPerPage: number = 5;
     const token = sessionStorage.getItem('authToken'); // Assuming this function exists in your authService
     this.userType = this.authService.getUserTypeFromToken(token)
     if (this.userType === 'staff') {
-      this.displayedColumns = ['select', 'fullname', 'phone', 'course', 'createdDateTime', 'leadSelection', 'followupDate', 'followupTime', 'comments', 'Action','MarkRegistered'];
+      this.displayedColumns = ['select', 'fullname', 'phone', 'course', 'createdDateTime', 'leadSelection', 'followupDate', 'followupTime', 'comments', 'Action','MarkRegistered','createdBy'];
     } else if(this.userType === 'admin') {
-      this.displayedColumns =  ['select', 'fullname', 'phone', 'course', 'createdDateTime', 'assigneeSelection', 'followupDate', 'followupTime', 'comments', 'Action'];
+      this.displayedColumns =  ['select', 'fullname', 'phone', 'course', 'createdDateTime', 'assigneeSelection', 'followupDate', 'followupTime', 'comments', 'Action','createdBy'];
     }
     return this.userType;
   }
@@ -542,18 +543,31 @@ openCreateRegisteredDialog(): void {
     }
   });
 }
+// In your parent component
 openCreateUserDialog(): void {
   const dialogRef = this.dialog.open(CreateUserComponent, {
-    width: '800px'
+    width: '800px',
+    data: {} // pass any data if needed
   });
 
-  dialogRef.afterClosed().subscribe(result => {
-    if (result) {
-      this.loadContacts(); // Refresh the list if a new user was created
+  dialogRef.afterClosed().subscribe((createdUser: any) => {
+    if (createdUser) {
+      console.log('New user created:', createdUser);
+      
+      // Option 1: Refresh the contact list
+      this.loadContacts();
+      
+      // Option 2: Add the new user to the existing list
+      // this.contacts.unshift(createdUser);
+      // this.contacts = [...this.contacts]; // Trigger change detection
+      
+      // Show confirmation message
+      this._snackBar.open(`User "${createdUser.fullname}" added to the list!`, 'Close', {
+        duration: 3000
+      });
     }
   });
-}
-// Add this method
+}// Add this method
 getRowColor(leadStatus: string): string {
   console.log('Lead status:', leadStatus); // Check console for output
   switch(leadStatus) {

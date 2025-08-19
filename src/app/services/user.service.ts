@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient,HttpHeaders } from '@angular/common/http';
+import { HttpClient,HttpHeaders ,HttpParams} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { User } from './user.model'
 import { AuthService } from './auth.service';
@@ -92,37 +92,40 @@ private getUserTypeFromToken(token: string | null): string | null {
 }
 
 // Fetch dashboard data (followups + new enrollments)
-getDashboardData(params?: { page?: number; limit?: number }): Observable<{
-    data: {
-      followupLeads: any[],
-      newEnrollments: any[],
-      followupPagination?: {
-        total: number,
-        currentPage: number,
-        totalPages: number
-      },
-      newEnrollmentPagination?: {
-        total: number,
-        currentPage: number,
-        totalPages: number
-      },
-      trainingStats?: {
-        totalLeads: number,
-        registeredLeads: number,
-        paidLeads: number,
-        rejectedLeads: number
-      }
-    }
-  }> {
-    const token = sessionStorage.getItem('authToken');
-    if (token) {
-      const headers = new HttpHeaders({
-        'Authorization': 'Bearer ' + token
-      });
-      return this.http.get<any>('http://localhost:8081/api/v1/dashboard', { headers, params });
-    } else {
-      return throwError(() => 'No authentication token found');
-    }
+// In user.service.ts
+getDashboardData(
+  followupPage: number = 1, 
+  followupLimit: number = 10,
+  enrollmentsPage: number = 1,
+  enrollmentsLimit: number = 10
+): Observable<{
+  data: {
+    followupLeads: any[],
+    newEnrollments: any[],
+    trainingStats?: {
+      totalLeads: number,
+      registeredLeads: number,
+      paidLeads: number,
+      rejectedLeads: number
+    },
+    pagination?: any
   }
+}> {
+  const token = sessionStorage.getItem('authToken');
+  if (token) {
+    const headers = new HttpHeaders({
+      'Authorization': 'Bearer ' + token
+    });
+    const params = new HttpParams()
+      .set('followupPage', followupPage.toString())
+      .set('followupLimit', followupLimit.toString())
+      .set('enrollmentsPage', enrollmentsPage.toString())
+      .set('enrollmentsLimit', enrollmentsLimit.toString());
+      
+    return this.http.get<any>('http://localhost:8081/api/v1/dashboard', { headers, params });
+  } else {
+    return throwError('No authentication token found');
+  }
+}
 }
 
