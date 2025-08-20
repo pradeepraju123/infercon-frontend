@@ -129,20 +129,21 @@
   </td>
 </ng-container>
 
-<ng-container matColumnDef="followupDate">
-  <th mat-header-cell *matHeaderCellDef> Followup Date </th>
+<ng-container matColumnDef="followupDateTime">
+  <th mat-header-cell *matHeaderCellDef> Followup Date&Time </th>
   <td mat-cell *matCellDef="let element"> 
-    {{ element.followup_date | date:'shortDate' }} 
+    {{ element.followup_date | date:'shortDate' }}
+    {{ formatTimeForDisplay(element.followup_time) }}  
   </td>
 </ng-container>
 
 <!-- In your contact-admin.component.html -->
-<ng-container matColumnDef="followupTime">
+<!-- <ng-container matColumnDef="followupTime">
   <th mat-header-cell *matHeaderCellDef> Followup Time </th>
   <td mat-cell *matCellDef="let element"> 
     {{ formatTimeForDisplay(element.followup_time) }} 
   </td>
-</ng-container>
+</ng-container> -->
         <ng-container  *ngIf="getUserType() === 'admin'" matColumnDef="assigneeSelection">
           <th mat-header-cell *matHeaderCellDef> Assignee </th>
           <td class="lead_status" mat-cell *matCellDef="let element">

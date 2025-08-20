@@ -23,6 +23,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 })
 export class AppComponent implements AfterViewInit {
   title = 'infercon-angular-dev';
+  currentYear: number = new Date().getFullYear();
   constructor(private router: Router,private renderer: Renderer2, private el: ElementRef, private authService : AuthService) {}
   ngAfterViewInit() {
     // Use Renderer2 to select the element and set focus

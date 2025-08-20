@@ -109,9 +109,9 @@ itemsPerPage: number = 5;
     const token = sessionStorage.getItem('authToken'); // Assuming this function exists in your authService
     this.userType = this.authService.getUserTypeFromToken(token)
     if (this.userType === 'staff') {
-      this.displayedColumns = ['select', 'fullname', 'phone', 'course', 'createdDateTime', 'leadSelection', 'followupDate', 'followupTime', 'comments', 'Action','MarkRegistered','createdBy'];
+      this.displayedColumns = ['select', 'fullname', 'phone', 'course', 'createdDateTime', 'leadSelection', 'followupDateTime', 'comments', 'Action','MarkRegistered','createdBy'];
     } else if(this.userType === 'admin') {
-      this.displayedColumns =  ['select', 'fullname', 'phone', 'course', 'createdDateTime', 'assigneeSelection', 'followupDate', 'followupTime', 'comments', 'Action','createdBy'];
+      this.displayedColumns =  ['select', 'fullname', 'phone', 'course', 'createdDateTime', 'assigneeSelection', 'followupDateTime', 'comments', 'Action','createdBy'];
     }
     return this.userType;
   }
