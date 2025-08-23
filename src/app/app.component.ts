@@ -77,6 +77,13 @@ export class AppComponent implements AfterViewInit {
   // Hide footer only on login
   return currentRoute !== '/login';
 }
+getUserName(): string | null {
+  const token = sessionStorage.getItem('authToken');
+  if (token) {
+    return this.authService.getUserNameFromToken(token);
+  }
+  return null;
+}
 }
 const routesWithoutDefault = [
   '/login',
@@ -96,7 +103,9 @@ const routesWithoutDefault = [
   '/whatsappactivity',
   '/whatsapptemplate',
   '/app-user-register',
-  '/installment'
+  '/installment',
+  '/app-all-accounts',
+  '/notifications'
 ];
 const routesWithDefault = [
   '/home',

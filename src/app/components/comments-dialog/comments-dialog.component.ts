@@ -31,23 +31,26 @@ export class CommentsDialogComponent implements OnInit {
   }
 
   loadComments(): void {
-    this.loading = true;
-    this.contactService.getComments(this.data.contactId).subscribe(
-      (response: any) => {
-        this.comments = response.comments || [];
-        // Sort comments by date (newest first)
-        this.comments.sort((a: any, b: any) => 
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-        this.loading = false;
-      },
-      (error) => {
-        console.error('Error loading comments:', error);
-        this.loading = false;
-        this.snackBar.open('Error loading comments', 'Close', { duration: 3000 });
-      }
-    );
-  }
+  this.loading = true;
+  this.contactService.getComments(this.data.contactId).subscribe(
+    (response: any) => {
+      // Create a deep copy to avoid mutating the original data
+      this.comments = JSON.parse(JSON.stringify(response.comments || []));
+      
+      // Sort by date (newest first)
+      this.comments.sort((a: any, b: any) => 
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+      
+      this.loading = false;
+    },
+    (error) => {
+      console.error('Error loading comments:', error);
+      this.loading = false;
+      this.snackBar.open('Error loading comments', 'Close', { duration: 3000 });
+    }
+  );
+}
 
 // Update the addComment method in comments-dialog.component.ts
 addComment(): void {

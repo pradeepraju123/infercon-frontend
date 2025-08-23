@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient,HttpHeaders ,HttpParams} from '@angular/common/http';
+import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { User } from './user.model'
 import { AuthService } from './auth.service';
@@ -90,25 +90,32 @@ private getUserTypeFromToken(token: string | null): string | null {
   }
   return null;
 }
-
 // Fetch dashboard data (followups + new enrollments)
-// In user.service.ts
-getDashboardData(
-  followupPage: number = 1, 
-  followupLimit: number = 10,
-  enrollmentsPage: number = 1,
-  enrollmentsLimit: number = 10
-): Observable<{
+getDashboardData(params?: {
+  followupPage?: number;
+  followupLimit?: number;
+  newEnrollmentPage?: number;
+  newEnrollmentLimit?: number;
+}): Observable<{
   data: {
     followupLeads: any[],
     newEnrollments: any[],
+    followupPagination?: {
+      total: number,
+      currentPage: number,
+      totalPages: number
+    },
+    newEnrollmentPagination?: {
+      total: number,
+      currentPage: number,
+      totalPages: number
+    },
     trainingStats?: {
       totalLeads: number,
       registeredLeads: number,
       paidLeads: number,
       rejectedLeads: number
-    },
-    pagination?: any
+    }
   }
 }> {
   const token = sessionStorage.getItem('authToken');
@@ -116,16 +123,20 @@ getDashboardData(
     const headers = new HttpHeaders({
       'Authorization': 'Bearer ' + token
     });
-    const params = new HttpParams()
-      .set('followupPage', followupPage.toString())
-      .set('followupLimit', followupLimit.toString())
-      .set('enrollmentsPage', enrollmentsPage.toString())
-      .set('enrollmentsLimit', enrollmentsLimit.toString());
-      
-    return this.http.get<any>('http://localhost:8081/api/v1/dashboard', { headers, params });
+    // Convert params to query string parameters
+    const queryParams: any = {};
+    if (params) {
+      if (params.followupPage) queryParams.followupPage = params.followupPage;
+      if (params.followupLimit) queryParams.followupLimit = params.followupLimit;
+      if (params.newEnrollmentPage) queryParams.newEnrollmentPage = params.newEnrollmentPage;
+      if (params.newEnrollmentLimit) queryParams.newEnrollmentLimit = params.newEnrollmentLimit;
+    }
+    return this.http.get<any>('http://localhost:8081/api/v1/dashboard', {
+      headers,
+      params: queryParams
+    });
   } else {
-    return throwError('No authentication token found');
+    return throwError(() => 'No authentication token found');
   }
 }
 }
-

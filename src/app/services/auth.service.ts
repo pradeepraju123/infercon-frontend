@@ -14,27 +14,29 @@ export class AuthService {
   login(username: string, password: string): Observable<any> {
     return this.http.post('http://localhost:8081/api/v1/users/login', { username, password });
   }
-  setToken(token: string | null) {
-    this.token = token;
-
-    if (token) {
-      // Set token expiration check here (use the token payload to check the expiration)
-      const payload = this.decodeJwt(token);
-      if (payload.exp) {
-        const expirationTimestamp = payload.exp * 1000; // Convert expiration to milliseconds
-        const currentTimestamp = Date.now();
-        const timeUntilExpiration = expirationTimestamp - currentTimestamp;
-
-        if (timeUntilExpiration > 0) {
-          // Token is still valid, set a timeout to automatically clear it when it expires
-          setTimeout(() => this.clearTokenAndNavigateToLogin(), timeUntilExpiration);
-        } else {
-          // Token is already expired, navigate to the login page immediately
-          this.navigateToLogin();
-        }
+setToken(token: string | null, userId?: string) {
+  this.token = token;
+  if (token) {
+    // :white_check_mark: Store token and userId in sessionStorage
+    sessionStorage.setItem('authToken', token);
+    if (userId) {
+      sessionStorage.setItem('userId', userId);
+    }
+    // Decode token for expiration
+    const payload = this.decodeJwt(token);
+    if (payload.exp) {
+      const expirationTimestamp = payload.exp * 1000;
+      const currentTimestamp = Date.now();
+      const timeUntilExpiration = expirationTimestamp - currentTimestamp;
+      if (timeUntilExpiration > 0) {
+        setTimeout(() => this.clearTokenAndNavigateToLogin(), timeUntilExpiration);
+      } else {
+        this.navigateToLogin();
       }
     }
   }
+}
+
 
 
 
@@ -81,12 +83,12 @@ export class AuthService {
     }
     return null;
   }
-  getUserIdFromToken(token: string | null): string | null {
+ getUserIdFromToken(token: string | null): string | null {
     // Parse the token and extract the userType
     // Replace this with your actual token decoding logic
     if (token) {
       const payload = this.decodeJwt(token);
-      return payload.userName || null;
+      return payload.userId || payload._id || null;
     }
     return null;
   }

@@ -6,11 +6,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { countries } from '../../model/country-data-store';
 import { courses } from '../../model/course-data-store';
 import * as libphonenumber from 'libphonenumber-js';
-import { RegistrationService } from '../../services/registration.service';
+import { AccountsService } from '../../services/accounts.service';
 
 @Component({
   selector: 'app-create-registered-dialog',
-  templateUrl: './create-registered-dialog.component.html',
+  templateUrl:'./create-registered-dialog.component.html',
   styleUrls: ['./create-registered-dialog.component.css']
 })
 export class CreateRegisteredDialogComponent {
@@ -24,7 +24,7 @@ export class CreateRegisteredDialogComponent {
     public dialogRef: MatDialogRef<CreateRegisteredDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private fb: FormBuilder,
-    private registrationService: RegistrationService,
+    private accountService: AccountsService,
     private snackBar: MatSnackBar
   ) {
     this.registrationForm = this.fb.group({
@@ -48,6 +48,8 @@ export class CreateRegisteredDialogComponent {
       governmentId: [''],
       currencyType: [''],
       feesCurrency: [''],
+      totalAmount: ['', [Validators.required, Validators.min(0)]],
+      numberOfInstallments: ['', [Validators.required, Validators.min(1)]],
       courses: [[], Validators.required]
     });
 
@@ -68,39 +70,45 @@ export class CreateRegisteredDialogComponent {
     });
   }
 
-  onSubmit(): void {
+onSubmit(): void {
   if (this.registrationForm.valid && !this.isSubmitting) {
-    this.isSubmitting = true; // ⬅️ disable button immediately
-      console.log("🚀 isSubmitting set to true");
+    this.isSubmitting = true;
 
     const formData = this.registrationForm.value;
 
-    // Prepare the data for registration
-    const registrationData = {
-      modeOfEducation: formData.modeOfEducation,
-      courses: formData.courses,
-      firstname: formData.firstname,
-      middlename: formData.middlename,
-      lastname: formData.lastname,
-      bday: formData.bday,
-      gender: formData.gender,
-      address: formData.address,
-      email: formData.email,
-      mobile: formData.mobile ? `${formData.country}${formData.mobile}` : '',
-      additionalMobile: formData.additionalMobile ? `${formData.country}${formData.additionalMobile}` : '',
-      workMobile: formData.workMobile ? `${formData.country}${formData.workMobile}` : '',
-      company: formData.company,
-      comments: formData.comments || '',
-      education: formData.education,
-      industryexp: formData.industryexp,
-      yearsOfExp: formData.yearsOfExp,
-      governmentId: formData.governmentId,
-      currencyType: formData.currencyType,
-      feesCurrency: formData.feesCurrency,
-      document: this.document ? this.document.name : null
+    // Prepare data for setupInstallmentPlan API
+    const installmentData = {
+      contactId: this.data?.user?._id, // This is crucial - the contact reference
+      totalAmount: formData.totalAmount,
+      numberOfInstallments: formData.numberOfInstallments,
+      startDate: new Date(), // You can make this configurable if needed
+      
+      // Include all registration data as well
+        modeOfEducation: formData.modeOfEducation,
+        courses: formData.courses,
+        firstname: formData.firstname,
+        middlename: formData.middlename,
+        lastname: formData.lastname,
+        bday: formData.bday,
+        gender: formData.gender,
+        address: formData.address,
+        email: formData.email,
+        mobile: formData.mobile ? `${formData.country}${formData.mobile}` : '',
+        additionalMobile: formData.additionalMobile ? `${formData.country}${formData.additionalMobile}` : '',
+        workMobile: formData.workMobile ? `${formData.country}${formData.workMobile}` : '',
+        company: formData.company,
+        comments: formData.comments || '',
+        education: formData.education,
+        industryexp: formData.industryexp,
+        yearsOfExp: formData.yearsOfExp,
+        governmentId: formData.governmentId,
+        currencyType: formData.currencyType,
+        feesCurrency: formData.feesCurrency,
+        document: this.document ? this.document.name : null
+        
     };
 
-    // ✅ Validate phone number if provided
+    // Validate phone number if provided
     if (formData.mobile) {
       const countryCode = this.getCodeFromDialCode(formData.country);
       if (countryCode) {
@@ -112,32 +120,32 @@ export class CreateRegisteredDialogComponent {
             'Close',
             { duration: 5000 }
           );
-          this.isSubmitting = false; // re-enable button
+          this.isSubmitting = false;
           return;
         }
       }
     }
 
-    this.registrationService.createRegistration(registrationData).subscribe(
+    // Call the setupInstallmentPlan API instead of createRegistration
+    this.accountService.setupInstallmentPlan(installmentData).subscribe(
       (response) => {
-        this.snackBar.open('Registration created successfully!', 'Close', {
+        this.snackBar.open('Registration with installment plan created successfully!', 'Close', {
           duration: 3000
         });
         this.dialogRef.close({
           success: true,
           email: formData.email
         });
-          this.isSubmitting = false;
+        this.isSubmitting = false;
       },
       (error) => {
         console.error('Error:', error);
         this.snackBar.open(
-          'Error creating registration: ' +
-            (error.error?.message || error.message),
+          'Error creating registration: ' + (error.error?.message || error.message),
           'Close',
           { duration: 5000 }
         );
-        this.isSubmitting = false; // re-enable if failed
+        this.isSubmitting = false;
       }
     );
   } else {

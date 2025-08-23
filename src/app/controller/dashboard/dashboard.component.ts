@@ -54,12 +54,7 @@ export class DashboardComponent implements OnInit {
   userName!: string;
   contactId!: string;
 
- followupPage = 1;
-  followupLimit = 20;
-  totalFollowups = 0;
-  totalFollowupPages = 1;
-  
-  followupPageSize = 10;
+followupPageSize = 10;
   followupCurrentPage = 1;
   followupTotalItems = 0;
   followupTotalPages = 1;
@@ -84,20 +79,11 @@ export class DashboardComponent implements OnInit {
     private authService: AuthService
   ) {}
 
-  ngOnInit(): void {
-  this.userService.getDashboardData().subscribe({
-    next: (res) => {
-      console.log('Raw backend data:', res.data.followupLeads); 
-      console.log('Count from backend:', res.data.followupLeads.length);
-      
-      this.followupLeads = res.data.followupLeads;
-      console.log('After assignment:', this.followupLeads.length); 
-    }
-  });
-  this.userType=this.getUserType();
-  this.userName=this.getUserName();
-  this.loadDashboardData();
-}
+ ngOnInit(): void {
+    this.userType = this.getUserType();
+    this.userName = this.getUserName();
+    this.loadDashboardData();
+  }
 
   getUserType(): string {
     const token = sessionStorage.getItem('authToken');
@@ -110,35 +96,45 @@ export class DashboardComponent implements OnInit {
   }
 
   loadDashboardData(): void {
-  this.userService.getDashboardData(this.followupCurrentPage, this.followupPageSize, this.newEnrollmentCurrentPage, this.newEnrollmentPageSize)
-  .subscribe({
+   this.userService.getDashboardData().subscribe({
     next: (res) => {
-      // Assign leads directly from backend (paginated)
-      this.followupLeads = res.data.followupLeads || [];
-      this.newEnrollments = res.data.newEnrollments || [];
-
+      console.log('Dashboard data received:', res); // Debug log
+      
+      // Process followup leads
+      this.followupLeads = (res.data.followupLeads || []).map(lead => ({
+        ...lead,
+        createdDate: lead.createdAt,
+        createdTime: lead.createdAt,
+        courses: Array.isArray(lead.courses) ? lead.courses : [lead.courses]
+      }));
+      
+      // Process new enrollments
+      this.newEnrollments = (res.data.newEnrollments || []).map(enrollment => ({
+        ...enrollment,
+        createdDate: enrollment.createdAt,
+        createdTime: enrollment.createdAt,
+        courses: Array.isArray(enrollment.courses) ? enrollment.courses : [enrollment.courses]
+      }));
+      
+      console.log('New enrollments count:', this.newEnrollments.length); // Debug log
+      
       // Initialize data sources
       this.followupDataSource = new MatTableDataSource<any>(this.followupLeads);
       this.newEnrollmentDataSource = new MatTableDataSource<any>(this.newEnrollments);
 
       this.followupDataSource.sort = this.sort;
       this.newEnrollmentDataSource.sort = this.sort;
-
-      // Pagination metadata from backend
-      if (res.data.pagination) {
-        const followupPageData = res.data.pagination.followups;
-        const enrollmentPageData = res.data.pagination.enrollments;
-
-        this.followupTotalItems = followupPageData.total;
-        this.followupTotalPages = followupPageData.pages;
-
-        this.newEnrollmentTotalItems = enrollmentPageData.total;
-        this.newEnrollmentTotalPages = enrollmentPageData.pages;
-      }
-
-      // Training stats
+      
+      // Set up pagination
+      this.followupTotalItems = res.data.followupPagination?.total || this.followupLeads.length;
+      this.newEnrollmentTotalItems = res.data.newEnrollmentPagination?.total || this.newEnrollments.length;
+      
+      this.updateFollowupPagination();
+      this.updateEnrollmentPagination();
+      
       if (res.data.trainingStats) {
         this.trainingStats = res.data.trainingStats;
+        console.log('Training stats:', this.trainingStats); // Debug log
       }
     },
     error: (err) => {
@@ -147,7 +143,6 @@ export class DashboardComponent implements OnInit {
     }
   });
 }
-
 
 
   getFollowupDisplayedColumns(): string[] {

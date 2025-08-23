@@ -54,8 +54,8 @@
     background: #d4d7935c
 }
 /*Secondary navbar*/
-.secondary_navbar {
-    position: relative;
+.secondary_navbar .navbar {
+    padding: 5px 15px; /* Add some padding */
 }
 /* .secondary_navbar .nav-item a {
     color: white;
@@ -69,7 +69,7 @@
     color: #000;
 }
 .secondary_navbar .navbar {
-    padding: 5px;
+    padding: 5px 15px;
 }
 .secondary_navbar .navbar li {
     padding: 0px 10px;
@@ -232,12 +232,82 @@ body, html {
   bottom: 0;
   left: 0;
 }
-
-
-
-
-
-
-
-
-
+/* Add to your component's CSS or global styles */
+.notification-item {
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+}
+/* Adjust notification button styling for navbar */
+.notification-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+  color: #6C757D; /* Match your navbar text color */
+}
+.notification-button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+/* Ensure notification dropdown appears above other navbar elements */
+.notification-dropdown {
+  z-index: 1030; /* Higher than navbar z-index */
+}
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+  .notification-item {
+    margin-right: 10px;
+  }
+  .notification-dropdown {
+    position: fixed;
+    top: 60px; /* Adjust based on your navbar height */
+    right: 15px;
+    width: 300px;
+  }
+}
+/* Add this to your global styles or component CSS */
+.notification-bell-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+.bell-icon {
+  font-size: 24px;
+  color: #333;
+  transition: color 0.3s ease;
+}
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #FF4757;
+  color: white;
+  border-radius: 50%;
+  padding: 3px 7px;
+  font-size: 11px;
+  font-weight: bold;
+  min-width: 20px;
+  height: 20px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+/* Hover effects */
+.nav-link:hover .bell-icon {
+  color: #007BFF;
+  transform: scale(1.1);
+}
+/* Animation for new notifications */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+.notification-badge.new {
+  animation: pulse 1s infinite;
+}

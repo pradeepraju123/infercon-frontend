@@ -21,17 +21,23 @@ export class ContactService {
        return this.http.post(url, data);
   }
 
-   createUser(data: any): Observable<any> {
-    const token = sessionStorage.getItem('authToken');
+//    createUser(data: any): Observable<any> {
+//     const token = sessionStorage.getItem('authToken');
     
-    if (token) {
-        const headers = new HttpHeaders({
-            'Authorization': 'Bearer ' + token
-        });
-        return this.http.post(`${this.apiUrl}/create-with-creator`, data, { headers });
-    } else {
-        return throwError('No authentication token found');
-    }
+//     if (token) {
+//         const headers = new HttpHeaders({
+//             'Authorization': 'Bearer ' + token
+//         });
+//         return this.http.post(`${this.apiUrl}/create-with-creator`, data, { headers });
+//     } else {
+//         return throwError('No authentication token found');
+//     }
+// }
+
+createWithCreator(contactData: any): Observable<any> {
+  const token = sessionStorage.getItem('authToken') || '';
+  const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+  return this.http.post(`${this.apiUrl}/create-with-creator`, contactData, { headers });
 }
 
 
@@ -215,9 +221,61 @@ filterByRegistrationStatus(params: any): Observable<any> {
       })
     );
 }
-
-
-
+getNonRegisteredContacts(params?:any):Observable<any>{
+  const token =sessionStorage.getItem('authToken')
+  if (token){
+    const headers = new HttpHeaders({
+       'Authorization': 'Bearer ' + token
+    });
+    return this.http.post(`${this.apiUrl}//getUnregistration`,params,{headers})
+  }
+  else{
+    return throwError('No authentication token found');
+  }
+}
+onAssigneeSelect(selectedAssignee: string, itemId: string): Observable<any> {
+  const body = { selectedAssignee, itemId };
+  return this.http.post<any>(`${this.apiUrl}/action/on-assignee-select`, body)
+    .pipe(
+      catchError((error: any) => {
+        console.error('Error in onAssigneeSelect:', error);
+        return throwError(() => error);
+      })
+    );
+}
+// Also ensure these notification methods exist:
+getUserNotifications(userId: string): Observable<any> {
+  return this.http.get<any>(`http://localhost:8081/api/v1/notification/user/${userId}`).pipe(
+    catchError((error: any) => {
+      console.error('API Error:', error);
+      return throwError(() => error);
+    })
+  );
+}
+markNotificationAsRead(notificationId: string) {
+  return this.http.patch<any>(`http://localhost:8081/api/v1/notification/${notificationId}/read`, {}).pipe(
+    catchError((error: any) => {
+      console.error('API Error:', error);
+      return throwError(() => error);
+    })
+  );
+}
+markAllNotificationsAsRead(userId: string) {
+  return this.http.patch<any>(`http://localhost:8081/api/v1/notification/user/${userId}/read-all`, {}).pipe(
+    catchError((error: any) => {
+      console.error('API Error:', error);
+      return throwError(() => error);
+    })
+  );
+}
+getUnreadCount(userId: string) {
+  return this.http.get<any>(`http://localhost:8081/api/v1/notification/unread-count/${userId}`).pipe(
+    catchError((error: any) => {
+      console.error('API Error:', error);
+      return throwError(() => error);
+    })
+  );
+}
 }
 
 
