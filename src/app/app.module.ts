@@ -106,6 +106,11 @@ import { CreateUserComponent } from './components/create-user/create-user.compon
 
 import { InstallmentComponent } from './components/installment/installment.component';
 import { InstallmentPopupComponent } from './components/installment-popup/installment-popup.component';
+import { AccountComponent } from './components/account/account.component';
+import { AllAccountsComponent } from './components/all-accounts/all-accounts.component';
+import { NotificationComponent } from './components/notification/notification.component';
+import { NotificationBellComponent } from './components/notification-bell/notification-bell.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -179,6 +184,10 @@ import { InstallmentPopupComponent } from './components/installment-popup/instal
           FollowupDialogComponent,
           UserRegisterComponent,
           CreateUserComponent,
+          AccountComponent,
+          AllAccountsComponent,
+          NotificationComponent,
+          NotificationBellComponent,
     
     
     

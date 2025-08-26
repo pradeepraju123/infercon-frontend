@@ -98,7 +98,7 @@ toolbar: Toolbar = [
           this.successMessage = 'Training was updated successfully.';
           this.errorMessage = null;
           this.openSnackBar(this.successMessage)
-          this.dialogRef.close();
+          this.dialogRef.close(this.updateContact);
         },
         (error) => {
           this.errorMessage = 'Failed to update training.';

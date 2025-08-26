@@ -1,6 +1,6 @@
 <ng-container *ngIf="showNavbar()">
   <section class="nav_section">
-    <div class="container new_container">
+    <div class="container-fluid new_container">
       <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
           <a class="navbar-brand navbar_brand_main" href="#"><img src="assets/infercon-only.jpg" alt=""></a>
@@ -57,7 +57,7 @@
 </ng-container>
 <ng-container *ngIf="showAlternateNavbar()">
   <section class="secondary_navbar">
-    <div class="container">
+    <div class="container-fluid">
       <nav class="navbar navbar-expand-lg ftco_navbar ftco-navbar-light">
         <div class="container-fluid">
           <a class="navbar-brand no-style-logo" routerLink="dashboard">
@@ -95,6 +95,9 @@
               <li class="nav-item" *ngIf="getUserType() === 'staff' || getUserType() === 'admin'">
                 <a class="nav-link" routerLink="app-user-register">UserRegistration</a>
               </li>
+              <li class="nav-item" *ngIf="getUserType() === 'staff' || getUserType() === 'admin'">
+                <a class="nav-link" routerLink="app-all-accounts">Account</a>
+              </li>
               <!-- <li class="nav-item" *ngIf="getUserType() === 'admin'">
                 <a class="nav-link" routerLink="whatsappactivity">whatsappactivity</a>
               </li>    -->
@@ -106,6 +109,13 @@
               </li>
             </ul>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 profile-menu" *ngIf="getUserType() === 'staff' || getUserType() === 'admin'">
+
+              <li class="nav-item" *ngIf="getUserType() === 'staff' ||  getUserType() === 'admin'">
+  <a class="nav-link" routerLink="/notifications" style="position: relative;">
+    <app-notification-bell [assigneeName]="getUserName() || ''"></app-notification-bell>
+  </a>
+</li>
+              
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   <i class="fa-solid fa-gear"></i>
@@ -129,7 +139,7 @@
     <router-outlet></router-outlet>
   </div>
 <footer class="dashboard-footer" *ngIf="showAlternateNavbar() && showFooter()">
-    <div class="container">
+    <div class="container-fluid">
       <div class="footer-content">
         <div class="footer-links">
           <a routerLink="dashboard" class="footer-link">Dashboard</a>
@@ -141,7 +151,7 @@
           <a routerLink="whatsapptemplate" class="footer-link" *ngIf="getUserType() === 'admin'">Templates</a>
         </div>
         <div class="footer-info">
-          <span>© 2023 Infercon Automation. All rights reserved.</span>
+          <span>© {{currentYear}} Infercon Automation. All rights reserved.</span>
         </div>
       </div>
     </div>

@@ -6,6 +6,7 @@ import { ContactService } from '../../services/contact.service';
 import { countries } from '../../model/country-data-store';
 import { PhoneValidationService } from '../../services/phone-validation.service';
 import { CountryCode } from 'libphonenumber-js';
+import { NotificationService } from '../../services/notification.service';
 @Component({
   selector: 'app-create-user',
   templateUrl: './create-user.component.html',
@@ -14,7 +15,7 @@ import { CountryCode } from 'libphonenumber-js';
 export class CreateUserComponent implements OnInit {
   createForm: FormGroup;
   public countries: any = countries;
-  public sources = ['Facebook', 'Linkedin', 'Website', 'Direct Enquiry', 'Reference'];
+  public sources = ['Facebook', 'Linkedin', 'Website', 'Direct Enquiry', 'Reference','WhatsApp'];
   horizontalPosition: 'right' = 'right';
   verticalPosition: 'top' = 'top';
 
@@ -24,11 +25,12 @@ export class CreateUserComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private dialogRef: MatDialogRef<CreateUserComponent>,
     private phonevalidationService:PhoneValidationService,
+    private notificaitonService:NotificationService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.createForm = this.fb.group({
       fullname: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [ Validators.email]],
       phone: ['', [Validators.required], [this.validatePhoneNumber.bind(this)]],
       city: [''],
       state: [''], 
@@ -68,10 +70,21 @@ validatePhoneNumber(control: any) {
         selectedCountry.code as CountryCode,
         phoneNumber
       );
-      resolve(isValid ? null : { invalidPhone: true });
-    } catch (error:any) {
-      // Handle specific validation errors
-      if (error.message.includes('TOO_SHORT')) {
+      
+      // If validation returns false, check if it's due to length
+      if (!isValid) {
+        const minLength = this.phonevalidationService.getMinPhoneLength(selectedCountry.code);
+        if (phoneNumber.length < minLength) {
+          resolve({ phoneTooShort: true });
+        } else {
+          resolve({ invalidPhone: true });
+        }
+      } else {
+        resolve(null); // Phone number is valid
+      }
+    } catch (error: any) {
+      // Handle specific validation errors from libphonenumber-js
+      if (error.message && error.message.includes('TOO_SHORT')) {
         resolve({ phoneTooShort: true });
       } else {
         resolve({ invalidPhone: true });
@@ -79,16 +92,19 @@ validatePhoneNumber(control: any) {
     }
   });
 }
+
 onSubmit() {
   if (this.createForm.valid) {
-    console.log('Form data being sent:', this.createForm.value);
-    this.contactService.createUser(this.createForm.value).subscribe(
-      (response) => {
-        // Success - show the created user data
-        console.log('User created successfully:', response.data);
-        
-        // Show success message with user details
-        const user = response.data;
+    //console.log('Form data being sent:', this.createForm.value);
+this.contactService.createWithCreator(this.createForm.value).subscribe(
+  (response) => {
+    this._snackBar.open('User created successfully!', 'Close', {
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    });
+    // Trigger notification update in components that are listening
+    this.notificaitonService.notifyUpdate();
+    const user = response.data;
         const successMessage = `
           User Created Successfully!
           Name: ${user.fullname}
@@ -96,38 +112,23 @@ onSubmit() {
           Phone: ${user.phone}
           ID: ${user._id}
         `;
-        
-        this._snackBar.open(successMessage, 'Close', {
-          horizontalPosition: this.horizontalPosition,
-          verticalPosition: this.verticalPosition,
-          duration: 5000, // Show for 5 seconds
-          panelClass: ['success-snackbar']
-        });
-        
-        // Close the dialog and pass the created user data back to parent component
-        this.dialogRef.close(user);
-      },
-      error => {
-        let errorMessage = 'Failed to create user!';
-        
-        if (error.error && error.error.message) {
-          errorMessage = error.error.message;
-          
-          // Specific handling for phone number exists error
-          if (error.status === 409) {
-            // Highlight the phone field
-            this.createForm.get('phone')?.setErrors({ phoneExists: true });
-            // Show error under the phone field
-            errorMessage = "User with this phone number already exists!";
-          }
-        }
-        
-        this._snackBar.open(errorMessage, 'Close', {
-          horizontalPosition: this.horizontalPosition,
-          verticalPosition: this.verticalPosition,
-        });
+    this.dialogRef.close(user);
+  },
+  error => {
+    let errorMessage = 'Failed to create user!';
+    if (error.error && error.error.message) {
+      errorMessage = error.error.message;
+      if (error.status === 409) {
+        this.createForm.get('phone')?.setErrors({ phoneExists: true });
+        errorMessage = "User with this phone number already exists!";
       }
-    );
+    }
+    this._snackBar.open(errorMessage, 'Close', {
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    });
+  }
+);
   }
 }
 

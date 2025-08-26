@@ -17,6 +17,7 @@ import { CreateRegisteredDialogComponent } from '../../components/create-registe
 import { FollowupDialogComponent } from '../../components/followup-dialog/followup-dialog.component';
 import { Router } from '@angular/router';
 import { CreateUserComponent } from '../../components/create-user/create-user.component';
+import { NotificationService } from '../../services/notification.service';
 @Component({
   selector: 'app-contact-admin',
   templateUrl: './contact-admin.component.html',
@@ -53,9 +54,11 @@ itemsPerPage: number = 100;
   testMessage: string = 'Test Message'
   selectedContactId: string = '';
   
-  newComment: string = '';
+  nnewComment: string = '';
   showComments: string | null = null;
   contactComments: any[] = [];
+  notifications: any[] = [];
+  unreadCount: number = 0;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   horizontalPosition: MatSnackBarHorizontalPosition = 'right';
@@ -68,8 +71,8 @@ itemsPerPage: number = 100;
     private getUsername: UserService, 
     private authService: AuthService,
     private contactService: ContactService,
-    private router:Router
-
+    private router:Router,
+    private notificationService: NotificationService,
     ) {}
     selectedFile: File | null = null;
   fileError: string | null = null;
@@ -109,9 +112,9 @@ itemsPerPage: number = 100;
     const token = sessionStorage.getItem('authToken'); // Assuming this function exists in your authService
     this.userType = this.authService.getUserTypeFromToken(token)
     if (this.userType === 'staff') {
-      this.displayedColumns = ['select', 'fullname', 'phone', 'course', 'createdDateTime', 'leadSelection', 'followupDate', 'followupTime', 'comments', 'Action','MarkRegistered','createdBy'];
+      this.displayedColumns = ['select', 'fullname', 'phone', 'course', 'createdDateTime', 'leadSelection', 'followupDateTime', 'comments', 'Action','MarkRegistered','createdBy'];
     } else if(this.userType === 'admin') {
-      this.displayedColumns =  ['select', 'fullname', 'phone', 'course', 'createdDateTime', 'assigneeSelection', 'followupDate', 'followupTime', 'comments', 'Action','createdBy'];
+      this.displayedColumns =  ['select', 'fullname', 'phone', 'course', 'createdDateTime', 'assigneeSelection', 'followupDateTime', 'comments', 'Action','createdBy'];
     }
     return this.userType;
   }
@@ -148,15 +151,26 @@ async getStaffAdminDetails(): Promise<any | null> {
   }
 }
 
+openDialog(_id: string) {
+  const dialogRef = this.dialog.open(EditContactComponent, {
+    data: { itemId: _id }
+  });
 
-  openDialog(_id: String) {
-    this.dialog.open(EditContactComponent, {
-      data: {
-        itemId: _id,
+  dialogRef.afterClosed().subscribe((updatedContact) => {
+    if (updatedContact) {
+      // ✅ Update the row directly in the table
+      const index = this.dataSource.data.findIndex(c => c._id === updatedContact._id);
+      if (index !== -1) {
+        this.dataSource.data[index] = { ...this.dataSource.data[index], ...updatedContact };
+        this.dataSource._updateChangeSubscription(); // refresh UI
+      } else {
+        // fallback if not found
+        this.loadContacts();
       }
-    });
-    this.loadContacts()
-  }
+    }
+  });
+}
+
 // contact-admin.component.ts - update the onCourseSelectionChange method
 async onCourseSelectionChange(selectedLead: string, itemId: string) {
   this.contactId = itemId;
@@ -205,67 +219,73 @@ async onCourseSelectionChange(selectedLead: string, itemId: string) {
   }
 }
 
-  onAssigneeSelect(selectedAssignee: string, itemId: string){
-    this.contactId = itemId;
-  
-    if (this.contactId) {
-      console.log(this.contactId);
-      // Create an object with the lead_status property
-      const updateData = { assignee: selectedAssignee };
-     
-          // First find the staff details to get their phone number
-    this.getUsername.getAllUsers().subscribe(
-      (users: any) => {
-        const staff = users.data.find((u: any) => u.name === selectedAssignee);
-        if (staff) {
-          // Update the contact
-          this.contactServices.updateContact(this.contactId, updateData)
-            .subscribe(
-              response => {
-                console.log('Contact updated successfully:', response);
-                
-                // Send WhatsApp notification to staff
-                const lead = this.dataSource.data.find(item => item._id === this.contactId);
-                if (lead) {
-                  this.contactServices.sendLeadNotification(
-                    staff.name,
-                    staff.phone_number,
-                    lead.fullname,
-                    lead.email,
-                    lead.phone,
-                    lead.courses
-                  ).subscribe(
-                    notificationResponse => {
-                      console.log('Notification sent:', notificationResponse);
-                    },
-                    error => {
-                      console.error('Error sending notification:', error);
-                    }
-                  );
-                }
-              },
-              error => {
-                console.error('Error updating contact:', error);
-              }
-            );
+onAssigneeSelect(selectedAssignee: string, itemId: string) {
+  this.contactId = itemId;
+  if (!this.contactId) {
+    console.error('No contact ID provided');
+    return;
+  }
+  const rowIndex = this.dataSource.data.findIndex(item => item._id === itemId);
+  if (rowIndex === -1) {
+    console.error('Contact not found in dataSource');
+    return;
+  }
+  // Get the contact (lead) data
+  const lead = this.dataSource.data[rowIndex];
+  // Update local data first for immediate UI feedback
+  this.dataSource.data[rowIndex].assignee = selectedAssignee;
+  this.dataSource._updateChangeSubscription();
+  // This single call handles BOTH contact assignment AND notification creation!
+  this.contactServices.onAssigneeSelect(selectedAssignee, itemId).subscribe({
+    next: (response: any) => {
+      console.log('Contact assigned and notification created:', response);
+      this.notificationService.notifyUpdate();
+      // Show success message with notification info
+      this.successMessage = `Contact assigned to ${selectedAssignee} successfully. Notification sent!`;
+      this.openSnackBar(this.successMessage);
+      // If you want to do something with the notification data
+      if (response.notification) {
+        console.log('Notification created:', response.notification);
+        // Optional: Refresh notifications if you have a notification panel
+        if (this.userId) {
+          this.loadNotifications();
+          this.loadUnreadCount();
         }
-      },
-      error => {
-        console.error('Error fetching users:', error);
       }
-    );
-  }
+    },
+    error: (err: any) => {
+      console.error('Error:', err);
+      this.errorMessage = 'Error assigning contact';
+      this.openSnackBar(this.errorMessage);
+    }
+  });
+}
 
-    // Find the index of the current row in the dataSource array
-    const rowIndex = this.dataSource.data.findIndex(item => item.itemId === itemId);
-  
-    // Update the selected course for the current row
-    this.dataSource.data[rowIndex].assignee = selectedAssignee;
-  
-    // You can perform additional actions based on the selected course
-    console.log('Selected Assignee:', selectedAssignee);
+loadNotifications(): void {
+    this.notificationService.getUserNotifications(this.userId!)
+      .subscribe(res => {
+        this.notifications = res.data; // backend returns {status, data}
+      });
   }
-  
+  loadUnreadCount(): void {
+    this.notificationService.getUnreadCount(this.userId!)
+      .subscribe(res => {
+        this.unreadCount = res.count;
+      });
+  }
+  markAsRead(id: string): void {
+    this.notificationService.markAsRead(id).subscribe(() => {
+      this.loadNotifications();
+      this.loadUnreadCount();
+    });
+  }
+  markAllAsRead(): void {
+    this.notificationService.markAllAsRead(this.userId!)
+      .subscribe(() => {
+        this.loadNotifications();
+        this.loadUnreadCount();
+      });
+  }
    
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
@@ -288,12 +308,13 @@ async onCourseSelectionChange(selectedLead: string, itemId: string) {
     sort_by: this.sortBy,
    page_size: this.itemsPerPage,
     page_num: this.pageNum,
-    assignee: this.getUserName()
+    assignee: this.getUserName(),
+    exclude_registered:true,
   };
    if (this.userType === 'staff') {
     params.assignee = this.userName;
   }
-  this.contactServices.getAllContact(params).subscribe(
+  this.contactServices.getNonRegisteredContacts(params).subscribe(
     (data: any) => {
       if (data && data.data && data.data.length > 0) {
         // Sort comments for each contact by createdAt in descending order
@@ -567,19 +588,7 @@ openCreateUserDialog(): void {
       });
     }
   });
-}// Add this method
-getRowColor(leadStatus: string): string {
-  console.log('Lead status:', leadStatus); // Check console for output
-  switch(leadStatus) {
-    case 'New lead': return 'rgba(58, 167, 244, 0.2)';
-    case 'Contacted': return 'rgba(173, 216, 230, 0.3)';
-    case 'Followup': return 'rgba(255, 255, 0, 0.2)';
-    case 'Not interested': return 'rgba(255, 0, 0, 0.1)';
-    case 'Finalized': return 'rgba(0, 128, 0, 0.15)';
-    default: return '';
-  }
 }
-
 getLeadStatusClass(status: string): string {
   if (!status) return '';
   // Convert status to lowercase and remove spaces for CSS class
@@ -693,6 +702,45 @@ sendLeadDetails(contactId: string) {
     );
   }
 }
+hasNewNotifications(assignee: string): boolean {
+  if (!this.notifications || this.notifications.length === 0) {
+    return false;
+  }
+  // Check if there are any unread notifications for this assignee
+  return this.notifications.some(notification =>
+    !notification.isRead &&
+    notification.message.includes(assignee)
+  );
+}
+private createWebsiteNotification(selectedAssignee: string, itemId: string, contactData: any): void {
+  // Find the staff user to get their ID
+  this.getUsername.getAllUsers().subscribe({
+    next: (users: any) => {
+      const staffUser = users.data.find((user: any) => user.name === selectedAssignee);
+      if (staffUser && staffUser._id) {
+        const notificationMessage = `You have been assigned a new lead: ${contactData.fullname} - ${contactData.courses} (${contactData.phone})`;
+        // Call the notification service to create website notification
+        this.notificationService.createNotification({
+          userId: staffUser._id,
+          message: notificationMessage,
+          type: 'assignment',
+          relatedContact: itemId
+        }).subscribe({
+          next: (notificationResponse: any) => {
+            console.log('Website notification created:', notificationResponse);
+          },
+          error: (error: any) => {
+            console.error('Error creating website notification:', error);
+          }
+        });
+      }
+    },
+    error: (error: any) => {
+      console.error('Error fetching users for notification:', error);
+    }
+  });
+}
+
 }
 
 // loadRegisteredLeads() {

@@ -18,7 +18,7 @@ import { CreateRegisteredDialogComponent } from '../../components/create-registe
 })
 export class UserRegisterComponent implements OnInit {
   dataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
-  displayedColumns: string[] = ['select', 'fullname', 'email', 'phone', 'course', 'createdDateTime', 'comments', 'action', 'Registration'];
+  displayedColumns: string[] = ['select', 'fullname', 'email', 'phone', 'course', 'createdDateTime', 'comments', 'action', 'Registration','account'];
   searchTerm: string = '';
   startDate: any = null;
   endDate: any = new Date();
@@ -232,6 +232,14 @@ goToLastPage(): void {
       }
     });
   }
+  viewAccount(contactId: string): void {
+  if (contactId) {
+    this.router.navigate(['/account', contactId]);
+  } else {
+    console.error('No contact ID provided for navigation');
+    this.openSnackBar('Error: No contact ID available');
+  }
+}
 }
 
 

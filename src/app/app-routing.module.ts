@@ -46,6 +46,9 @@ import { WhatsappActivityComponent } from './components/whatsapp-activity/whatsa
 import { TemplateManagerComponent } from './components/template-manager/template-manager.component';
 import { UserRegisterComponent } from './controller/user-register/user-register.component';
 import { InstallmentComponent } from './components/installment/installment.component';
+import { AccountComponent } from './components/account/account.component';
+import { AllAccountsComponent } from './components/all-accounts/all-accounts.component';
+import { NotificationComponent } from './components/notification/notification.component';
 
 
 const routes: Routes = [
@@ -94,7 +97,9 @@ const routes: Routes = [
    { path:'installment', component: InstallmentComponent },
    {path:'app-user-register',component:UserRegisterComponent},
  {path:'user-register',component:UserRegisterComponent},
-
+{path:'account/:id',component:AccountComponent},
+{path:'app-all-accounts',component:AllAccountsComponent},
+{ path: 'notifications', component: NotificationComponent },
   { path: '**', redirectTo: 'home' },
   
 

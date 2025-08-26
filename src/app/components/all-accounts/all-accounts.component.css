@@ -1,0 +1,233 @@
+/* Main Container */
+.all-accounts-container {
+  padding: 15px;
+  background: #f8f9fa;
+  min-height: 100vh;
+}
+
+.all-accounts-container h2 {
+  color: #2c3e50;
+  margin-bottom: 24px;
+  font-weight: 600;
+  font-size: 28px;
+  padding-bottom: 12px;
+}
+
+/* Search Controls */
+.search-controls {
+  margin-bottom: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.search-field {
+  flex: 0 0 auto;
+  width: 400px;
+}
+.search-field .mat-form-field-wrapper {
+  padding-bottom: 0;
+}
+
+.search-field .mat-form-field-flex {
+  height: 36px;
+  align-items: center;
+}
+
+.search-field .mat-form-field-infix {
+  padding: 0.4em 0;
+  border-top: 0;
+}
+
+.search-field .mat-input-element {
+  font-size: 13px;
+}
+
+.search-controls button[mat-raised-button] {
+  height: 36px;
+  padding: 0 10px;
+  font-size: 13px;
+  line-height: 36px;
+}
+/* Table Container */
+.table-container {
+  border: 1px solid #E0E0E0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  background: white;
+}
+
+/* Table Styling */
+.mat-elevation-z8 {
+  margin-bottom: 0;
+  box-shadow: none;
+  width: 100%;
+}
+
+.mat-header-row {
+  background: #f5f5f5;
+  height: 56px;
+}
+
+.mat-header-cell {
+  font-weight: 600;
+  color: #333;
+  padding: 0 10px;
+}
+
+.mat-row {
+  height: 48px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.mat-row:hover {
+  background-color: #F5F5F5 !important;
+}
+
+.mat-cell {
+  padding: 0 10px;
+  font-size: 14px;
+  color: #2c3e50;
+  border: none;
+}
+
+/* Status Badges */
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+.status-pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-partially_paid {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-completed {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-overdue {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* Action Buttons */
+button[mat-raised-button] {
+  background: none;
+  color: #000;
+  border: 2px solid #000;
+  transition: all 0.3s ease;
+  padding: 0 16px;
+  height: 36px;
+  font-size: 14px;
+}
+
+button[mat-raised-button]:hover {
+  background: #3AA7F4;
+  border-color: #3AA7F4;
+  color: #fff;
+}
+
+/* No Data Message */
+.no-data {
+  text-align: center;
+  padding: 40px 20px;
+  color: #7f8c8d;
+}
+
+.no-data p {
+  font-size: 16px;
+  margin: 0;
+}
+
+/* Pagination */
+.pagination-container {
+  margin-top: 20px;
+  padding: 12px 16px;
+  background: white;
+  border-top: 1px solid #E0E0E0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.pagination {
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.page-item {
+  cursor: pointer;
+}
+
+.page-number-container {
+  flex-wrap: wrap;
+}
+
+.pagination-info {
+  font-size: 0.9rem;
+  color: #666;
+  white-space: nowrap;
+}
+
+.page-link {
+  color: #0D6EFD;
+  padding: 6px 12px;
+}
+
+.page-item.active .page-link {
+  background-color: #0D47A1;
+  border-color: #0D47A1;
+  color: white;
+}
+
+.page-item.disabled .page-link {
+  color: #6C757D;
+  pointer-events: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .all-accounts-container {
+    padding: 10px;
+  }
+  
+  .all-accounts-container h2 {
+    font-size: 24px;
+  }
+  
+  .search-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .search-field {
+    min-width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  .pagination-container {
+    justify-content: center;
+  }
+  
+  .pagination {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}

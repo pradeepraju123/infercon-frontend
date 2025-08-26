@@ -12,7 +12,7 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Email</mat-label>
-            <input type="email" formControlName="email" matInput placeholder="Email" required>
+            <input type="email" formControlName="email" matInput placeholder="Email" >
           </mat-form-field>
 
 <mat-form-field appearance="outline">
@@ -23,6 +23,9 @@
   </mat-error>
   <mat-error *ngIf="createForm.get('phone')?.hasError('invalidPhone')">
     Please enter a valid phone number for the selected country
+  </mat-error>
+  <mat-error *ngIf="createForm.get('phone')?.hasError('phoneTooShort')">
+    Phone number is too short for the selected country
   </mat-error>
   <mat-error *ngIf="createForm.get('phone')?.hasError('phoneExists')">
     User with this phone number already exists!
