@@ -7,7 +7,7 @@ import { AuthService } from './auth.service';
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://localhost:8081/api/v1/users';
+  private apiUrl = 'https://api.inferconautomation.com/api/v1/users';
   constructor(
     private http: HttpClient,
     private authService: AuthService // Inject your authentication service
@@ -122,7 +122,7 @@ getDashboardData(
       .set('enrollmentsPage', enrollmentsPage.toString())
       .set('enrollmentsLimit', enrollmentsLimit.toString());
       
-    return this.http.get<any>('http://localhost:8081/api/v1/dashboard', { headers, params });
+    return this.http.get<any>('https://api.inferconautomation.com/api/v1/dashboard', { headers, params });
   } else {
     return throwError('No authentication token found');
   }

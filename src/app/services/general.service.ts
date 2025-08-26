@@ -8,7 +8,7 @@ import { AuthService } from './auth.service';
 })
 export class GeneralService {
 
-  private apiUrl = 'http://localhost:8081/api/v1/general-data';
+  private apiUrl = 'https://api.inferconautomation.com/api/v1/general-data';
 
   constructor(
     private http: HttpClient,

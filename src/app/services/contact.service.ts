@@ -8,7 +8,7 @@ import { catchError } from 'rxjs/operators';
 })
 export class ContactService {
 
-  private apiUrl = 'http://localhost:8081/api/v1/contact';
+  private apiUrl = 'https://api.inferconautomation.com/api/v1/contact';
 
 
 

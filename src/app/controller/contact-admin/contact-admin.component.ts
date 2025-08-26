@@ -36,11 +36,11 @@ export class ContactAdminComponent implements AfterViewInit {
   singleEndDate: Date | null = null;
   published: any;
   sortBy: any
-  pageSize = 5;
+  pageSize = 100;
   pageNum = 1;
   totalItems: number = 0;
 totalPages: number = 1;
-itemsPerPage: number = 5;
+itemsPerPage: number = 100;
   data : any
   userType: any
   userName : any
