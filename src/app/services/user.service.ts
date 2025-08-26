@@ -131,7 +131,7 @@ getDashboardData(params?: {
       if (params.newEnrollmentPage) queryParams.newEnrollmentPage = params.newEnrollmentPage;
       if (params.newEnrollmentLimit) queryParams.newEnrollmentLimit = params.newEnrollmentLimit;
     }
-    return this.http.get<any>('http://localhost:8081/api/v1/dashboard', {
+    return this.http.get<any>('https://api.inferconautomation.com/api/v1/dashboard', {
       headers,
       params: queryParams
     });
