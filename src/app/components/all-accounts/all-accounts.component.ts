@@ -5,7 +5,8 @@ import { MatSort } from '@angular/material/sort';
 import { AccountsService } from '../../services/accounts.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-
+import { AccountDialogComponent } from '../account-dialog/account-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-all-accounts',
   templateUrl: './all-accounts.component.html',
@@ -28,7 +29,8 @@ export class AllAccountsComponent implements OnInit {
   constructor(
     private accountService: AccountsService,
     private snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private dialog:MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -69,8 +71,18 @@ export class AllAccountsComponent implements OnInit {
     }
   }
 
-  viewAccountDetails(contactId: string): void {
-    this.router.navigate(['/account', contactId]);
+  viewAccountModal(contactId: string): void {
+    if (contactId) {
+      const dialogRef = this.dialog.open(AccountDialogComponent, {
+        width: '90%',
+        maxWidth: '1200px',
+        maxHeight: '90vh',
+        data: { contactId: contactId }
+      });
+    } else {
+      console.error('No contact ID provided for modal');
+      this.snackBar.open('Error: No contact ID available');
+    }
   }
 
   // Pagination methods

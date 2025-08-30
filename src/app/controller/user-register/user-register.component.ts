@@ -10,7 +10,7 @@ import { EditContactComponent } from '../../components/edit-contact/edit-contact
 import { AuthService } from '../../services/auth.service';
 import { CommentsDialogComponent } from '../../components/comments-dialog/comments-dialog.component';
 import { CreateRegisteredDialogComponent } from '../../components/create-registered-dialog/create-registered-dialog.component';
-
+import { AccountDialogComponent } from '../../components/account-dialog/account-dialog.component';
 @Component({
   selector: 'app-user-register',
   templateUrl: './user-register.component.html',
@@ -232,11 +232,16 @@ goToLastPage(): void {
       }
     });
   }
-  viewAccount(contactId: string): void {
+viewAccountModal(contactId: string): void {
   if (contactId) {
-    this.router.navigate(['/account', contactId]);
+    const dialogRef = this.dialog.open(AccountDialogComponent, {
+      width: '90%',
+      maxWidth: '1200px',
+      maxHeight: '90vh',
+      data: { contactId: contactId }
+    });
   } else {
-    console.error('No contact ID provided for navigation');
+    console.error('No contact ID provided for modal');
     this.openSnackBar('Error: No contact ID available');
   }
 }

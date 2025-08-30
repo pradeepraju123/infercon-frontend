@@ -110,6 +110,7 @@ import { AccountComponent } from './components/account/account.component';
 import { AllAccountsComponent } from './components/all-accounts/all-accounts.component';
 import { NotificationComponent } from './components/notification/notification.component';
 import { NotificationBellComponent } from './components/notification-bell/notification-bell.component';
+import { AccountDialogComponent } from './components/account-dialog/account-dialog.component';
 
 @NgModule({
   declarations: [
@@ -188,6 +189,7 @@ import { NotificationBellComponent } from './components/notification-bell/notifi
           AllAccountsComponent,
           NotificationComponent,
           NotificationBellComponent,
+          AccountDialogComponent,
     
     
     
