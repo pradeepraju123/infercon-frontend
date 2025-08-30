@@ -7,7 +7,9 @@ import { Observable } from 'rxjs';
 })
 export class RegistrationService {
 
-  private apiUrl = 'http://localhost:8081/api/v1/registration';
+    private apiUrl = 'http://localhost:8081/api/v1/registration';
+
+ 
 
   constructor(
     private http: HttpClient
@@ -16,4 +18,5 @@ export class RegistrationService {
        const url = `${this.apiUrl}`;
        return this.http.post(url, data);
   }
+  
 }
