@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class InstallmentService {
-  private apiUrl = 'http://localhost:8081/api/v1/users/active';
+  private apiUrl = 'https://api.inferconautomation.com/api/v1/users/active';
 
   constructor(private http: HttpClient) {}
 

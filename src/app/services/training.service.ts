@@ -10,7 +10,7 @@ import { map } from 'rxjs/operators';
 export class TrainingService {
 
   
-  private apiUrl = 'http://localhost:8081/api/v1/trainings';
+  private apiUrl = 'https://api.inferconautomation.com/api/v1/trainings';
 
   constructor(
     private http: HttpClient,

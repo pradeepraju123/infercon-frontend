@@ -59,11 +59,11 @@ accountsSelection = new SelectionModel<any>(true, []);
   singleEndDate: Date | null = null;
   published: any;
   sortBy: any
-  pageSize = 5;
+  pageSize = 100;
   pageNum = 1;
   totalItems: number = 0;
 totalPages: number = 1;
-itemsPerPage: number = 5;
+itemsPerPage: number = 100;
   data : any
   userType: any
   userName : any
@@ -1053,10 +1053,12 @@ loadNewLeads() {
 
 loadRegisteredLeads() {
   const params: any = {
-    page_size: this.itemsPerPage,
-    page_num: this.pageNum
+    page_size: this.registeredItemsPerPage, // Use the specific pagination setting
+    page_num: this.registeredPageNum,
+    assignee: this.userName
   };
-if (this.userType === 'staff') {
+
+  if (this.userType === 'staff') {
     params.assignee = this.userName;
   }
 
@@ -1071,8 +1073,12 @@ if (this.userType === 'staff') {
         });
         
         this.registeredDataSource = new MatTableDataSource(registeredLeads);
+        this.registeredTotalItems = data.pagination?.total_items || registeredLeads.length;
+        this.registeredTotalPages = data.pagination?.total_pages || Math.ceil(this.registeredTotalItems / this.registeredItemsPerPage);
       } else {
         this.registeredDataSource = new MatTableDataSource<any>([]);
+        this.registeredTotalItems = 0;
+        this.registeredTotalPages = 1;
       }
     },
     (error) => {
@@ -1080,7 +1086,6 @@ if (this.userType === 'staff') {
     }
   );
 }
-
 // Add selection methods for registered table
 isAllRegisteredSelected() {
   const numSelected = this.registeredSelection.selected.length;

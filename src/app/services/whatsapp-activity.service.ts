@@ -12,15 +12,15 @@ export class WhatsappActivityService {
   private apiUrl = 'https://api.inferconautomation.com/api/v1/contact';
   private excelUrl='https://api.inferconautomation.com/api/v1/users/getall';
  private template='https://api.inferconautomation.com/api/v1/users/bulkwhatsmes';
- // private excelUrl='http://localhost:8081/api/v1/users/getall';
-   //private excelUrl_contacts='http://localhost:8081/api/v1/users/bulkupload';
+ // private excelUrl='https://api.inferconautomation.com/api/v1/users/getall';
+   //private excelUrl_contacts='https://api.inferconautomation.com/api/v1/users/bulkupload';
    private excelUrl_contacts='https://api.inferconautomation.com/api/v1/users/bulkupload';
 
    private filter_contact='https://api.inferconautomation.com/api/v1/users/filtercontact';
   private deletecontact='https://api.inferconautomation.com/api/v1/users/deletecontact'
- // private deletecontact='http://localhost:8081/api/v1/users/deletecontact';
-   // private template='http://localhost:8081/api/v1/users/bulkwhatsmes';
-    //private filter_contact='http://localhost:8081/api/v1/users/filtercontact';
+ // private deletecontact='https://api.inferconautomation.com/api/v1/users/deletecontact';
+   // private template='https://api.inferconautomation.com/api/v1/users/bulkwhatsmes';
+    //private filter_contact='https://api.inferconautomation.com/api/v1/users/filtercontact';
 
 
 

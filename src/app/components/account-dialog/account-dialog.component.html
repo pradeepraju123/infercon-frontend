@@ -1,4 +1,4 @@
-<!-- account-dialog.component.html -->
+
 <div class="modal-header">
   <h2>Account Details</h2>
    <button class="close-button" (click)="onClose()">
@@ -7,7 +7,7 @@
 </div>
 
 <mat-dialog-content class="modal-content">
-  <!-- Copy the content from account.component.html -->
+
   <ng-container *ngIf="!loading; else loadingTemplate">
     <div class="account-container" *ngIf="installment && hasInstallments; else noDetailsTemplate">
       <div class="header">

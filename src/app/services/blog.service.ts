@@ -9,7 +9,7 @@ import { map } from 'rxjs/operators';
 })
 export class BlogService {
 
-  private apiUrl = 'http://localhost:8081/api/v1/blogs';
+  private apiUrl = 'https://api.inferconautomation.com/api/v1/blogs';
 
   constructor(
     private http: HttpClient,

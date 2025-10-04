@@ -8,7 +8,7 @@ import { AuthService } from '../auth.service';
 })
 export class InstallmentService {
 
-  private baseUrl = 'http://localhost:8081/api/v1/installments';
+  private baseUrl = 'https://api.inferconautomation.com/api/v1/installments';
 
   constructor(private http: HttpClient) {}
 

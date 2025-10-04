@@ -10,7 +10,7 @@ import { map } from 'rxjs/operators';
 export class ServicesdataService {
 
     
-  private apiUrl = 'http://localhost:8081/api/v1/services-data';
+  private apiUrl = 'https://api.inferconautomation.com/api/v1/services-data';
 
   constructor(
     private http: HttpClient,
@@ -21,7 +21,7 @@ getAllServicesdata(): Observable<any> {
       return this.http.get<any>(this.apiUrl);
     }
 getServicedata(_id: string): Observable<any> {
-      const url = `http://localhost:8081/api/v1/services-data/${_id}`;
+      const url = `https://api.inferconautomation.com/api/v1/services-data/${_id}`;
       return this.http.get(url).pipe(
         map((response: any) => response.data) // Extract the 'data' property from the response
       );
