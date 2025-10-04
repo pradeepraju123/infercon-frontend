@@ -324,3 +324,124 @@ textarea.mat-input-element {
 .close-btn::after {
   transform: rotate(-45deg);
 }
+/* Manual Installments Section */
+.manual-installments-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.installment-box {
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  background: #fafafa;
+}
+
+.installment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.installment-number {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.installment-status {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.installment-fields {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.amount-field, .date-field {
+  flex: 1;
+}
+
+.installment-actions {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 8px;
+}
+
+.installment-actions button {
+  flex: 1;
+  font-size: 11px;
+  padding: 0 8px;
+  min-width: auto;
+}
+
+.paid-amount {
+  font-size: 12px;
+  font-weight: 600;
+  color: #2e7d32;
+  text-align: center;
+  padding: 4px;
+  background: rgba(76, 175, 80, 0.1);
+  border-radius: 4px;
+}
+
+.manual-total {
+  text-align: center;
+  padding: 15px;
+  background: #e3f2fd;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #1976d2;
+}
+
+/* Auto Installment Section */
+.auto-installment-section {
+  padding: 10px 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .manual-installments-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .installment-fields {
+    flex-direction: column;
+  }
+  
+  .installment-actions {
+    flex-wrap: wrap;
+  }
+  
+  .installment-actions button {
+    flex: 0 0 calc(50% - 5px);
+  }
+}
+
+/* Status color backgrounds */
+.status-paid {
+  background-color: rgba(76, 175, 80, 0.1) !important;
+  border-left: 4px solid #4caf50 !important;
+}
+
+.status-overdue {
+  background-color: rgba(244, 67, 54, 0.1) !important;
+  border-left: 4px solid #f44336 !important;
+}
+
+.status-pending {
+  background-color: rgba(255, 193, 7, 0.1) !important;
+  border-left: 4px solid #ffc107 !important;
+}
+
+.status-partial {
+  background-color: rgba(255, 152, 0, 0.1) !important;
+  border-left: 4px solid #ff9800 !important;
+}

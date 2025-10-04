@@ -276,6 +276,56 @@ getUnreadCount(userId: string) {
     })
   );
 }
+softDeleteContact(contactId: string): Observable<any> {
+  const token =sessionStorage.getItem('authToken')
+  if (token){
+    const headers = new HttpHeaders({
+       'Authorization': 'Bearer ' + token
+    });
+    return this.http.delete(`${this.apiUrl}/${contactId}/soft-delete`,{headers})
+  }
+  else{
+    return throwError('No authentication token found');
+  }
+}
+restoreContact(contactId: string): Observable<any> {
+  const token =sessionStorage.getItem('authToken')
+  if (token){
+    const headers = new HttpHeaders({
+       'Authorization': 'Bearer ' + token
+    });
+    return this.http.patch(`${this.apiUrl}/${contactId}/restore`,{headers})
+  }
+  else{
+    return throwError('No authentication token found');
+  }
 }
 
+getFollowupLeads(params: any): Observable<any> {
+  const token =sessionStorage.getItem('authToken')
+  if (token){
+    const headers = new HttpHeaders({
+       'Authorization': 'Bearer ' + token
+    });
+  return this.http.post<any>(`${this.apiUrl}/followup-leads`, params,{headers});
+}
+else{
+    return throwError('No authentication token found');
+  }
+}
+
+getFinalizedLeads(params: any): Observable<any> {
+   const token =sessionStorage.getItem('authToken')
+  if (token){
+    const headers = new HttpHeaders({
+       'Authorization': 'Bearer ' + token
+    });
+  return this.http.post(`${this.apiUrl}/finalized`, params,{headers});
+}
+else{
+    return throwError('No authentication token found');
+  }
+}
+
+}
 

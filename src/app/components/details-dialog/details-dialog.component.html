@@ -1,0 +1,116 @@
+
+<div class="details-dialog">
+  <div mat-dialog-title class="dialog-header">
+    <h2>Contact Details</h2>
+    <button class="floating-close" (click)="onClose()" aria-label="Close">&times;</button>
+  </div>
+
+  <div mat-dialog-content class="dialog-content">
+    <div class="details-grid">
+      <!-- Personal Information -->
+      <div class="detail-section">
+        <h3>Personal Information</h3>
+        <div class="detail-row">
+          <span class="detail-label">Full Name:</span>
+          <span class="detail-value">{{ data.contact.fullname }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Phone:</span>
+          <span class="detail-value">{{ data.contact.phone }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Email:</span>
+          <span class="detail-value">{{ data.contact.email }}</span>
+        </div>
+      </div>
+
+      <!-- Course Information -->
+      <div class="detail-section">
+        <h3>Course Information</h3>
+        <div class="detail-row">
+          <span class="detail-label">Course:</span>
+          <span class="detail-value">{{ data.contact.courses }}</span>
+        </div>
+      </div>
+
+      <!-- Timeline Information -->
+      <div class="detail-section">
+        <h3>Timeline</h3>
+        <div class="detail-row">
+          <span class="detail-label">Created Date:</span>
+          <span class="detail-value">{{ data.contact.created_date | date:'mediumDate' }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Created Time:</span>
+          <span class="detail-value">{{ data.contact.created_time }}</span>
+        </div>
+        <div class="detail-row" *ngIf="data.contact.followup_date">
+          <span class="detail-label">Follow-up Date:</span>
+          <span class="detail-value">{{ data.contact.followup_date | date:'mediumDate' }}</span>
+        </div>
+        <div class="detail-row" *ngIf="data.contact.followup_time">
+          <span class="detail-label">Follow-up Time:</span>
+          <span class="detail-value">{{ formatTimeForDisplay(data.contact.followup_time) }}</span>
+        </div>
+      </div>
+
+      <!-- Status Information -->
+      <div class="detail-section">
+        <h3>Status</h3>
+        <div class="detail-row">
+          <span class="detail-label">Lead Status:</span>
+          <span class="detail-value status-badge" [ngClass]="getStatusClass(data.contact.lead_status)">
+            {{ data.contact.lead_status }}
+          </span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Assignee:</span>
+          <span class="detail-value">{{ data.contact.assignee || 'Not assigned' }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Registration Status:</span>
+          <span class="detail-value">
+            <span [ngClass]="{'registered': data.contact.isRegistered, 'not-registered': !data.contact.isRegistered}">
+              {{ data.contact.isRegistered ? 'Registered' : 'Not Registered' }}
+            </span>
+          </span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Created By:</span>
+          <span class="detail-value">{{ data.contact.created_by || 'System' }}</span>
+        </div>
+      </div>
+
+      <!-- Comments Section -->
+      <div class="detail-section" *ngIf="data.contact.comments && data.contact.comments.length > 0">
+        <h3>Comments ({{ data.contact.comments.length }})</h3>
+        <div class="comments-list">
+          <div *ngFor="let comment of data.contact.comments" class="comment-item">
+            <div class="comment-header">
+              <span class="comment-author">{{ comment.createdBy || 'System' }}</span>
+              <span class="comment-date">{{ comment.createdAt | date:'short' }}</span>
+            </div>
+            <div class="comment-text">{{ comment.texts }}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section" *ngIf="!data.contact.comments || data.contact.comments.length === 0">
+        <h3>Comments</h3>
+        <p class="no-comments">No comments yet.</p>
+      </div>
+    </div>
+  </div>
+
+  <div mat-dialog-actions class="dialog-actions">
+    <button mat-button mat-dialog-close class="close-btn">Close</button>
+    <button mat-raised-button color="primary" (click)="openEditDialog()" class="edit-btn">
+      <!-- <mat-icon>edit</mat-icon> -->
+      Edit Contact
+    </button>
+    <button mat-raised-button color="accent" (click)="openCommentsDialog()" class="comments-btn">
+      <!-- <mat-icon>comment</mat-icon> -->
+      Add Comment
+    </button>
+  </div>
+</div>

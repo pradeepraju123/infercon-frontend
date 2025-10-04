@@ -500,14 +500,3 @@ formatTime(time24: string): string {
   return `${hoursNum}:${minutes} ${ampm}`;
 }
 }
-
-
-
-
-
-
-
-
-
-
-

@@ -1,0 +1,112 @@
+<!-- account-dialog.component.html -->
+<div class="modal-header">
+  <h2>Account Details</h2>
+   <button class="close-button" (click)="onClose()">
+    ×
+  </button>
+</div>
+
+<mat-dialog-content class="modal-content">
+  <!-- Copy the content from account.component.html -->
+  <ng-container *ngIf="!loading; else loadingTemplate">
+    <div class="account-container" *ngIf="installment && hasInstallments; else noDetailsTemplate">
+      <div class="header">
+        <h2>Account Details</h2>
+        
+        <div class="contact-info">
+          <div class="info-row">
+            <div class="info-item">
+              <strong>Name:</strong> {{installment.contactDetails?.name || installment.firstname}} {{installment.middlename}} {{installment.lastname}}
+            </div>
+            <div class="info-item">
+              <strong>Email:</strong> {{installment.contactDetails?.email || installment.email}}
+            </div>
+          </div>
+          
+          <div class="info-row">
+            <div class="info-item">
+              <strong>Phone:</strong> {{installment.contactDetails?.phone || installment.mobile}}
+            </div>
+            <div class="info-item">
+              <strong>Course:</strong> {{installment.courses}}
+            </div>
+          </div>
+        </div>
+
+        <div class="financial-summary">
+          <div class="summary-item">
+            <strong>Total Amount:</strong> {{installment.totalAmount | currency:installment.currencyType}}
+          </div>
+          <div class="summary-item">
+            <strong>Pending Amount:</strong> {{installment.pendingAmount | currency:installment.currencyType}}
+          </div>
+          <div class="summary-item">
+            <strong>Paid Amount:</strong> {{installment.totalAmount - installment.pendingAmount | currency:installment.currencyType}}
+          </div>
+          <div class="summary-item">
+            <strong>Overall Status:  </strong>
+            <span [class]="'status-badge ' + getOverallStatusColor()">
+              {{getOverallStatusText()}}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="installments-section">
+        <h3>Installment Plan</h3>
+        
+        <div class="installments-grid">
+          <div *ngFor="let installment of installment.installments; let i = index" 
+               [class]="'installment-card ' + getStatusColor(installment)">
+            
+            <div class="installment-header">
+              <h4>Installment #{{i + 1}}</h4>
+              <span [class]="'status-badge ' + getStatusColor(installment)">{{getStatusText(installment)}}</span>
+            </div>
+            
+            <div class="installment-details">
+              <div class="detail-item">
+                <strong>Amount:</strong> {{installment.amount | currency:installment.currencyType}}
+              </div>
+              <div class="detail-item">
+                <strong>Due Date:</strong> {{installment.dueDate | date:'mediumDate'}}
+              </div>
+              <div class="detail-item" *ngIf="installment.paymentDate">
+                <strong>Paid On:</strong> {{installment.paymentDate | date:'mediumDate'}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="payment-history" *ngIf="installment.paymentHistory?.length">
+        <h3>Payment History</h3>
+        <div class="history-table">
+          <div class="history-header">
+            <div>Date</div>
+            <div>Amount</div>
+          </div>
+          <div class="history-row" *ngFor="let payment of installment.paymentHistory">
+            <div>{{payment.date | date:'mediumDate'}}</div>
+            <div>{{payment.amount | currency:installment.currencyType}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="installment && (!installment.installments || installment.installments.length === 0)" class="no-installments">
+      <p>No installments scheduled for this account.</p>
+    </div>
+  </ng-container>
+
+  <ng-template #loadingTemplate>
+    <div class="loading">Loading account details...</div>
+  </ng-template>
+
+  <ng-template #noDetailsTemplate>
+    <div class="no-details-found">
+      <h3>No Installment Details Found</h3>
+      <p>There are no installment records available for this contact.</p>
+    </div>
+  </ng-template>
+</mat-dialog-content>

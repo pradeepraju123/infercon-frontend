@@ -110,6 +110,10 @@ import { AccountComponent } from './components/account/account.component';
 import { AllAccountsComponent } from './components/all-accounts/all-accounts.component';
 import { NotificationComponent } from './components/notification/notification.component';
 import { NotificationBellComponent } from './components/notification-bell/notification-bell.component';
+import { AccountDialogComponent } from './components/account-dialog/account-dialog.component';
+import { DeleteConfirmationDialogComponent } from './components/delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { DetailsDialogComponent } from './components/details-dialog/details-dialog.component';
 
 @NgModule({
   declarations: [
@@ -188,6 +192,9 @@ import { NotificationBellComponent } from './components/notification-bell/notifi
           AllAccountsComponent,
           NotificationComponent,
           NotificationBellComponent,
+          AccountDialogComponent,
+          DeleteConfirmationDialogComponent,
+          DetailsDialogComponent,
     
     
     
@@ -221,6 +228,7 @@ import { NotificationBellComponent } from './components/notification-bell/notifi
     MatSelectModule,
     MatSortModule,
     MatCardModule,
+     MatMenuModule,
     NgxEditorModule.forRoot({
       locals: {
         // menu

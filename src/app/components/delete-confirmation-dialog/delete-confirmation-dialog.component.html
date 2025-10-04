@@ -1,0 +1,12 @@
+<div class="custom-dialog-container">
+  <div class="dialog-header">
+    <h2>Confirm Deletion</h2>
+  </div>
+  <div class="dialog-content">
+    <p>Are you sure you want to delete this contact?</p>
+  </div>
+  <div class="dialog-actions">
+    <button mat-button (click)="onCancel()" class="cancel-btn">Cancel</button>
+    <button mat-raised-button (click)="onConfirm()" color="warn" class="confirm-btn">Delete</button>
+  </div>
+</div>

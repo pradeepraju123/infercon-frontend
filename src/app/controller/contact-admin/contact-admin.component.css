@@ -1,5 +1,5 @@
 .contact_table {
-  padding: 15px;
+  padding: 10px;
 }
 /* Responsive table container */
 .mat-elevation-z2 {
@@ -10,10 +10,11 @@
 /* Table styling */
 .table {
   width: 100%;
-  table-layout: auto;
+  table-layout: fixed;
   min-width: 100%;
 }
 /* --- Search Section --- */
+
 .search {
   margin-bottom: 20px;
 }
@@ -28,9 +29,9 @@
 .title_field_card .mat-form-field {
   flex: 1 1 auto;
   min-width: 150px;
-  margin: 0; /* Remove any margin */
+  margin: 0; 
   display: flex;
-  align-items: center; /* Center vertically */
+  align-items: center; 
 }
 /* Input field alignment - PERFECTED */
 .title_field_card .mat-form-field-wrapper {
@@ -43,11 +44,11 @@
   border-top: 0;
   padding: 0.7em 0;
   display: flex;
-  align-items: center; /* Center content vertically */
-  min-height: 56px; /* Match button height */
+  align-items: center; 
+  min-height: 56px; 
 }
 .title_field_card .mat-form-field-flex {
-  align-items: center; /* Center content vertically */
+  align-items: center; 
   height: 100%;
 }
 /* Date range specific adjustments */
@@ -81,59 +82,71 @@
 /* Date picker toggle alignment */
 .mat-datepicker-toggle {
   display: flex;
-  align-items: center; /* Center the toggle */
+  align-items: center; 
 }
 /* Material form field adjustments for perfect alignment */
 ::ng-deep .title_field_card .mat-form-field-appearance-outline .mat-form-field-infix {
-  padding: 0.7em 0 0.7em 0; /* Consistent padding */
+  padding: 0.5em 0 0.5em 0; 
 }
 ::ng-deep .title_field_card .mat-form-field-appearance-outline .mat-form-field-outline {
-  top: 0; /* Ensure outline doesn't create offset */
+  top: 0; 
 }
 /* Input text alignment */
 ::ng-deep .title_field_card .mat-form-field-appearance-outline .mat-input-element {
-  padding: 0; /* Remove any internal padding that might affect alignment */
+  padding: 0; 
   margin: 0;
+  font-size: 12px; 
 }
 /* Label alignment */
 ::ng-deep .title_field_card .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
-  transform: translateY(-1.4em) scale(0.75); /* Standardize label position */
+  transform: translateY(-1.2em) scale(0.75); 
+  font-size: 12px;
 }
-/* --- Rest of your existing styles --- */
 .button-row {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
   margin-top: 5px;
 }
 .button-row .btn {
-  padding: 0 14px;
-  height: 40px;
-  font-size: 0.9rem;
+  padding: 0 10px;
+  height: 22px; 
+  font-size: 0.8rem; 
 }
 .lead_status {
-  min-width: 150px;
+  min-width: 50px; 
+  text-align: center;
+}
+.lead_status .mat-form-field {
+  width: 100%;
+  margin: 0 auto;
+  display: block;
+  text-align: center;
 }
 .comments-button {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 0.85rem;
-  padding: 6px 12px;
+  gap: 4px;
+  font-size: 0.75rem; 
+  padding: 4px 8px; 
 }
 .comment-count {
   background: rgba(0, 0, 0, 0.1);
-  padding: 2px 6px;
-  border-radius: 10px;
-  font-size: 0.75rem;
+  padding: 1px 4px; /* Reduced padding */
+  border-radius: 8px;
+  font-size: 0.7rem; /* Smaller font */
 }
 .mat-paginator {
-  margin-top: 15px;
+  margin-top: 10px;
   background: transparent;
+  font-size: 12px; /* Smaller font */
 }
 .mat-select-lead-status {
-  border-radius: 4px;
-  padding: 8px;
+  border-radius: 3px;
+  padding: 10px; 
+  font-size: 16px; 
+  min-width: 150px;
+  text-align: center;
 }
 .mat-select-new-lead {
   background-color: rgba(58, 167, 244, 0.3) !important;
@@ -155,24 +168,41 @@
   background-color: rgba(0, 128, 0, 0.3) !important;
   color: black !important;
 }
+.mat-select-positive {
+  background-color: #d4edda !important; /* Light green for Positive */
+  color: #155724 !important;
+}
+
+.mat-select-medium {
+  background-color: #fff3cd !important; /* Light yellow for Medium */
+  color: #856404 !important;
+}
 .mat-header-cell {
   font-weight: 600;
   color: #333;
+  font-size: 10px; 
+  padding: 0 4px !important; 
 }
-.mat-cell,
-.mat-header-cell {
-  padding: 0 10px;
+.mat-cell {
+  padding: 0 4px !important; /* Reduced padding */
+  font-size: 10px; /* Smaller font */
+}
+
+.mat-row {
+  min-height: 28px !important; /* Reduced row height */
+  height: 28px !important;
 }
 .mat-row:hover {
   background-color: #F5F5F5;
 }
+
 ::ng-deep .comments-dialog-panel .mat-dialog-container {
-  padding: 20px !important;
-  border-radius: 8px !important;
+  padding: 15px !important; /* Reduced padding */
+  border-radius: 6px !important;
   max-width: 95vw;
 }
 .followup-dialog .mat-dialog-container {
-  padding: 20px;
+  padding: 15px; 
 }
 .followup-dialog .mat-form-field {
   width: 100%;
@@ -190,8 +220,8 @@ button[disabled] {
   cursor: not-allowed;
 }
 .pagination-container {
-  margin-top: 20px;
-  padding: 12px 16px;
+  margin-top: 15px;
+  padding: 8px 12px; /* Reduced padding */
   background: white;
   border-top: 1px solid #E0E0E0;
   display: flex;
@@ -203,7 +233,7 @@ button[disabled] {
 .pagination-group {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 15px; /* Reduced gap */
 }
 .pagination {
   margin: 0;
@@ -217,12 +247,14 @@ button[disabled] {
   flex-wrap: wrap;
 }
 .pagination-info {
-  font-size: 0.9rem;
+  font-size: 0.8rem; /* Smaller font */
   color: #666;
   white-space: nowrap;
 }
 .page-link {
   color: #0D6EFD;
+  font-size: 12px; /* Smaller font */
+  padding: 8px 16px; /* Reduced padding */
 }
 .page-item.active .page-link {
   background-color: #0D47A1;
@@ -233,12 +265,6 @@ button[disabled] {
   color: #6C757D;
   pointer-events: none;
 }
-.table-container {
-  border: 1px solid #E0E0E0;
-  border-radius: 4px;
-  overflow: hidden;
-  margin-bottom: 20px;
-}
 .mat-elevation-z8 {
   margin-bottom: 0;
   box-shadow: none;
@@ -246,18 +272,218 @@ button[disabled] {
 }
 .table-container {
   border: 1px solid #E0E0E0;
-  border-radius: 4px;
+  border-radius: 3px;
   overflow-x: auto;
   width: 100%;
+  margin-bottom: 15px;
+}
+
+.staff-table {
+  border: 1px solid #E0E0E0;
+  border-radius: 3px;
+  overflow-x: auto;
+  width: 100%;
+  margin-bottom: 15px;
+}
+.card {
   margin-bottom: 20px;
+  border: 1px solid #E0E0E0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.card-header {
+  padding: 12px 15px;
+  font-weight: 600;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+.card-body {
+  padding: 0 !important;
 }
 .contact_table .container {
   width: 100%;
   max-width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
+  padding-right: 10px;
+  padding-left: 10px;
   margin-right: auto;
   margin-left: auto;
+}
+
+/* Compact form fields in table */
+::ng-deep .mat-form-field-infix {
+  padding: 0.4em 0 !important;
+  border-top: 0;
+}
+
+::ng-deep .mat-select-value {
+  font-size: 11px !important;
+}
+
+/* Make buttons in table more compact */
+.mat-raised-button {
+  min-width: 0 !important;
+  line-height: 20px !important;
+  padding: 0 6px !important;
+  font-size: 11px !important;
+}
+
+/* Compact checkboxes */
+::ng-deep .mat-checkbox-inner-container {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+::ng-deep .mat-select {
+  outline: none !important;
+}
+
+/* Remove focus outline from mat-select */
+::ng-deep .mat-select:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+::ng-deep .mat-cell .mat-form-field-appearance-outline .mat-form-field-outline {
+  display: none !important;
+}
+
+/* Remove focus border enhancement */
+::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick {
+  color: transparent !important;
+}
+
+/* Specifically for dropdowns in the table */
+::ng-deep .lead_status .mat-form-field-appearance-outline .mat-form-field-outline {
+  display: none !important;
+}
+
+/* Remove the focus indicator for select elements */
+::ng-deep .mat-select-panel {
+  outline: none !important;
+}
+
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex:hover .mat-form-field-outline {
+  color: transparent !important;
+}
+
+::ng-deep .mat-select-trigger {
+  outline: none !important;
+}
+
+
+::ng-deep .mat-select-panel {
+  border: 1px solid #e0e0e0 !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  outline: none !important;
+}
+
+/* Remove focus ring from options */
+::ng-deep .mat-option:focus {
+  outline: none !important;
+  background: rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Remove border from the form field when focused */
+::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline {
+  color: transparent !important;
+}
+
+/* Completely remove outline for a cleaner look */
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-start,
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-gap,
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline-end {
+  border: none !important;
+  display: none !important;
+}
+
+/* Remove outline from search fields too */
+::ng-deep .title_field_card .mat-form-field-appearance-outline .mat-form-field-outline {
+  opacity: 0.5 !important;
+}
+
+::ng-deep .title_field_card .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline {
+  opacity: 0.8 !important;
+}
+
+/* Minimalist style for all dropdowns in the table */
+::ng-deep .mat-table .mat-form-field-appearance-outline .mat-form-field-outline {
+  display: none !important;
+}
+
+::ng-deep .mat-table .mat-form-field-appearance-outline .mat-form-field-wrapper {
+  padding-bottom: 0 !important;
+}
+
+::ng-deep .mat-table .mat-form-field-appearance-outline .mat-form-field-infix {
+  border-top: 0 !important;
+  padding: 0.4em 0 !important;
+}
+
+/* Excel-like minimalist dropdowns */
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  border: none !important;
+  background-color: transparent !important;
+}
+
+::ng-deep .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove dropdown arrow border */
+::ng-deep .mat-select-arrow {
+  border-left: 5px solid transparent !important;
+  border-right: 5px solid transparent !important;
+  border-top: 5px solid !important;
+  margin: 0 4px !important;
+}
+
+/* Adjust the form field to look like regular text when not focused */
+::ng-deep .mat-table .mat-form-field-appearance-outline .mat-form-field-flex {
+  background-color: transparent !important;
+  margin-top: -0.25em !important;
+}
+
+/* Make the select value blend with table text */
+::ng-deep .mat-table .mat-select-value {
+  color: inherit !important;
+  font-size: inherit !important;
+}
+.mat-column-followupDateTime {
+  padding: 0 6px !important; /* Match other columns */
+  width: auto !important;
+}
+.lead_status .mat-form-field {
+  width: 100%;
+  min-width: 150px;
+}
+
+/* Ensure form fields in table cells have consistent styling */
+.mat-cell .mat-form-field {
+  margin: 0;
+  padding: 0;
+}
+
+/* Make sure the form field wrapper doesn't add extra space */
+.mat-cell .mat-form-field-wrapper {
+  padding-bottom: 0;
+  margin: 0;
+}
+
+/* Fix for date display in followup column */
+.mat-column-followupDateTime {
+  white-space: nowrap;
+}
+
+.mat-row, .mat-header-row {
+  height: 28px !important; 
+}
+
+/* Make sure form fields vertically center in cells */
+.mat-cell {
+  vertical-align: middle;
 }
 @media (max-width: 992px) {
   .title_field_card {
@@ -267,8 +493,8 @@ button[disabled] {
   .title_field_card > * {
     width: 100%;
     height: auto;
-    padding: 10px;
-    margin: 5px 0 !important;
+    padding: 8px;
+    margin: 4px 0 !important;
   }
   .button-row {
     flex-direction: column;
@@ -277,12 +503,121 @@ button[disabled] {
   .button-row .btn {
     width: 100%;
     height: auto;
-    padding: 10px;
+    padding: 8px;
   }
+  
+  /* Ensure dropdown borders stay removed on mobile */
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+    display: none !important;
+  }
+}
+
+
+
+.mat-column-followupDateTime .mat-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+
+.mat-column-followupDateTime .mat-cell {
+  white-space: normal !important;
+}
+
+.mat-column-followupDateTime .mat-cell > *:first-child {
+  margin-right: 5px;
+}
+
+.followup-date-time {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.followup-edit-trigger {
+  background: none !important;
+  border: none !important;
+  padding: 6px !important;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+  margin-left: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+} 
+.followup-edit-trigger:hover {
+  transform: scale(1.09);
+}
+
+.followup-edit-trigger img {
+  width: 16px;
+  height: 16px;
+}
+.followup-cell {
+  display: flex !important;
+  align-items: center;
+  /* justify-content: space-between; */
+  padding: 4px 8px !important;
+}
+/* For the specific followup date/time cells */
+td.mat-column-followupDateTime {
+  vertical-align: middle !important; /* Center vertically within table row */
+  padding: 0 12px !important;
+  height: 54px !important; /* Match row height */
+}
+
+td.mat-column-followupDateTime > div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* If you want date and time on same line with space */
+td.mat-column-followupDateTime > div.inline {
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+::ng-deep .lead_status .mat-form-field-wrapper {
+  padding-bottom: 0;
+  margin: 0;
+}
+
+::ng-deep .lead_status .mat-form-field-infix {
+  padding: 8px 0;
+  border-top: none;
+  margin: 0;
+}
+
+/* Position the select dropdown properly */
+.mat-select-lead-status {
+  padding: 5px;
+  width: 100%;
+  margin: 0;
+}
+
+/* Ensure proper alignment of the select trigger */
+::ng-deep .lead_status .mat-select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Center the dropdown arrow */
+::ng-deep .lead_status .mat-select-arrow-wrapper {
+  transform: translateY(0);
+}
+
+/* Fix any outline offset issues */
+::ng-deep .lead_status .mat-form-field-outline {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 @media (max-width: 768px) {
   .contact_table {
-    padding: 10px;
+    padding: 8px;
   }
   table {
     min-width: 100%;
@@ -293,7 +628,7 @@ button[disabled] {
   .pagination-group {
     flex-direction: column;
     align-items: flex-end;
-    gap: 10px;
+    gap: 8px;
   }
   .pagination {
     order: 1;
@@ -301,13 +636,496 @@ button[disabled] {
   .pagination-info {
     order: 2;
   }
+  
+  /* Mobile dropdown styles */
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+    display: none !important;
+  }
+}
+
+/* .mat-select-lead-status .mat-select-value {
+  padding-left: 4px !important;
+}
+
+.mat-select-lead-status {
+  padding: 4px 8px !important; 
+} */
+
+/* Center the lead status dropdown value */
+::ng-deep .lead_status .mat-select-value {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center !important;
+  width: 100% !important;
+}
+
+/* Center the dropdown arrow as well */
+::ng-deep .lead_status .mat-select-arrow-wrapper {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Ensure the select trigger container is properly centered */
+::ng-deep .lead_status .mat-select-trigger {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+/* Remove any padding that might be pushing content to the left */
+.mat-select-lead-status {
+  /* padding: 4px 0 !important; Remove left/right padding */
+  text-align: center !important;
+  width: 100% !important;
+}
+
+/* Center the dropdown panel options if desired */
+::ng-deep .lead_status .mat-select-panel .mat-option {
+  text-align: center !important;
+  justify-content: center !important;
+}
+
+.staff-table .mat-mdc-header-row {
+  background-color: #0D47A1 !important;
+}
+
+.staff-table .mat-mdc-header-cell {
+  color: white !important;
+  font-weight: bold !important;
+}
+.staff-table .mat-row,
+.staff-table .mat-header-row {
+  min-height: 20px !important; /* or 24px for tighter rows */
+  height: 20px !important;
+}
+
+ 
+.staff-table .mat-cell,
+.staff-table .mat-header-cell {
+  
+  line-height: 1.2 !important; /* reduces vertical spacing inside cells */
+  font-size: 11px !important;  /* smaller text to match compact rows */
+}
+
+.staff-table .mat-form-field-wrapper {
+  padding-bottom: 0 !important;
+  margin: 0 !important;
+}
+
+.staff-table .mat-form-field-infix {
+  padding: 2px 0 !important;
+  border-top: 0 !important;
+}
+
+.staff-table ::ng-deep .mat-checkbox-inner-container {
+  width: 10px !important;
+  height: 10px !important;
+}
+
+.staff-table .mat-raised-button {
+  min-width: 0 !important;
+  padding: 0 2px !important;
+  line-height: 16px !important;
+  font-size: 11px !important;
+}
+
+.staff-table table {
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+
+.staff-table .mat-column-select {
+  width: 40px !important; /* Reduce checkbox column width */
+  padding: 0 1px !important;
+}
+
+.staff-table .mat-column-fullname {
+  width: 120px !important; /* Fixed width for name */
+  padding: 0 3px !important;
+}
+
+.staff-table .mat-column-phone {
+  width: 100px !important; /* Fixed width for phone */
+  padding: 0 1px !important;
+}
+
+.staff-table .mat-column-email {
+  width: 200px !important; /* Fixed width for email */
+  padding: 0 6px !important;
+}
+
+.staff-table .mat-column-course {
+  width: 150px !important; /* Fixed width for course */
+  padding: 0 2px !important;
+}
+
+.staff-table .mat-column-assignedDateTime {
+  width: 100px !important; /* Fixed width for date */
+  padding: 0 2px !important;
+}
+
+.staff-table .mat-column-leadSelection {
+  width: 150px !important; /* Fixed width for lead status */
+  padding: 0 2px !important;
+}
+
+.staff-table .mat-column-followupDateTime {
+  width: 100px !important; /* Fixed width for followup */
+  padding: 0 2px !important;
+}
+
+.staff-table .mat-column-comments {
+  width: 120px !important; /* Fixed width for comments */
+  padding: 0 2px !important;
+}
+
+.staff-table .mat-column-Action {
+  width: 60px !important; /* Fixed width for action */
+  padding: 0 1px !important;
+}
+
+/* Today followup table */
+.today-table .mat-mdc-header-row {
+  background-color: #0D47A1 !important;
+}
+
+.today-table .mat-mdc-header-cell {
+  color: white !important;
+  font-weight: bold !important;
+}
+.today-table .mat-column-select {
+  width: 40px !important; /* Reduce checkbox column width */
+  padding: 0 10px !important;
+}
+
+.today-table .mat-column-fullname {
+  width: 120px !important; 
+  padding: 0 18px !important;
+}
+
+.today-table .mat-column-phone {
+  width: 100px !important; /* Fixed width for phone */
+  padding: 0 18px !important;
+}
+
+.today-table .mat-column-email {
+  width: 200px !important; /* Fixed width for email */
+  padding: 0 6px !important;
+}
+
+.today-table .mat-column-course {
+  width: 150px !important; /* Fixed width for course */
+  padding: 0 12px !important;
+}
+
+.today-table .mat-column-assignedDateTime {
+  width: 100px !important; /* Fixed width for date */
+  padding: 0 2px !important;
+}
+
+.today-table .mat-column-leadSelection {
+  width: 150px !important; /* Fixed width for lead status */
+  padding: 0 12px !important;
+}
+
+.today-table .mat-column-followupDateTime {
+  width: 120px !important; /* Fixed width for followup */
+  padding: 0 12px !important;
+}
+
+.today-table .mat-column-comments {
+  width: 120px !important; /* Fixed width for comments */
+  padding: 0 18px !important;
+}
+
+.today-table .mat-column-Action {
+  width: 60px !important; /* Fixed width for action */
+  padding: 0 1px !important;
+}
+
+/* Registration table specific styles */
+.registered-table {
+  border: 1px solid #28a745;
+}
+
+.registered-table .mat-mdc-header-row {
+  background-color: #0D47A1 !important;
+}
+
+.registered-table .mat-mdc-header-cell {
+  color: white !important;
+  font-weight: bold !important;
+}
+
+.badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.bg-success {
+  background-color: #28a745 !important;
+  color: white;
+}
+/* Registered Leads table specific styles */
+.staff-table .mat-column-registeredDate {
+  width: 120px !important; /* Fixed width for registered date */
+  padding: 0 2px !important;
+  text-align: center !important;
+}
+
+.staff-table .mat-column-status {
+  width: 100px !important; /* Fixed width for status */
+  padding: 0 2px !important;
+  text-align: center !important;
+}
+
+/* Ensure status badge is centered */
+.staff-table .mat-column-status .badge {
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+}
+
+/* Make sure all columns in registered table have consistent alignment */
+.staff-table .mat-column-fullname,
+.staff-table .mat-column-phone,
+.staff-table .mat-column-email,
+.staff-table .mat-column-course,
+.staff-table .mat-column-registeredDate,
+.staff-table .mat-column-status {
+  vertical-align: middle !important;
+  text-align: left !important;
+}
+
+/* Specific column widths for registered leads table */
+.staff-table.registered-table .mat-column-fullname {
+  width: 120px !important;
+}
+
+.staff-table.registered-table .mat-column-phone {
+  width: 110px !important;
+}
+
+.staff-table.registered-table .mat-column-email {
+  width: 200px !important;
+}
+
+.staff-table.registered-table .mat-column-course {
+  width: 130px !important;
+}
+
+.staff-table.registered-table .mat-column-registeredDate {
+  width: 120px !important;
+}
+
+.staff-table.registered-table .mat-column-status {
+  width: 100px !important;
+}
+
+/* Ensure header alignment matches data cells */
+.staff-table.registered-table .mat-header-cell {
+  text-align: center !important;
+  justify-content: center !important;
 }
 
 
 
+.assigned-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.assigned-display .date-text {
+  font-size: 14px;
+  color: #333;
+}
+
+.assigned-display .time-text {
+  font-size: 14px;
+  color: #333;
+}
+/* Finalized table specific styles */
+.finalized-table {
+  border: 1px solid #17a2b8;
+}
+
+.finalized-table .mat-mdc-header-row {
+  background-color:#0D47A1 !important;
+}
+
+.finalized-table .mat-mdc-header-cell {
+  color: white !important;
+  font-weight: bold !important;
+}
+
+.finalized-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.finalized-cell {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.finalized-display .date-text {
+  font-size: 14px;
+  color: #333;
+}
+
+.finalized-display .time-text {
+  font-size: 14px;
+  color: #333;
+}
+
+/* Registered Leads table specific styles */
+/* .staff-table .mat-column-finalizedDateTime {
+  width: 120px !important; 
+  padding: 0 2px !important;
+  text-align: center !important;
+} */
+
+.staff-table .mat-column-markRegistered {
+  width: 100px !important; /* Fixed width for status */
+  padding: 0 2px !important;
+  text-align: center !important;
+}
+/* Compact spacing for Finalized Leads table */
+.finalized-table .mat-column-course {
+  width: 120px !important;   /* reduce width of Course column */
+  padding: 0 4px !important;
+}
+
+.finalized-table .mat-column-Registration {
+  width: 120px !important;  
+  padding: 0 4px !important;
+  text-align: center;
+
+}
+
+.finalized-table .mat-column-Action {
+  width: 80px !important;    /* keep Action menu tight */
+  padding: 0 4px !important;
+  text-align: center;
+}
+/* Accounts table specific styles */
+.accounts-table {
+  border: 1px solid #17a2b8;
+}
+
+.accounts-table .mat-mdc-header-row {
+  background-color: #0D47A1 !important;
+}
+
+.accounts-table .mat-mdc-header-cell {
+  color: white !important;
+  font-weight: bold !important;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  display: inline-block;
+}
+
+.status-pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-partially_paid {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-completed {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.status-overdue {
+  background-color: #f8d7da;
+  color: #721c24;
+}
 
 
+.accounts-table .mat-row,
+.accounts-table .mat-header-row {
+  min-height: 20px !important;
+  height: 20px !important;
+}
 
+.accounts-table .mat-cell,
+.accounts-table .mat-header-cell {
+  line-height: 1.2 !important;
+  font-size: 11px !important;
+}
 
+.accounts-table .mat-raised-button {
+  min-width: 0 !important;
+  padding: 0 2px !important;
+  line-height: 16px !important;
+  font-size: 11px !important;
+}
 
+/* Fixed column widths for accounts table */
+.accounts-table .mat-column-select {
+  width: 40px !important;
+  padding: 0 12px !important;
+}
 
+.accounts-table .mat-column-contactName {
+  width: 120px !important;
+  padding: 0 18px !important;
+}
+
+.accounts-table .mat-column-email {
+  width: 150px !important;
+  padding: 0 18px !important;
+}
+
+.accounts-table .mat-column-phone {
+  width: 100px !important;
+  padding: 0 12px !important;
+}
+
+.accounts-table .mat-column-totalAmount,
+.accounts-table .mat-column-pendingAmount,
+.accounts-table .mat-column-paidAmount {
+  width: 90px !important;
+  padding: 0 12px !important;
+  text-align: center !important;
+}
+
+.accounts-table .mat-column-pendingInstallments {
+  width: 80px !important;
+  padding: 0 12px !important;
+  text-align: center !important;
+}
+
+.accounts-table .mat-column-overallStatus {
+  width: 80px !important;
+  padding: 0 18px !important;
+  text-align: center !important;
+}
+
+.accounts-table .mat-column-actions {
+  width: 80px !important;
+  padding: 0 18px !important;
+  text-align: center !important;
+}

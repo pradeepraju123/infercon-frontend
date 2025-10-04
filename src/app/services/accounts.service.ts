@@ -40,4 +40,24 @@ else {
     return throwError(() => new Error('No authentication token found'));
   }
 }
+setupManualInstallmentPlan(data: any): Observable<any> {
+  const token = sessionStorage.getItem('authToken'); // ← Change to sessionStorage
+  if (token) {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.post(`${this.apiUrl}/manual-setup`, data, { headers });
+  } else {
+    return throwError(() => new Error('No authentication token found'));
+  }
+}
+
+updateInstallmentStatus(payload: any) {
+  const token = sessionStorage.getItem('authToken'); // ← Change to sessionStorage
+  if (token) {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  return this.http.post<any>(`${this.apiUrl}/update-status`, payload);
+} else {
+    return throwError(() => new Error('No authentication token found'));
+  }
+}
+
 }
