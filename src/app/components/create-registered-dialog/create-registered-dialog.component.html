@@ -179,12 +179,11 @@
                 </mat-form-field>
               </div>
 
-              <div class="installment-actions">
-                <button type="button" mat-raised-button color="primary" 
-                        (click)="updateInstallmentStatus(i, 'paid')"
-                        [disabled]="isInstallmentDisabled(i, 'paid')">
-                  Paid
-                </button>
+              <!-- <div class="installment-actions">
+                  <button type="button" mat-raised-button color="primary" 
+        (click)="updateInstallmentStatus(i, 'paid')">
+  {{ getInstallmentStatus(i) === 'paid' ? 'Paid ✓' : 'Mark as Paid' }}
+</button> -->
                 <!-- <button type="button" mat-raised-button color="warn" 
                         (click)="updateInstallmentStatus(i, 'overdue')"
                         [disabled]="isInstallmentDisabled(i, 'overdue')">
@@ -195,8 +194,11 @@
                         [disabled]="isInstallmentDisabled(i, 'pending')">
                   Pending
                 </button> -->
-              </div>
-
+              <!-- </div> -->
+<div *ngIf="getInstallmentStatus(i) === 'paid'" class="paid-details" 
+     style="font-size: 11px; color: #4caf50; text-align: center; margin-top: 5px;">
+  Paid on {{ getInstallmentControl(i, 'paymentDate').value | date:'mediumDate' }}
+</div>
               <div *ngIf="getInstallmentStatus(i) === 'paid'" class="paid-amount">
                 Paid: {{ getInstallmentPaidAmount(i) | currency }}
               </div>

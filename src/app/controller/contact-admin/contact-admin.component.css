@@ -181,10 +181,10 @@
   font-weight: 600;
   color: #333;
   font-size: 10px; 
-  padding: 0 4px !important; 
+  padding: 0 2px !important; 
 }
 .mat-cell {
-  padding: 0 4px !important; /* Reduced padding */
+  padding: 0 2px !important; /* Reduced padding */
   font-size: 10px; /* Smaller font */
 }
 
@@ -214,7 +214,7 @@
 .mat-column-Action,
 .mat-column-comments {
   white-space: nowrap;
-  width: 1%;
+  
 }
 button[disabled] {
   cursor: not-allowed;
@@ -277,30 +277,6 @@ button[disabled] {
   width: 100%;
   margin-bottom: 15px;
 }
-
-.staff-table {
-  border: 1px solid #E0E0E0;
-  border-radius: 3px;
-  overflow-x: auto;
-  width: 100%;
-  margin-bottom: 15px;
-}
-.card {
-  margin-bottom: 20px;
-  border: 1px solid #E0E0E0;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.card-header {
-  padding: 12px 15px;
-  font-weight: 600;
-  border-bottom: 1px solid #E0E0E0;
-}
-
-.card-body {
-  padding: 0 !important;
-}
 .contact_table .container {
   width: 100%;
   max-width: 100%;
@@ -323,8 +299,8 @@ button[disabled] {
 /* Make buttons in table more compact */
 .mat-raised-button {
   min-width: 0 !important;
-  line-height: 20px !important;
-  padding: 0 6px !important;
+  line-height: 10px !important;
+  padding: 0px !important;
   font-size: 11px !important;
 }
 
@@ -421,7 +397,6 @@ button[disabled] {
   padding: 0.4em 0 !important;
 }
 
-/* Excel-like minimalist dropdowns */
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
   border: none !important;
   background-color: transparent !important;
@@ -472,6 +447,7 @@ button[disabled] {
   margin: 0;
 }
 
+
 /* Fix for date display in followup column */
 .mat-column-followupDateTime {
   white-space: nowrap;
@@ -513,7 +489,7 @@ button[disabled] {
 }
 
 
-
+/* Add space between date and time in followup display */
 .mat-column-followupDateTime .mat-cell {
   display: flex;
   flex-direction: column;
@@ -591,7 +567,7 @@ td.mat-column-followupDateTime > div.inline {
 
 /* Position the select dropdown properly */
 .mat-select-lead-status {
-  padding: 5px;
+  padding: 10px;
   width: 100%;
   margin: 0;
 }
@@ -688,444 +664,40 @@ td.mat-column-followupDateTime > div.inline {
   justify-content: center !important;
 }
 
-.staff-table .mat-mdc-header-row {
-  background-color: #0D47A1 !important;
+.mat-mdc-header-cell {
+  color: black !important; /* White text */
+  font-weight: bold; /* Bold text */
 }
 
-.staff-table .mat-mdc-header-cell {
-  color: white !important;
-  font-weight: bold !important;
-}
-.staff-table .mat-row,
-.staff-table .mat-header-row {
-  min-height: 20px !important; /* or 24px for tighter rows */
-  height: 20px !important;
+/* Date and Time column styling */
+.date-time-cell {
+  padding: 0 8px !important;
 }
 
- 
-.staff-table .mat-cell,
-.staff-table .mat-header-cell {
-  
-  line-height: 1.2 !important; /* reduces vertical spacing inside cells */
-  font-size: 11px !important;  /* smaller text to match compact rows */
-}
-
-.staff-table .mat-form-field-wrapper {
-  padding-bottom: 0 !important;
-  margin: 0 !important;
-}
-
-.staff-table .mat-form-field-infix {
-  padding: 2px 0 !important;
-  border-top: 0 !important;
-}
-
-.staff-table ::ng-deep .mat-checkbox-inner-container {
-  width: 10px !important;
-  height: 10px !important;
-}
-
-.staff-table .mat-raised-button {
-  min-width: 0 !important;
-  padding: 0 2px !important;
-  line-height: 16px !important;
-  font-size: 11px !important;
-}
-
-.staff-table table {
-  border-collapse: collapse;
-  table-layout: fixed;
-}
-
-
-.staff-table .mat-column-select {
-  width: 40px !important; /* Reduce checkbox column width */
-  padding: 0 1px !important;
-}
-
-.staff-table .mat-column-fullname {
-  width: 120px !important; /* Fixed width for name */
-  padding: 0 3px !important;
-}
-
-.staff-table .mat-column-phone {
-  width: 100px !important; /* Fixed width for phone */
-  padding: 0 1px !important;
-}
-
-.staff-table .mat-column-email {
-  width: 200px !important; /* Fixed width for email */
-  padding: 0 6px !important;
-}
-
-.staff-table .mat-column-course {
-  width: 150px !important; /* Fixed width for course */
-  padding: 0 2px !important;
-}
-
-.staff-table .mat-column-assignedDateTime {
-  width: 100px !important; /* Fixed width for date */
-  padding: 0 2px !important;
-}
-
-.staff-table .mat-column-leadSelection {
-  width: 150px !important; /* Fixed width for lead status */
-  padding: 0 2px !important;
-}
-
-.staff-table .mat-column-followupDateTime {
-  width: 100px !important; /* Fixed width for followup */
-  padding: 0 2px !important;
-}
-
-.staff-table .mat-column-comments {
-  width: 120px !important; /* Fixed width for comments */
-  padding: 0 2px !important;
-}
-
-.staff-table .mat-column-Action {
-  width: 60px !important; /* Fixed width for action */
-  padding: 0 1px !important;
-}
-
-/* Today followup table */
-.today-table .mat-mdc-header-row {
-  background-color: #0D47A1 !important;
-}
-
-.today-table .mat-mdc-header-cell {
-  color: white !important;
-  font-weight: bold !important;
-}
-.today-table .mat-column-select {
-  width: 40px !important; /* Reduce checkbox column width */
-  padding: 0 10px !important;
-}
-
-.today-table .mat-column-fullname {
-  width: 120px !important; 
-  padding: 0 18px !important;
-}
-
-.today-table .mat-column-phone {
-  width: 100px !important; /* Fixed width for phone */
-  padding: 0 18px !important;
-}
-
-.today-table .mat-column-email {
-  width: 200px !important; /* Fixed width for email */
-  padding: 0 6px !important;
-}
-
-.today-table .mat-column-course {
-  width: 150px !important; /* Fixed width for course */
-  padding: 0 12px !important;
-}
-
-.today-table .mat-column-assignedDateTime {
-  width: 100px !important; /* Fixed width for date */
-  padding: 0 2px !important;
-}
-
-.today-table .mat-column-leadSelection {
-  width: 150px !important; /* Fixed width for lead status */
-  padding: 0 12px !important;
-}
-
-.today-table .mat-column-followupDateTime {
-  width: 120px !important; /* Fixed width for followup */
-  padding: 0 12px !important;
-}
-
-.today-table .mat-column-comments {
-  width: 120px !important; /* Fixed width for comments */
-  padding: 0 18px !important;
-}
-
-.today-table .mat-column-Action {
-  width: 60px !important; /* Fixed width for action */
-  padding: 0 1px !important;
-}
-
-/* Registration table specific styles */
-.registered-table {
-  border: 1px solid #28a745;
-}
-
-.registered-table .mat-mdc-header-row {
-  background-color: #0D47A1 !important;
-}
-
-.registered-table .mat-mdc-header-cell {
-  color: white !important;
-  font-weight: bold !important;
-}
-
-.badge {
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: bold;
-}
-
-.bg-success {
-  background-color: #28a745 !important;
-  color: white;
-}
-/* Registered Leads table specific styles */
-.staff-table .mat-column-registeredDate {
-  width: 120px !important; /* Fixed width for registered date */
-  padding: 0 2px !important;
-  text-align: center !important;
-}
-
-.staff-table .mat-column-status {
-  width: 100px !important; /* Fixed width for status */
-  padding: 0 2px !important;
-  text-align: center !important;
-}
-
-/* Ensure status badge is centered */
-.staff-table .mat-column-status .badge {
-  display: inline-block;
-  text-align: center;
-  width: 100%;
-}
-
-/* Make sure all columns in registered table have consistent alignment */
-.staff-table .mat-column-fullname,
-.staff-table .mat-column-phone,
-.staff-table .mat-column-email,
-.staff-table .mat-column-course,
-.staff-table .mat-column-registeredDate,
-.staff-table .mat-column-status {
-  vertical-align: middle !important;
-  text-align: left !important;
-}
-
-/* Specific column widths for registered leads table */
-.staff-table.registered-table .mat-column-fullname {
-  width: 120px !important;
-}
-
-.staff-table.registered-table .mat-column-phone {
-  width: 110px !important;
-}
-
-.staff-table.registered-table .mat-column-email {
-  width: 200px !important;
-}
-
-.staff-table.registered-table .mat-column-course {
-  width: 130px !important;
-}
-
-.staff-table.registered-table .mat-column-registeredDate {
-  width: 120px !important;
-}
-
-.staff-table.registered-table .mat-column-status {
-  width: 100px !important;
-}
-
-/* Ensure header alignment matches data cells */
-.staff-table.registered-table .mat-header-cell {
-  text-align: center !important;
-  justify-content: center !important;
-}
-
-
-
-.assigned-display {
+.date-time-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 2px;
-}
-
-.assigned-display .date-text {
-  font-size: 14px;
-  color: #333;
-}
-
-.assigned-display .time-text {
-  font-size: 14px;
-  color: #333;
-}
-/* Finalized table specific styles */
-.finalized-table {
-  border: 1px solid #17a2b8;
-}
-
-.finalized-table .mat-mdc-header-row {
-  background-color:#0D47A1 !important;
-}
-
-.finalized-table .mat-mdc-header-cell {
-  color: white !important;
-  font-weight: bold !important;
-}
-
-.finalized-display {
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 2px;
 }
 
-.finalized-cell {
-  display: flex !important;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-}
-
-.finalized-display .date-text {
+.date-text, .time-text {
+  white-space: nowrap;
   font-size: 14px;
-  color: #333;
+  line-height: 1.2;
 }
 
-.finalized-display .time-text {
-  font-size: 14px;
-  color: #333;
-}
-
-/* Registered Leads table specific styles */
-/* .staff-table .mat-column-finalizedDateTime {
-  width: 120px !important; 
-  padding: 0 2px !important;
-  text-align: center !important;
-} */
-
-.staff-table .mat-column-markRegistered {
-  width: 100px !important; /* Fixed width for status */
-  padding: 0 2px !important;
-  text-align: center !important;
-}
-/* Compact spacing for Finalized Leads table */
-.finalized-table .mat-column-course {
-  width: 120px !important;   /* reduce width of Course column */
-  padding: 0 4px !important;
-}
-
-.finalized-table .mat-column-Registration {
-  width: 120px !important;  
-  padding: 0 4px !important;
-  text-align: center;
-
-}
-
-.finalized-table .mat-column-Action {
-  width: 80px !important;    /* keep Action menu tight */
-  padding: 0 4px !important;
-  text-align: center;
-}
-/* Accounts table specific styles */
-.accounts-table {
-  border: 1px solid #17a2b8;
-}
-
-.accounts-table .mat-mdc-header-row {
-  background-color: #0D47A1 !important;
-}
-
-.accounts-table .mat-mdc-header-cell {
-  color: white !important;
-  font-weight: bold !important;
-}
-
-.status-badge {
-  padding: 4px 8px;
-  border-radius: 12px;
-  font-size: 12px;
+.date-text {
   font-weight: 500;
-  text-transform: uppercase;
-  display: inline-block;
 }
 
-.status-pending {
-  background-color: #fff3cd;
-  color: #856404;
+.time-text {
+  color: #666;
+  font-size: 14px;
 }
 
-.status-partially_paid {
-  background-color: #d1ecf1;
-  color: #0c5460;
-}
-
-.status-completed {
-  background-color: #d4edda;
-  color: #155724;
-}
-
-.status-overdue {
-  background-color: #f8d7da;
-  color: #721c24;
-}
-
-
-.accounts-table .mat-row,
-.accounts-table .mat-header-row {
-  min-height: 20px !important;
-  height: 20px !important;
-}
-
-.accounts-table .mat-cell,
-.accounts-table .mat-header-cell {
-  line-height: 1.2 !important;
-  font-size: 11px !important;
-}
-
-.accounts-table .mat-raised-button {
-  min-width: 0 !important;
-  padding: 0 2px !important;
-  line-height: 16px !important;
-  font-size: 11px !important;
-}
-
-/* Fixed column widths for accounts table */
-.accounts-table .mat-column-select {
-  width: 40px !important;
-  padding: 0 12px !important;
-}
-
-.accounts-table .mat-column-contactName {
-  width: 120px !important;
-  padding: 0 18px !important;
-}
-
-.accounts-table .mat-column-email {
-  width: 150px !important;
-  padding: 0 18px !important;
-}
-
-.accounts-table .mat-column-phone {
-  width: 100px !important;
-  padding: 0 12px !important;
-}
-
-.accounts-table .mat-column-totalAmount,
-.accounts-table .mat-column-pendingAmount,
-.accounts-table .mat-column-paidAmount {
-  width: 90px !important;
-  padding: 0 12px !important;
-  text-align: center !important;
-}
-
-.accounts-table .mat-column-pendingInstallments {
-  width: 80px !important;
-  padding: 0 12px !important;
-  text-align: center !important;
-}
-
-.accounts-table .mat-column-overallStatus {
-  width: 80px !important;
-  padding: 0 18px !important;
-  text-align: center !important;
-}
-
-.accounts-table .mat-column-actions {
-  width: 80px !important;
-  padding: 0 18px !important;
-  text-align: center !important;
+/* Ensure proper row height for the date-time cells */
+.mat-column-createdDateTime {
+  width: 120px !important; /* Adjust width as needed */
+  min-width: 120px !important;
 }

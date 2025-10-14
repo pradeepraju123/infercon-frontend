@@ -22,11 +22,11 @@ setupInstallmentPlan(data: any): Observable<any> {
     return throwError(() => new Error('No authentication token found'));
   }
 }
-// In registration.service.ts
+
 payInstallment(paymentData: any): Observable<any> {
   return this.http.post(`${this.apiUrl}/pay`, paymentData);
 }
-// In registration.service.ts
+
 getAllAccounts(params?: any): Observable<any> {
   const token = sessionStorage.getItem('authToken');
   if(token){
@@ -59,5 +59,13 @@ updateInstallmentStatus(payload: any) {
     return throwError(() => new Error('No authentication token found'));
   }
 }
-
+payManualInstallment(paymentData: any): Observable<any> {
+  const token = sessionStorage.getItem('authToken'); 
+  if (token) {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  return this.http.post(`${this.apiUrl}/manual-payment`, paymentData,{headers});
+}else {
+    return throwError(() => new Error('No authentication token found'));
+  }
+}
 }

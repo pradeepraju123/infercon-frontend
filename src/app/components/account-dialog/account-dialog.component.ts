@@ -1,4 +1,3 @@
-
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AccountsService } from '../../services/accounts.service';
@@ -35,46 +34,85 @@ export class AccountDialogComponent implements OnInit {
     }
   }
 
-  loadInstallmentDetails(): void {
-    this.loading = true;
-    this.accountService.getInstallmentDetails(this.contactId).subscribe(
-      (data: any) => {
-        console.log('API Response:', data);
-        
-        let installmentData = null;
-        
-        if (data.data && data.data.installment) {
-          installmentData = data.data.installment;
-        } else if (data.installment) {
-          installmentData = data.installment;
-        } else if (data.data) {
-          installmentData = data.data;
+loadInstallmentDetails(): void {
+  this.loading = true;
+  this.accountService.getInstallmentDetails(this.contactId).subscribe(
+    (response: any) => {
+      console.log('FULL API RESPONSE:', response);
+      
+      let installmentData = null;
+      
+      if (response.data) {
+        // Use data.installment if it exists, otherwise use data directly
+        if (response.data.installment) {
+          installmentData = response.data.installment;
         } else {
-          installmentData = data;
+          installmentData = response.data;
         }
         
-        if (installmentData && 
-            (installmentData.installments || 
-             installmentData.overallStatus || 
-             Object.keys(installmentData).length > 0)) {
-          this.installment = installmentData;
-        } else {
-          this.installment = null;
+        // DEEP DEBUG: Check the actual payment dates structure
+        console.log('=== DEEP PAYMENT DATES DEBUG ===');
+        if (installmentData.installments) {
+          installmentData.installments.forEach((inst: any, index: number) => {
+            console.log(`🧾 Installment ${index}:`);
+            console.log(`   Amount: ${inst.amount}, Paid: ${inst.paidAmount}, Due: ${inst.due_amount}`);
+            console.log(`   Status: ${inst.status}`);
+            console.log(`   Payment Dates Array:`, inst.paymentDates);
+            console.log(`   Payment Dates Type:`, typeof inst.paymentDates);
+            console.log(`   Is Array:`, Array.isArray(inst.paymentDates));
+            
+            // Debug the actual structure
+            console.log(`   Full installment object:`, JSON.stringify(inst, null, 2));
+            
+            if (inst.paymentDates && Array.isArray(inst.paymentDates)) {
+              console.log(`   Number of payments: ${inst.paymentDates.length}`);
+              inst.paymentDates.forEach((payment: any, paymentIndex: number) => {
+                console.log(`     Payment ${paymentIndex}:`, payment);
+              });
+            } else {
+              console.log(`   ❌ NO PAYMENT DATES ARRAY FOUND`);
+            }
+          });
         }
-        
-        this.loading = false;
-      },
-      (error) => {
-        console.error('Error fetching installment details:', error);
-        this.installment = null;
-        this.loading = false;
+        console.log('=== END DEEP DEBUG ===');
       }
-    );
+      
+      this.installment = installmentData;
+      this.loading = false;
+      
+      // Final verification
+      this.verifyPaymentDatesDisplay();
+    },
+    (error) => {
+      console.error('Error fetching installment details:', error);
+      this.installment = null;
+      this.loading = false;
+      this.snackBar.open('Error loading account details', 'Close', { duration: 3000 });
+    }
+  );
+}
+// Add this method to verify what will be displayed
+verifyPaymentDatesDisplay(): void {
+  if (this.installment && this.installment.installments) {
+    console.log('=== FINAL DISPLAY VERIFICATION ===');
+    this.installment.installments.forEach((inst: any, index: number) => {
+      console.log(`📱 Installment ${index} will display:`);
+      console.log(`   Payment Dates:`, inst.paymentDates);
+      console.log(`   Payment Dates Length:`, inst.paymentDates.length);
+      
+      if (inst.paymentDates.length > 0) {
+        console.log(`   ✅ WILL SHOW ${inst.paymentDates.length} PAYMENTS`);
+      } else {
+        console.log(`   ❌ WILL SHOW NO PAYMENTS`);
+      }
+    });
   }
-
+}
   getStatusColor(installment: any): string {
     if (installment.status === 'paid') {
       return 'green';
+    } else if (installment.status === 'partially_paid') {
+      return 'yellow';
     } else if (installment.status === 'pending') {
       return 'yellow';
     } else {
@@ -85,11 +123,18 @@ export class AccountDialogComponent implements OnInit {
   getStatusText(installment: any): string {
     if (installment.status === 'paid') {
       return 'Paid';
+    } else if (installment.status === 'partially_paid') {
+      return 'Partially Paid';
     } else if (installment.status === 'pending') {
       return 'Pending';
     } else {
       return 'Not Paid';
     }
+  }
+
+  getDueAmount(installment: any): number {
+    // Calculate due amount: original amount minus paid amount
+    return installment.amount - (installment.paidAmount || 0);
   }
 
   getOverallStatusColor(): string {

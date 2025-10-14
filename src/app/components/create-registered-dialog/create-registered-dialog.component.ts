@@ -1,6 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ContactService } from '../../services/contact.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { countries } from '../../model/country-data-store';
@@ -20,8 +20,10 @@ export class CreateRegisteredDialogComponent {
   document: File | null = null;
   isSubmitting = false;
   installmentType: 'auto' | 'manual' = 'auto';
-   maxInstallments = 12;
-currentInstallmentId: string | null = null;
+  maxInstallments = 6;
+  currentInstallmentId: string | null = null;
+  currentInstallmentPlanId: string | null = null;
+
   constructor(
     public dialogRef: MatDialogRef<CreateRegisteredDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -62,8 +64,10 @@ currentInstallmentId: string | null = null;
       courses: [[], Validators.required]
     });
 
-    // Initialize with 6 manual installments
-    this.addManualInstallment();
+    // Don't pre-add installments for auto mode
+    if (this.installmentType === 'manual') {
+      this.addManualInstallment();
+    }
 
     // If data.user is provided, pre-fill the form
     if (data?.user) {
@@ -74,6 +78,15 @@ currentInstallmentId: string | null = null;
     this.registrationForm.get('installmentType')?.valueChanges.subscribe(value => {
       this.installmentType = value;
       this.updateValidators();
+      
+      // Clear or add installments based on type
+      if (value === 'auto') {
+        this.clearManualInstallments();
+      } else {
+        if (this.manualInstallments.length === 0) {
+          this.addManualInstallment();
+        }
+      }
     });
 
     this.updateValidators();
@@ -89,129 +102,120 @@ currentInstallmentId: string | null = null;
     return installment.get(controlName) as FormControl;
   }
 
-  private initializeManualInstallments(): void {
-    for (let i = 0; i < 6; i++) {
-      this.addManualInstallment();
+  // Add this method to clear manual installments
+  private clearManualInstallments(): void {
+    while (this.manualInstallments.length !== 0) {
+      this.manualInstallments.removeAt(0);
     }
   }
 
- addManualInstallment(): void {
+  addManualInstallment(): void {
     if (this.manualInstallments.length < this.maxInstallments) {
       const installmentGroup = this.fb.group({
-        amount: [0, [Validators.required, Validators.min(0)]],
+        amount: [0, [Validators.required, Validators.min(1)]],
         dueDate: ['', Validators.required],
         status: ['pending'],
         paidAmount: [0],
+        paymentDate: [null],
         notes: ['']
       });
       this.manualInstallments.push(installmentGroup);
+      
+      // Trigger validation update
+      this.updateValidators();
     } else {
       this.snackBar.open(`Maximum ${this.maxInstallments} installments allowed`, 'Close', {
         duration: 3000
       });
     }
   }
+
   removeManualInstallment(index: number): void {
     this.manualInstallments.removeAt(index);
+    this.updateValidators();
   }
+
+  // Update the validator method to be more robust
   private updateValidators(): void {
     const totalAmountControl = this.registrationForm.get('totalAmount');
     const numberOfInstallmentsControl = this.registrationForm.get('numberOfInstallments');
+    const manualInstallmentsControl = this.registrationForm.get('manualInstallments');
 
     if (this.installmentType === 'auto') {
-      totalAmountControl?.setValidators([Validators.required, Validators.min(0)]);
-      numberOfInstallmentsControl?.setValidators([Validators.required, Validators.min(1)]);
+      // Set required validators for auto mode
+      totalAmountControl?.setValidators([Validators.required, Validators.min(1)]);
+      numberOfInstallmentsControl?.setValidators([Validators.required, Validators.min(1), Validators.max(12)]);
+      
+      // Clear validators for manual installments in auto mode
+      manualInstallmentsControl?.clearValidators();
+      
     } else {
+      // Manual mode
       totalAmountControl?.clearValidators();
       numberOfInstallmentsControl?.clearValidators();
+      
+      // Set validators for manual installments
+      manualInstallmentsControl?.setValidators(this.validateManualInstallments.bind(this));
     }
 
     totalAmountControl?.updateValueAndValidity();
     numberOfInstallmentsControl?.updateValueAndValidity();
+    manualInstallmentsControl?.updateValueAndValidity();
   }
 
-  calculateManualTotal(): number {
-    return this.manualInstallments.controls.reduce((total, control) => {
-      return total + (control.get('amount')?.value || 0);
+  // Add validation for manual installments
+  private validateManualInstallments(control: AbstractControl): ValidationErrors | null {
+    const installments = control as FormArray;
+    
+    if (installments.length === 0) {
+      return { 'noInstallments': true };
+    }
+
+    const totalAmount = installments.controls.reduce((sum, installment) => {
+      return sum + (installment.get('amount')?.value || 0);
     }, 0);
+
+    if (totalAmount <= 0) {
+      return { 'invalidTotalAmount': true };
+    }
+
+    // Check if any installment has invalid data
+    for (let i = 0; i < installments.length; i++) {
+      const installment = installments.at(i);
+      const amount = installment.get('amount')?.value;
+      const dueDate = installment.get('dueDate')?.value;
+
+      if (!amount || amount <= 0) {
+        return { 'invalidInstallmentAmount': true };
+      }
+
+      if (!dueDate) {
+        return { 'missingDueDate': true };
+      }
+    }
+
+    return null;
   }
 
-  getStatusColor(status: string): string {
-    switch (status) {
-      case 'paid': return '#4caf50'; // Green
-      case 'overdue': return '#f44336'; // Red
-      case 'partially_paid': return '#ff9800'; // Orange
-      default: return '#ffc107'; // Yellow for pending
+  // Add a method to check if form is valid for submission
+  isFormValid(): boolean {
+    if (!this.registrationForm.valid) {
+      return false;
+    }
+
+    if (this.installmentType === 'auto') {
+      const totalAmount = this.registrationForm.get('totalAmount')?.value;
+      const numberOfInstallments = this.registrationForm.get('numberOfInstallments')?.value;
+      
+      return totalAmount > 0 && numberOfInstallments > 0;
+    } else {
+      return this.manualInstallments.length > 0 && this.calculateManualTotal() > 0;
     }
   }
 
-  getStatusText(status: string): string {
-    switch (status) {
-      case 'paid': return 'Paid';
-      case 'overdue': return 'Overdue';
-      case 'partially_paid': return 'Partial';
-      default: return 'Pending';
-    }
-  }
-
- updateInstallmentStatus(index: number, status: string): void {
-  const installmentId = this.currentInstallmentId; // the MongoDB _id of the installment plan
-
-  this.accountService.updateInstallmentStatus({
-    installmentId: installmentId,
-    installmentIndex: index,
-    status: status,
-    paymentDate: new Date()
-  }).subscribe({
-    next: (res) => {
-      console.log('Updated in DB:', res);
-      // also update UI immediately
-      this.manualInstallments.at(index).patchValue({ status: status });
-    },
-    error: (err) => {
-      console.error('Error updating DB:', err);
-    }
-  });
-}
-
-
-  onAmountChange(index: number): void {
-    const installment = this.manualInstallments.at(index);
-    const amount = installment.get('amount')?.value;
-    const paidAmount = installment.get('paidAmount')?.value;
-    const status = installment.get('status')?.value;
-
-    if (status === 'paid' && paidAmount !== amount) {
-      installment.patchValue({ paidAmount: amount });
-    }
-  }
-
-  getInstallmentStatus(index: number): string {
-     const installment = this.manualInstallments.at(index);
-  return installment?.get('status')?.value || 'pending';
-  }
-
-  getInstallmentPaidAmount(index: number): number {
-    return this.manualInstallments.at(index).get('paidAmount')?.value || 0;
-  }
-
-  isInstallmentDisabled(index: number, status: string): boolean {
-    return this.getInstallmentStatus(index) === status;
-  }
-
-  private prefillForm(user: any): void {
-    this.registrationForm.patchValue({
-      firstname: user.fullname?.split(' ')[0] || '',
-      lastname: user.fullname?.split(' ').slice(1).join(' ') || '',
-      email: user.email || '',
-      mobile: user.phone || '',
-      courses: user.courses || [],
-      comments: user.message || ''
-    });
-  }
-
+  // Update your onSubmit method to use the new validation
   onSubmit(): void {
-    if (this.registrationForm.valid && !this.isSubmitting) {
+    if (this.isFormValid() && !this.isSubmitting) {
       this.isSubmitting = true;
 
       const formData = this.registrationForm.value;
@@ -271,6 +275,7 @@ currentInstallmentId: string | null = null;
 
         this.accountService.setupInstallmentPlan(installmentData).subscribe(
           (response) => {
+            this.currentInstallmentPlanId = response.data.installment._id;
             this.handleSuccess();
           },
           (error) => {
@@ -293,6 +298,7 @@ currentInstallmentId: string | null = null;
 
         this.accountService.setupManualInstallmentPlan(manualInstallmentData).subscribe(
           (response) => {
+            this.currentInstallmentPlanId = response.data.installment._id;
             this.handleSuccess();
           },
           (error) => {
@@ -301,10 +307,129 @@ currentInstallmentId: string | null = null;
         );
       }
     } else {
+      console.log('Form invalid reasons:', {
+        formValid: this.registrationForm.valid,
+        installmentType: this.installmentType,
+        totalAmount: this.registrationForm.get('totalAmount')?.value,
+        numberOfInstallments: this.registrationForm.get('numberOfInstallments')?.value,
+        manualTotal: this.calculateManualTotal(),
+        manualInstallmentsCount: this.manualInstallments.length
+      });
+      
       this.snackBar.open('Please fill all required fields correctly', 'Close', {
         duration: 3000
       });
     }
+  }
+
+  // ... rest of your existing methods (calculateManualTotal, getStatusColor, etc.) ...
+
+  calculateManualTotal(): number {
+    return this.manualInstallments.controls.reduce((total, control) => {
+      return total + (control.get('amount')?.value || 0);
+    }, 0);
+  }
+
+  getStatusColor(status: string): string {
+    switch (status) {
+      case 'paid': return '#4caf50';
+      case 'overdue': return '#f44336';
+      case 'partially_paid': return '#ff9800';
+      default: return '#ffc107';
+    }
+  }
+
+  getStatusText(status: string): string {
+    switch (status) {
+      case 'paid': return 'Paid';
+      case 'overdue': return 'Overdue';
+      case 'partially_paid': return 'Partial';
+      default: return 'Pending';
+    }
+  }
+
+  updateInstallmentStatus(index: number, status: string): void {
+    if (!this.currentInstallmentPlanId) {
+      this.snackBar.open('Please save the registration first before updating installment status', 'Close', {
+        duration: 3000
+      });
+      return;
+    }
+
+    const installmentControl = this.manualInstallments.at(index);
+    const amount = installmentControl.get('amount')?.value;
+    
+    this.accountService.updateInstallmentStatus({
+      installmentId: this.currentInstallmentPlanId,
+      installmentIndex: index,
+      status: status,
+      paymentDate: status === 'paid' ? new Date() : null,
+      amount: amount,
+      notes: `Marked as ${status}`
+    }).subscribe({
+      next: (res) => {
+        console.log('Updated in DB:', res);
+        
+        const installmentControl = this.manualInstallments.at(index);
+        installmentControl.patchValue({ 
+          status: status,
+          paidAmount: status === 'paid' ? amount : 0
+        });
+        
+        this.snackBar.open(`Installment ${index + 1} marked as ${status}`, 'Close', {
+          duration: 2000
+        });
+      },
+      error: (err) => {
+        console.error('Error updating DB:', err);
+        this.snackBar.open('Error updating installment status', 'Close', {
+          duration: 3000
+        });
+      }
+    });
+  }
+
+  onAmountChange(index: number): void {
+    const installment = this.manualInstallments.at(index);
+    const amount = installment.get('amount')?.value;
+    const paidAmount = installment.get('paidAmount')?.value;
+    const status = installment.get('status')?.value;
+
+    if (status === 'paid' && paidAmount !== amount) {
+      installment.patchValue({ paidAmount: amount });
+    }
+  }
+
+  getInstallmentStatus(index: number): string {
+    const installment = this.manualInstallments.at(index);
+    const status = installment?.get('status')?.value || 'pending';
+    const amount = installment?.get('amount')?.value || 0;
+    const paidAmount = installment?.get('paidAmount')?.value || 0;
+    
+    if (status === 'paid' && paidAmount !== amount) {
+      installment.patchValue({ paidAmount: amount });
+    }
+    
+    return status;
+  }
+
+  getInstallmentPaidAmount(index: number): number {
+    return this.manualInstallments.at(index).get('paidAmount')?.value || 0;
+  }
+
+  isInstallmentDisabled(index: number, status: string): boolean {
+    return this.getInstallmentStatus(index) === status;
+  }
+
+  private prefillForm(user: any): void {
+    this.registrationForm.patchValue({
+      firstname: user.fullname?.split(' ')[0] || '',
+      lastname: user.fullname?.split(' ').slice(1).join(' ') || '',
+      email: user.email || '',
+      mobile: user.phone || '',
+      courses: user.courses || [],
+      comments: user.message || ''
+    });
   }
 
   private handleSuccess(): void {

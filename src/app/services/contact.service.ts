@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
 import { catchError } from 'rxjs/operators';
+import { ProcessedContact } from './upload-state.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -326,6 +327,42 @@ else{
     return throwError('No authentication token found');
   }
 }
+uploadExcel(formData: FormData): Observable<any> {
+  const token = sessionStorage.getItem('authToken');
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token}`
+  });
+  return this.http.post(`${this.apiUrl}/action/excelupload`, formData, { headers });
+}
+
+saveProcessedContacts(processedData: ProcessedContact[]): Observable<ProcessedContact[]> {
+  const token = sessionStorage.getItem('authToken') || '';
+  const headers = { Authorization: `Bearer ${token}` };
+  return this.http.post<ProcessedContact[]>(`${this.apiUrl}/save-processed-contacts`, processedData, { headers });
+}
+
+getProcessedContacts(params?: any): Observable<ProcessedContact[]> {
+  const token = sessionStorage.getItem('authToken') || '';
+  const headers = { Authorization: `Bearer ${token}` };
+  return this.http.post<ProcessedContact[]>(`${this.apiUrl}/get-processed-contacts`, params || {}, { headers });
+}
+
+
+getExcelUploadedContacts(params?: any): Observable<any> {
+  const token = sessionStorage.getItem('authToken');
+  if (token) {
+    const headers = new HttpHeaders({
+      'Authorization': 'Bearer ' + token
+    });
+    // Send parameters in request body for POST request
+    return this.http.post(`${this.apiUrl}/get/excelupload`, params || {}, { headers });
+  } else {
+    return throwError('No authentication token found');
+  }
+}
 
 }
+
+
+
 

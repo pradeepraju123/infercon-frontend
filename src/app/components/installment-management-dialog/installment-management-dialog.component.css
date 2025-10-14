@@ -1,0 +1,546 @@
+.installments-container {
+  margin: 15px 0;
+}
+
+.installment-header-row, .installment-row {
+  display: grid;
+  grid-template-columns: 40px 100px 150px 120px 120px 80px 160px 1fr; /* slightly wider boxes */
+  gap: 8px;
+  align-items: start;
+  padding: 6px 8px;
+  margin-bottom: 6px;
+  font-size: 10px;
+}
+
+.installment-header-row {
+  background: #f5f5f5;
+  font-weight: bold;
+  border-radius: 3px;
+  font-size: 11px;
+  align-items: center;
+}
+
+.installment-row {
+  border: 1px solid #e0e0e0;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+  min-height: 40px;
+}
+
+.installment-row.overdue {
+  border-left: 3px solid #f44336;
+  background: rgba(244, 67, 54, 0.05);
+}
+
+.installment-row.paid {
+  border-left: 3px solid #4caf50;
+  background: rgba(76, 175, 80, 0.05);
+}
+
+.header-cell, .cell {
+  display: flex;
+  align-items: center;
+  min-height: 20px;
+  justify-content: center;
+}
+
+.installment-number {
+  justify-content: center;
+  font-weight: bold;
+  font-size: 11px;
+}
+
+.status-cell {
+  justify-content: center;
+}
+
+.status-badge {
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-size: 9px;
+  font-weight: bold;
+  color: white;
+  text-transform: uppercase;
+}
+
+.totals-section {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 15px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.total-item {
+  text-align: center;
+  padding: 8px;
+}
+
+.total-item .positive {
+  color: #f44336;
+  font-weight: bold;
+}
+
+
+.amount-field, .date-field, .paid-amount-field, .due-amount-field, .notes-field {
+  width: 100%;
+  min-width: 0; 
+}
+
+.mat-form-field {
+  width: 100%;
+  font-size: 12px;
+}
+
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+  padding: 0.4em 0;
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
+  padding-bottom: 0.4em;
+  margin: 0;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  height: 36px;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex {
+  align-items: center;
+  height: 36px;
+}
+
+::ng-deep .mat-input-element {
+  height: 20px;
+  line-height: 20px;
+  font-size: 12px;
+}
+
+::ng-deep .mat-form-field-label {
+  font-size: 11px;
+  top: 1.2em;
+}
+
+::ng-deep .mat-datepicker-toggle {
+  font-size: 16px !important;
+}
+
+/* Specific column alignment */
+.cell:nth-child(2) .mat-form-field, /* Amount */
+.cell:nth-child(3) .mat-form-field, /* Due Date */
+.cell:nth-child(4) .mat-form-field, /* Paid Amount */
+.cell:nth-child(5) .mat-form-field, /* Due Amount */
+.cell:nth-child(8) .mat-form-field { /* Notes */
+  margin: 0;
+  padding: 0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #666;
+}
+
+.actions-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+}
+
+.mark-paid-btn {
+  font-size: 10px;
+  padding: 2px 6px;
+  min-width: auto;
+  line-height: 1.2;
+  height: 24px;
+  white-space: nowrap;
+}
+
+.paid-text {
+  color: #4caf50;
+  font-weight: bold;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.overdue-field {
+  background-color: rgba(244, 67, 54, 0.1);
+  border: 1px solid #f44336;
+}
+
+.overdue-field .mat-form-field-outline {
+  color: #f44336;
+}
+
+
+@media (max-width: 768px) {
+  .installment-header-row, .installment-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 10px;
+    font-size: 11px;
+  }
+  
+  .totals-section {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding: 8px;
+    font-size: 11px;
+  }
+  
+  .header-cell {
+    display: none;
+  }
+  
+  .cell {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    min-height: 18px;
+  }
+  
+  .cell::before {
+    content: attr(data-label);
+    font-weight: bold;
+    margin-bottom: 5px;
+    width: 100%;
+    font-size: 10px;
+  }
+  
+  
+ .amount-field, .date-field, .paid-amount-field, .due-amount-field, .notes-field {
+  width: 100%;
+  min-width: 0; 
+  box-sizing: border-box;
+}
+  
+  .mat-form-field {
+    width: 100%;
+    font-size: 11px;
+  }
+  
+  .actions-cell {
+    justify-content: flex-start;
+    min-height: 30px;
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .actions-cell::before {
+    content: "Actions: ";
+    font-weight: bold;
+    margin-right: 8px;
+    font-size: 10px;
+    flex-shrink: 0;
+  }
+  
+  .mark-paid-btn {
+    font-size: 9px;
+    padding: 1px 4px;
+    height: 20px;
+  }
+  
+  .paid-text {
+    font-size: 9px;
+  }
+}
+
+
+.cell:nth-child(2) { 
+  justify-content: flex-start;
+}
+
+.cell:nth-child(3) {
+  justify-content: flex-start;
+}
+
+.cell:nth-child(4) { 
+  justify-content: flex-start;
+}
+
+.cell:nth-child(5) { 
+  justify-content: flex-start;
+}
+
+.cell:nth-child(8) .mat-form-field {
+  width: 120px; 
+}
+
+.notes-field{
+    width: 60%;
+}
+
+.add-installment-section {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.add-installment-btn {
+  font-size: 12px;
+  padding: 6px 12px;
+  background-color: #2196f3;
+  color: white;
+}
+
+.add-installment-btn:hover {
+  background-color: #1976d2;
+}
+
+
+.remove-btn {
+  background: none;
+  border: none;
+  color: #f44336;
+  font-size: 16px;
+  cursor: pointer;
+  margin-left: 5px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-btn:hover {
+  background-color: rgba(244, 67, 54, 0.1);
+}
+
+
+.installment-number {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* Payment Prompt Styles */
+.payment-prompt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+.payment-prompt-container {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  width: 90%;
+  max-width: 450px;
+  animation: slideIn 0.3s ease-out;
+  overflow-y: auto;
+}
+
+.payment-prompt-header {
+  padding: 20px 24px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.payment-prompt-title {
+  margin: 0 0 16px 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.payment-prompt-content {
+  padding: 20px 24px;
+}
+
+.payment-amount-section {
+  margin-bottom: 20px;
+}
+
+.amount-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #555;
+}
+
+.amount-input-container {
+  position: relative;
+}
+
+.amount-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.amount-input:focus {
+  outline: none;
+  border-color: #2196f3;
+}
+
+.amount-currency {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  font-weight: 500;
+}
+
+.amount-info {
+  margin-top: 8px;
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.quick-amount-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.quick-amount-btn {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #f8f9fa;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.875rem;
+}
+
+.quick-amount-btn:hover {
+  background: #e9ecef;
+  border-color: #adb5bd;
+}
+
+.quick-amount-btn.active {
+  background: #2196f3;
+  color: white;
+  border-color: #2196f3;
+}
+
+.payment-options {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.payment-option-btn {
+  flex: 1;
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.payment-option-btn:hover {
+  border-color: #2196f3;
+  background: #f8fdff;
+}
+
+.payment-option-btn.active {
+  border-color: #2196f3;
+  background: #e3f2fd;
+}
+
+.option-label {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.option-amount {
+  font-size: 0.875rem;
+  color: #666;
+}
+
+.payment-prompt-actions {
+  padding: 16px 24px 20px;
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  border-top: 1px solid #e0e0e0;
+}
+
+.prompt-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+  min-width: 80px;
+}
+
+.prompt-btn-cancel {
+  background: #f5f5f5;
+  color: #333;
+}
+
+.prompt-btn-cancel:hover {
+  background: #e0e0e0;
+}
+
+.prompt-btn-confirm {
+  background: #2196f3;
+  color: white;
+}
+
+.prompt-btn-confirm:hover {
+  background: #1976d2;
+}
+
+.prompt-btn-confirm:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .payment-prompt-container {
+    width: 95%;
+    margin: 20px;
+  }
+  
+  .payment-options {
+    flex-direction: column;
+  }
+  
+  .payment-prompt-actions {
+    flex-direction: column-reverse;
+  }
+  
+  .prompt-btn {
+    flex: 1;
+  }
+}

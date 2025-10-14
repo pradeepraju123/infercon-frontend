@@ -114,6 +114,8 @@ import { AccountDialogComponent } from './components/account-dialog/account-dial
 import { DeleteConfirmationDialogComponent } from './components/delete-confirmation-dialog/delete-confirmation-dialog.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { DetailsDialogComponent } from './components/details-dialog/details-dialog.component';
+import { InstallmentManagementDialogComponent } from './components/installment-management-dialog/installment-management-dialog.component';
+import { ExcelUploadComponent } from './components/excel-upload/excel-upload.component';
 
 @NgModule({
   declarations: [
@@ -195,6 +197,8 @@ import { DetailsDialogComponent } from './components/details-dialog/details-dial
           AccountDialogComponent,
           DeleteConfirmationDialogComponent,
           DetailsDialogComponent,
+          InstallmentManagementDialogComponent,
+          ExcelUploadComponent,
     
     
     

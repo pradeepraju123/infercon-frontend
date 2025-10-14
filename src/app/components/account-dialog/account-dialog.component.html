@@ -1,18 +1,15 @@
-
 <div class="modal-header">
   <h2>Account Details</h2>
-   <button class="close-button" (click)="onClose()">
-    ×
-  </button>
+  <button class="close-button" (click)="onClose()">×</button>
 </div>
 
 <mat-dialog-content class="modal-content">
-
   <ng-container *ngIf="!loading; else loadingTemplate">
     <div class="account-container" *ngIf="installment && hasInstallments; else noDetailsTemplate">
+      
+      <!-- Header and contact info remains the same -->
       <div class="header">
         <h2>Account Details</h2>
-        
         <div class="contact-info">
           <div class="info-row">
             <div class="info-item">
@@ -22,7 +19,6 @@
               <strong>Email:</strong> {{installment.contactDetails?.email || installment.email}}
             </div>
           </div>
-          
           <div class="info-row">
             <div class="info-item">
               <strong>Phone:</strong> {{installment.contactDetails?.phone || installment.mobile}}
@@ -44,7 +40,7 @@
             <strong>Paid Amount:</strong> {{installment.totalAmount - installment.pendingAmount | currency:installment.currencyType}}
           </div>
           <div class="summary-item">
-            <strong>Overall Status:  </strong>
+            <strong>Overall Status:</strong>
             <span [class]="'status-badge ' + getOverallStatusColor()">
               {{getOverallStatusText()}}
             </span>
@@ -52,46 +48,89 @@
         </div>
       </div>
 
+      <!-- Installments Section with Payment Dates -->
       <div class="installments-section">
         <h3>Installment Plan</h3>
         
         <div class="installments-grid">
-          <div *ngFor="let installment of installment.installments; let i = index" 
-               [class]="'installment-card ' + getStatusColor(installment)">
+          <div *ngFor="let inst of installment.installments; let i = index" 
+               [class]="'installment-card ' + getStatusColor(inst)">
             
             <div class="installment-header">
               <h4>Installment #{{i + 1}}</h4>
-              <span [class]="'status-badge ' + getStatusColor(installment)">{{getStatusText(installment)}}</span>
+              <span [class]="'status-badge ' + getStatusColor(inst)">{{getStatusText(inst)}}</span>
             </div>
             
             <div class="installment-details">
+            <div class="detail-item">
+              <strong>Amount:</strong> {{inst.amount | currency:installment.currencyType}}
+            </div>
+            <div class="detail-item" *ngIf="inst.paidAmount > 0">
+              <strong>Paid Amount:</strong> {{inst.paidAmount | currency:installment.currencyType}}
+            </div>
               <div class="detail-item">
-                <strong>Amount:</strong> {{installment.amount | currency:installment.currencyType}}
+                <strong>Due Amount:</strong> {{getDueAmount(inst) | currency:installment.currencyType}}
               </div>
               <div class="detail-item">
-                <strong>Due Date:</strong> {{installment.dueDate | date:'mediumDate'}}
+                <strong>Due Date:</strong> {{inst.dueDate | date:'mediumDate'}}
               </div>
-              <div class="detail-item" *ngIf="installment.paymentDate">
-                <strong>Paid On:</strong> {{installment.paymentDate | date:'mediumDate'}}
-              </div>
+              <div class="detail-item" *ngIf="inst.paymentDate">
+    <strong>Last Payment:</strong> {{inst.paymentDate | date:'mediumDate'}}
+  </div>
+
+             
+<div class="payment-dates-section" *ngIf="inst.paymentDates && inst.paymentDates.length > 0">
+  <div class="payment-dates-header">
+    <strong>Payment History ({{inst.paymentDates.length}} payments):</strong>
+  </div>
+  <div class="payment-dates-list">
+    <div *ngFor="let payment of inst.paymentDates; let paymentIndex = index" class="payment-date-item">
+      <div class="payment-info">
+        <span class="payment-index">#{{paymentIndex + 1}}</span>
+        <span class="payment-date">{{payment.date | date:'mediumDate'}}</span>
+        <span class="payment-amount">{{payment.amount | currency:installment.currencyType}}</span>
+        <!-- <span class="payment-method">({{payment.paymentMethod}})</span> -->
+      </div>
+      <div class="payment-details" *ngIf="payment.notes || payment.reference">
+        <small *ngIf="payment.notes">Notes: {{payment.notes}}</small>
+        <!-- <small *ngIf="payment.reference"> | Ref: {{payment.reference}}</small> -->
+      </div>
+    </div>
+  </div>
+  <div class="payment-summary">
+      <strong>Total Paid for this Installment:</strong> 
+      {{inst.paidAmount | currency:installment.currencyType}} / {{inst.amount | currency:installment.currencyType}}
+      ({{ (inst.paidAmount / inst.amount * 100) | number:'1.0-0' }}%)
+    </div>
+</div>
+
+
             </div>
           </div>
         </div>
       </div>
 
-      <div class="payment-history" *ngIf="installment.paymentHistory?.length">
-        <h3>Payment History</h3>
+      <!-- Overall Payment History -->
+      <div class="payment-history" *ngIf="installment?.paymentHistory?.length">
+        <h3>Overall Payment History</h3>
         <div class="history-table">
           <div class="history-header">
             <div>Date</div>
             <div>Amount</div>
+            <div>Type</div>
+            <div>Method</div>
+            <div>Notes</div>
           </div>
           <div class="history-row" *ngFor="let payment of installment.paymentHistory">
             <div>{{payment.date | date:'mediumDate'}}</div>
             <div>{{payment.amount | currency:installment.currencyType}}</div>
+            <div>{{payment.payment_type || 'payment'}}</div>
+            <div>{{payment.paymentMethod}}</div>
+            <div>{{payment.notes}}</div>
           </div>
         </div>
       </div>
+
     </div>
 
     <div *ngIf="installment && (!installment.installments || installment.installments.length === 0)" class="no-installments">

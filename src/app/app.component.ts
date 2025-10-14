@@ -105,7 +105,8 @@ const routesWithoutDefault = [
   '/app-user-register',
   '/installment',
   '/app-all-accounts',
-  '/notifications'
+  '/notifications',
+  '/app-excel-upload'
 ];
 const routesWithDefault = [
   '/home',

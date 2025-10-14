@@ -1,0 +1,428 @@
+<!-- excel-upload.component.html -->
+<div class="excel-upload-container">
+  <!-- Professional Header -->
+  <!-- <div class="page-header">
+    <h1>Excel Data Management</h1>
+    <p>Upload, manage, and analyze your contact data with ease</p>
+  </div> -->
+  
+  <!-- Upload Section -->
+  <div class="upload-card">
+    <div class="section-header">
+      <h2>Upload Excel File</h2>
+      <p class="section-subtitle">Import your contact data from Excel spreadsheets</p>
+    </div>
+    
+    <div class="upload-area" 
+         (dragover)="onDragOver($event)" 
+         (dragleave)="onDragLeave($event)" 
+         (drop)="onDrop($event)" 
+         [class.drag-over]="isDragOver" 
+         (click)="fileInput.click()">
+      <div class="upload-icon">📤</div>
+      <h3>Drop your Excel file here</h3>
+      <p>or click to browse your files</p>
+      <p class="file-types">Supported formats: .xlsx, .xls (Max: 10MB)</p>
+      <input #fileInput type="file" (change)="onFileSelected($event)" accept=".xlsx,.xls" hidden>
+    </div>
+    
+    <div class="selected-file" *ngIf="selectedFile">
+      <div class="file-icon">📄</div>
+      <div class="file-info">
+        <span class="file-name">{{ selectedFile.name }}</span>
+        <span class="file-size">{{ getFileSize(selectedFile.size) }}</span>
+      </div>
+      <button class="remove-btn" (click)="removeFile()" title="Remove file">×</button>
+    </div>
+    
+    <div class="upload-actions">
+      <button mat-raised-button color="primary" 
+              (click)="uploadFile()" 
+              [disabled]="!selectedFile || uploading"
+              class="upload-btn">
+        <span *ngIf="!uploading">📤 Upload Excel</span>
+        <span *ngIf="uploading" class="loading-text">🔄 Processing...</span>
+      </button>
+      
+      <button mat-stroked-button (click)="downloadTemplate()" class="template-btn">
+        📥 Download Template
+      </button>
+      
+      <button mat-button (click)="clearFile()" [disabled]="!selectedFile || uploading" class="clear-btn">
+        🗑️ Clear File
+      </button>
+      
+      <button mat-button (click)="clearAll()" [disabled]="dataSource.data.length === 0" class="clear-all-btn">
+        🗑️ Clear All Data
+      </button>
+    </div>
+  </div>
+
+  <!-- Search & Filter Section -->
+  <div class="search-section" *ngIf="dataSource.data.length > 0">
+    <div class="section-header">
+      <h3>🔍 Search & Filter Contacts</h3>
+      <p class="section-subtitle">Find specific contacts using advanced filters</p>
+    </div>
+    
+    <div class="search-controls">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search across all fields</mat-label>
+        <input matInput 
+               [(ngModel)]="searchTerm" 
+               (keyup)="applyFilter()" 
+               placeholder="Search by name, email, phone, course, etc.">
+        <span matSuffix>🔍</span>
+        <button mat-icon-button matSuffix (click)="clearSearch()" *ngIf="searchTerm">
+          ×
+        </button>
+      </mat-form-field>
+
+      <button mat-stroked-button 
+              (click)="toggleAdvancedSearch()" 
+              class="advanced-toggle">
+        {{ showAdvancedSearch ? '▲' : '▼' }}
+        {{ showAdvancedSearch ? 'Hide' : 'Show' }} Advanced Filters
+      </button>
+    </div>
+
+    <!-- Advanced Search -->
+    <div class="advanced-search" *ngIf="showAdvancedSearch">
+      <div class="advanced-fields">
+        <mat-form-field appearance="outline" class="advanced-field">
+          <mat-label>Full Name</mat-label>
+          <input matInput [(ngModel)]="fieldFilters.fullname" (keyup)="applyAdvancedFilter()">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="advanced-field">
+          <mat-label>Email Address</mat-label>
+          <input matInput [(ngModel)]="fieldFilters.email" (keyup)="applyAdvancedFilter()">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="advanced-field">
+          <mat-label>Phone Number</mat-label>
+          <input matInput [(ngModel)]="fieldFilters.phone" (keyup)="applyAdvancedFilter()">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="advanced-field">
+          <mat-label>Course Name</mat-label>
+          <input matInput [(ngModel)]="fieldFilters.course_name" (keyup)="applyAdvancedFilter()">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="advanced-field">
+          <mat-label>Staff Member</mat-label>
+          <input matInput [(ngModel)]="fieldFilters.staff_name" (keyup)="applyAdvancedFilter()">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="advanced-field">
+          <mat-label>Source</mat-label>
+          <input matInput [(ngModel)]="fieldFilters.source" (keyup)="applyAdvancedFilter()">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="advanced-field">
+          <mat-label>Training Type</mat-label>
+          <input matInput [(ngModel)]="fieldFilters.vilt_cilt" (keyup)="applyAdvancedFilter()">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="advanced-field">
+          <mat-label>Remarks</mat-label>
+          <input matInput [(ngModel)]="fieldFilters.remarks" (keyup)="applyAdvancedFilter()">
+        </mat-form-field>
+      </div>
+
+      <!-- Date Range -->
+      <div class="filter-section">
+        <h4>📅 Date Range Filter</h4>
+        <div class="date-range">
+          <mat-form-field appearance="outline" class="date-field">
+            <mat-label>From Date</mat-label>
+            <input matInput [matDatepicker]="startPicker" [(ngModel)]="dateRange.startDate" (dateChange)="applyAdvancedFilter()">
+            <mat-datepicker-toggle matSuffix [for]="startPicker">
+              <span>📅</span>
+            </mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="date-field">
+            <mat-label>To Date</mat-label>
+            <input matInput [matDatepicker]="endPicker" [(ngModel)]="dateRange.endDate" (dateChange)="applyAdvancedFilter()">
+            <mat-datepicker-toggle matSuffix [for]="endPicker">
+              <span>📅</span>
+            </mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="advanced-actions">
+        <button mat-raised-button color="primary" (click)="applyAdvancedFilter()" class="apply-filters-btn">
+          🔍 Apply Filters
+        </button>
+        <button mat-stroked-button (click)="exportFilteredData()" [disabled]="dataSource.filteredData.length === 0" class="export-btn">
+          📥 Export Data ({{ dataSource.filteredData.length }})
+        </button>
+        <button mat-button (click)="clearAdvancedFilters()" class="clear-filters-btn">
+          🗑️ Clear All Filters
+        </button>
+      </div>
+    </div>
+
+    <!-- Search Results -->
+    <div class="search-results-info" *ngIf="searchTerm || hasActiveFilters()">
+      <div class="results-count">
+        ℹ️ Showing {{ dataSource.filteredData.length }} of {{ dataSource.data.length }} contacts
+        <span *ngIf="searchTerm"> matching "{{ searchTerm }}"</span>
+      </div>
+      <button class="clear-search-btn" (click)="clearSearch()" title="Clear search">
+        ×
+      </button>
+    </div>
+  </div>
+
+  <!-- Upload Summary -->
+  <div class="results-card" *ngIf="uploadResult && summary">
+    <div class="section-header">
+      <h3>📊 Upload Summary</h3>
+      <p class="section-subtitle">Overview of the data processing results</p>
+    </div>
+    
+    <div class="summary-grid">
+      <div class="summary-item success">
+        <div class="summary-icon">✅</div>
+        <div class="summary-content">
+          <div class="summary-count">{{ summary.successful || 0 }}</div>
+          <div class="summary-label">Successfully Inserted</div>
+        </div>
+      </div>
+      
+      <div class="summary-item skipped" *ngIf="summary.skipped > 0">
+        <div class="summary-icon">⚠️</div>
+        <div class="summary-content">
+          <div class="summary-count">{{ summary.skipped || 0 }}</div>
+          <div class="summary-label">Skipped Records</div>
+        </div>
+      </div>
+      
+      <div class="summary-item info">
+        <div class="summary-icon">📈</div>
+        <div class="summary-content">
+          <div class="summary-count">{{ summary.totalRows || 0 }}</div>
+          <div class="summary-label">Total Processed</div>
+        </div>
+      </div>
+      
+      <div class="summary-item fees">
+        <div class="summary-icon">💰</div>
+        <div class="summary-content">
+          <div class="summary-count">{{ summary.feesProcessed || 0 }}</div>
+          <div class="summary-label">Fee Records</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skipped Contacts -->
+    <div class="skipped-phones" *ngIf="uploadResult?.skippedContacts && uploadResult.skippedContacts.length > 0">
+      <h4>⚠️ Skipped Contacts (Duplicate Entries)</h4>
+      <div class="skipped-list">
+        <div *ngFor="let contact of uploadResult.skippedContacts" class="skipped-item">
+          <span class="phone">{{ contact.phone }}</span>
+          <span class="reason">{{ contact.reason }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data Table -->
+  <div class="results-card processed-table" *ngIf="dataSource.data.length > 0">
+    <div class="table-header">
+      <div class="table-title">
+        <h3>📋 Excel Uploaded Contacts</h3>
+        <span class="table-subtitle">Total: {{ totalItems }} records</span>
+      </div>
+      <div class="table-actions">
+        <button mat-stroked-button (click)="downloadTemplate()" class="download-btn">
+          📥 Download Template
+        </button>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z2">
+        <!-- Table columns remain the same as your original -->
+        <ng-container matColumnDef="fullname">
+          <th mat-header-cell *matHeaderCellDef>Full Name</th>
+          <td mat-cell *matCellDef="let row">{{ row.fullname || 'N/A' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef>Email</th>
+          <td mat-cell *matCellDef="let row">{{ row.email || 'N/A' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="phone">
+          <th mat-header-cell *matHeaderCellDef>Phone</th>
+          <td mat-cell *matCellDef="let row">{{ normalizePhone(row.phone) || 'N/A' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="date_of_enquiry">
+          <th mat-header-cell *matHeaderCellDef>Enquiry Date</th>
+          <td mat-cell *matCellDef="let row">
+            {{ formatDateDisplay(row.date_of_enquiry) }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="source">
+          <th mat-header-cell *matHeaderCellDef>Source</th>
+          <td mat-cell *matCellDef="let row">{{ row.source || 'N/A' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="student_code">
+  <th mat-header-cell *matHeaderCellDef>Student Code</th>
+  <td mat-cell *matCellDef="let row">{{ row.student_code || 'N/A' }}</td>
+</ng-container>
+
+<ng-container matColumnDef="course">
+  <th mat-header-cell *matHeaderCellDef>Course</th>
+  <td mat-cell *matCellDef="let row">{{ row.course || 'N/A' }}</td>
+</ng-container>
+
+<ng-container matColumnDef="course_name">
+  <th mat-header-cell *matHeaderCellDef>Course Name</th>
+  <td mat-cell *matCellDef="let row">{{ row.course_name || 'N/A' }}</td>
+</ng-container>
+
+<ng-container matColumnDef="staff_name">
+  <th mat-header-cell *matHeaderCellDef>Staff</th>
+  <td mat-cell *matCellDef="let row">{{ row.staff_name || 'N/A' }}</td>
+</ng-container>
+        <ng-container matColumnDef="total_amount">
+          <th mat-header-cell *matHeaderCellDef>Total Amount</th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.total_amount && row.total_amount > 0 ? '₹' + (row.total_amount | number) : 'N/A' }}
+          </td>
+        </ng-container>
+
+ 
+
+        <ng-container matColumnDef="vilt_cilt">
+          <th mat-header-cell *matHeaderCellDef>vilt/cilt</th>
+          <td mat-cell *matCellDef="let row">{{ row.vilt_cilt || 'N/A' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="outstanding">
+          <th mat-header-cell *matHeaderCellDef>Outstanding</th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.outstanding && row.outstanding > 0 ? '₹' + (row.outstanding | number) : 'N/A' }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="remarks">
+          <th mat-header-cell *matHeaderCellDef>Remarks</th>
+          <td mat-cell *matCellDef="let row">{{ row.remarks || 'N/A' }}</td>
+        </ng-container>
+
+        <!-- Dynamic Fee Columns -->
+        <ng-container *ngFor="let column of displayedColumns | slice:baseColumns.length" [matColumnDef]="column">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ getColumnHeader(column) }}
+          </th>
+          <td mat-cell *matCellDef="let row">
+            {{ getCellValue(row, column) }}
+          </td>
+        </ng-container>
+
+               <!-- Add these after the remarks column in the table -->
+
+<ng-container matColumnDef="bank_charges">
+  <th mat-header-cell *matHeaderCellDef>Bank Charges</th>
+  <td mat-cell *matCellDef="let row">
+    {{ row.bank_charges && row.bank_charges > 0 ? '₹' + (row.bank_charges | number) : 'N/A' }}
+  </td>
+</ng-container>
+
+<ng-container matColumnDef="bank_charges_date">
+  <th mat-header-cell *matHeaderCellDef>Bank Charges Date</th>
+  <td mat-cell *matCellDef="let row">
+    {{ formatDateDisplay(row.bank_charges_date) }}
+  </td>
+</ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+            <div class="no-data-message">
+              🔍
+              <p>No contacts found matching your search criteria</p>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+   <!-- Pagination -->
+    <nav aria-label="Contact pagination" *ngIf="totalItems > 0">
+  <ul class="pagination justify-content-center my-4">
+    <li class="page-item" [class.disabled]="pageNum === 1" (click)="goToFirstPage()">
+      <button class="page-link" type="button" aria-label="First" [disabled]="pageNum === 1">
+        ««
+      </button>
+    </li>
+    
+    <!-- Show page numbers only if multiple pages exist -->
+    <div class="page-number-container" *ngIf="totalPages > 1">
+      <li *ngFor="let page of getPageNumbers()"
+          class="page-item"
+          [class.active]="page === pageNum"
+          (click)="goToPage(page)">
+        <button class="page-link" type="button">{{ page }}</button>
+      </li>
+    </div>
+    
+    <!-- Show single page indicator if only one page -->
+    <div class="single-page-indicator" *ngIf="totalPages === 1">
+      <li class="page-item active">
+        <button class="page-link" type="button">1</button>
+      </li>
+    </div>
+
+    <li class="page-item" [class.disabled]="pageNum === totalPages" (click)="goToNextPage()">
+      <button class="page-link" type="button" aria-label="Next" [disabled]="pageNum === totalPages">
+        »
+      </button>
+    </li>
+    <li class="page-item" [class.disabled]="pageNum === totalPages" (click)="goToLastPage()">
+      <button class="page-link" type="button" aria-label="Last" [disabled]="pageNum === totalPages">
+        »»
+      </button>
+    </li>
+  </ul>
+  
+  <div class="pagination-info">
+    Showing <strong>{{ getStartItem() }}</strong> to <strong>{{ getEndItem() }}</strong> of <strong>{{ totalItems }}</strong> entries
+  </div>
+</nav>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="dataSource.data.length === 0 && !uploading">
+    <div class="empty-icon">📊</div>
+    <h3>No Excel Data Available</h3>
+    <p>Upload an Excel file to start managing your contact data</p>
+    <button mat-raised-button color="primary" (click)="downloadTemplate()" class="download-template-btn">
+      📥 Download Excel Template
+    </button>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="uploading-overlay" *ngIf="uploading">
+    <div class="uploading-spinner">
+      <div class="custom-spinner"></div>
+      <h3>Processing Excel File</h3>
+      <p>Please wait while we process your data...</p>
+    </div>
+  </div>
+</div>

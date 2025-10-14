@@ -66,365 +66,1068 @@
 
     <!-- Full width Followups -->
      
-    <div class="row margin_top" *ngIf="userType === 'admin' || userType ==='staff'">
-      <div class="col-md-12">
-        <div class="table_cont">
-          <div class="top_table_cont">
-            <h5>Upcoming Followups</h5>
+    <section class="contact_table">
+  <div class="container-fluid">
+    <!-- <div class="search">
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="title_field_card">
+            <mat-form-field appearance="outline" class="example-full-width" style="margin: 10px">
+              <mat-label>Search</mat-label>
+              <input matInput placeholder="Ex. CAE" [(ngModel)]="searchTerm">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Enter a date range</mat-label>
+              <mat-date-range-input [rangePicker]="picker">
+                <input matStartDate placeholder="Start date" [(ngModel)]="startDate">
+                <input matEndDate placeholder="End date" [(ngModel)]="endDate">
+              </mat-date-range-input>
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker></mat-date-range-picker>
+            </mat-form-field>
+            <button class="btn" (click)="loadContacts()">Search</button>
+            <button class="btn" (click)="downloadContacts()">Download</button>
+            <button class="btn" (click)="openCreateUserDialog()">Create User</button>
           </div>
-          <div class="mat-elevation-z2 table-container">
-            <table mat-table [dataSource]="followupDataSource" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
-              <!-- Checkbox Column -->
-              <ng-container matColumnDef="select">
-                <th mat-header-cell *matHeaderCellDef>
-                  <mat-checkbox (change)="$event ? masterToggle('followup') : null"
-                                [checked]="followupSelection.hasValue() && isAllSelected('followup')"
-                                [indeterminate]="followupSelection.hasValue() && !isAllSelected('followup')">
-                  </mat-checkbox>
-                </th>
-                <td mat-cell *matCellDef="let row">
-                  <mat-checkbox (click)="$event.stopPropagation()"
-                                (change)="$event ? followupSelection.toggle(row) : null"
-                                [checked]="followupSelection.isSelected(row)">
-                  </mat-checkbox>
-                </td>
-              </ng-container>
-              
-              <!-- Full Name -->
-              <ng-container matColumnDef="fullname">
-                <th mat-header-cell mat-sort-header *matHeaderCellDef> Full Name </th>
-                <td mat-cell *matCellDef="let element"> {{ element.fullname }} </td>
-              </ng-container>
-              
-              <!-- Phone -->
-              <ng-container matColumnDef="phone">
-                <th mat-header-cell mat-sort-header *matHeaderCellDef> Phone </th>
-                <td mat-cell *matCellDef="let element"> {{ element.phone }} </td>
-              </ng-container>
-              
-              <!-- Course -->
-              <ng-container matColumnDef="course">
-                <th mat-header-cell mat-sort-header *matHeaderCellDef> Course </th>
-                <td mat-cell *matCellDef="let element">
-                  {{ element.courses?.join(', ') }}
-                </td>
-              </ng-container>
-              
-              <!-- Followup Date -->
-              <ng-container matColumnDef="followupDate">
-                <th mat-header-cell *matHeaderCellDef> Followup Date </th>
-                <td mat-cell *matCellDef="let element"> 
-                  {{ element.followup_date | date:'shortDate' }} 
-                </td>
-              </ng-container>
-              
-              <!-- Followup Time -->
-              <ng-container matColumnDef="followupTime">
-                <th mat-header-cell *matHeaderCellDef> Followup Time </th>
-                <td mat-cell *matCellDef="let element"> 
-                  {{ formatTimeForDisplay(element.followup_time) }} 
-                </td>
-              </ng-container>
-              
-              <!-- Lead Status -->
-              <ng-container matColumnDef="leadSelection">
-                <th mat-header-cell *matHeaderCellDef> Lead status </th>
-                <td class="lead_status" mat-cell *matCellDef="let element">
-                  <mat-form-field appearance="outline">
-                    <mat-select
-                      [(value)]="element.lead_status"
-                      (selectionChange)="onLeadStatusChange($event.value, element._id, true)"
-                      [ngClass]="getLeadStatusClass(element.lead_status)"
-                      class="mat-select-lead-status">
-                      <mat-option *ngFor="let lead of leadOptions" [value]="lead">{{ lead }}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </td>
-              </ng-container>
-              
-              <!-- Comments -->
-              <ng-container matColumnDef="comments">
-                <th mat-header-cell *matHeaderCellDef> Comments </th>
-                <td mat-cell *matCellDef="let element">
-                  <button 
-                    mat-raised-button 
-                    color="primary" 
-                    class="comments-button"
-                    (click)="openCommentsDialog(element._id, element.fullname)">
-                    Comments
-                    <span *ngIf="element.comments && element.comments.length > 0" class="comment-count">
-                      ({{element.comments.length}})
-                    </span>
-                  </button>
-                </td>
-              </ng-container>
-              
-              <!-- Action -->
-              <ng-container matColumnDef="Action">
-                <th mat-header-cell *matHeaderCellDef>Action</th>
-                <td mat-cell *matCellDef="let element"> <button mat-raised-button (click)="openDialog(element._id)">Edit</button></td>
-              </ng-container>
-              
-              <!-- Mark Registered -->
-              <ng-container matColumnDef="MarkRegistered">
-                <th mat-header-cell *matHeaderCellDef>Status</th>
-                <td mat-cell *matCellDef="let element">
-                  <button
-                    mat-raised-button
-                    color="primary"
-                    [disabled]="element.isRegistered === 1"
-                    (click)="markAsRegistered(element._id, true)">
-                    {{ element.isRegistered === 1 ? 'Registered' : 'Mark Registered' }}
-                  </button>
-                </td>
-              </ng-container>
-              
-              <!-- Send Message -->
-              <ng-container *ngIf="userType === 'admin'" matColumnDef="SendMessage">
-                <th mat-header-cell *matHeaderCellDef>Send Message</th>
-                <td mat-cell *matCellDef="let element"> <button mat-raised-button (click)="sendLeadDetails(element._id)">Send</button></td>
-              </ng-container>
-              
-              <tr mat-header-row *matHeaderRowDef="getFollowupDisplayedColumns()"></tr>
-              <tr mat-row *matRowDef="let row; columns: getFollowupDisplayedColumns()"></tr>
-            </table>
-            
-            <!-- Pagination -->
-            <div class="pagination-container">
-              <nav aria-label="Followup pagination">
-                <div class="pagination-wrapper">
-                  <div class="pagination-group">
-                    <ul class="pagination">
-                      <li class="page-item" [class.disabled]="followupCurrentPage === 1" (click)="goToFirstPage('followup')">
-                        <button class="page-link" type="button" aria-label="First">
-                          <span aria-hidden="true">&laquo;</span>
+         
+        </div>
+        <div class="col-lg-4">
+          <div class="title_field_card">
+            <mat-form-field appearance="outline" *ngIf="getUserType() === 'admin'" class="example-full-width" style="margin: 10px">
+              <mat-label>Select Assignee</mat-label>
+              <mat-select [(ngModel)]="selectedAssignee">
+                  <mat-option *ngFor="let user of assigneeOptions" [value]="user">{{ user }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button class="btn" *ngIf="getUserType() === 'admin'"(click)="bulkAction()">Select</button>
+          </div>
+        </div> -->
+
+
+<div class="row align-items-center button-row">
+ <!-- <div class="col-auto">
+    <button class="btn" (click)="openCreateUserDialog()">Create User</button>
+  </div> -->
+  <!-- <div class="col-auto">
+    <button class="btn" *ngIf="getUserType() === 'admin'" (click)="SendBulkMessage()">Send Message</button>
+  </div> -->
+</div>
+
+      <!-- </div>
+      
+    </div>
+   -->
+    
+    <!-- <div class="row">
+      <div class="col-lg-4">
+        <mat-form-field appearance="outline">
+          <mat-label>Select Start Date</mat-label>
+          <input matInput [matDatepicker]="startPicker" [(ngModel)]="singleStartDate" placeholder="Start date">
+          <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    
+      <div class="col-lg-4">
+        <mat-form-field appearance="outline">
+          <mat-label>Select End Date</mat-label>
+          <input matInput [matDatepicker]="endPicker" [(ngModel)]="singleEndDate" placeholder="End date">
+          <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+          <mat-datepicker #endPicker></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+     -->
+    <ng-container *ngIf="getUserType() === 'staff' || getUserType() === 'admin'">
+      <!-- Staff View: Two tables side by side -->
+      <div class="row">
+        <!-- New Leads Table -->
+        <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
+          <div class="card">
+            <div class="card-header bg-primary text-white">
+              <h5 class="mb-0">New Leads ({{newLeadsTotalItems}})</h5>
+            </div>
+            <div class="card-body p-0">
+              <div class="mat-elevation-z2 table-container staff-table">
+                <table mat-table [dataSource]="newLeadsDataSource" class="mat-elevation-z8">
+                  
+                  <!-- Checkbox Column -->
+                  <ng-container matColumnDef="select">
+                    <th mat-header-cell *matHeaderCellDef>
+                      <mat-checkbox (change)="$event ? newLeadsMasterToggle() : null"
+                                    [checked]="newLeadsSelection.hasValue() && isAllNewLeadsSelected()"
+                                    [indeterminate]="newLeadsSelection.hasValue() && !isAllNewLeadsSelected()">
+                      </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                      <mat-checkbox (click)="$event.stopPropagation()"
+                                    (change)="$event ? newLeadsSelection.toggle(row) : null"
+                                    [checked]="newLeadsSelection.isSelected(row)">
+                      </mat-checkbox>
+                    </td>
+                  </ng-container>
+
+                  <!-- Column definitions for new leads -->
+                  <ng-container matColumnDef="fullname">
+                    <th mat-header-cell *matHeaderCellDef> Full Name </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.fullname }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="phone">
+                    <th mat-header-cell *matHeaderCellDef> Phone </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.phone }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef> Email </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.email }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="course">
+                    <th mat-header-cell *matHeaderCellDef> Course </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.courses }} </td>
+                  </ng-container>
+
+                  
+                  <ng-container matColumnDef="assigneeSelection">
+                  <th mat-header-cell *matHeaderCellDef> Assignee </th>
+                  <td class="lead_status" mat-cell *matCellDef="let element">
+                    <mat-form-field appearance="outline" class="small-assignee-field">
+                      <mat-select [(value)]="element.assignee" (selectionChange)="onAssigneeSelect($event.value, element._id)">
+                        <mat-option *ngFor="let user of assigneeOptions" [value]="user">{{ user }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </td>
+                </ng-container>
+
+                  <ng-container matColumnDef="leadSelection">
+                    <th mat-header-cell *matHeaderCellDef> Lead Status </th>
+                    <td class="lead_status" mat-cell *matCellDef="let element">
+                      <mat-select
+                        [(value)]="element.lead_status"
+                        (selectionChange)="onCourseSelectionChange($event.value, element._id)"
+                        [ngClass]="getLeadStatusClass(element.lead_status)"
+                        class="mat-select-lead-status">
+                        <mat-option *ngFor="let lead of leadOptions" [value]="lead">{{ lead }}</mat-option>
+                      </mat-select>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="followupDateTime"   >
+  <th mat-header-cell *matHeaderCellDef> Followup </th>
+  <td mat-cell *matCellDef="let element" class="followup-cell" > 
+    <div class="followup-display">
+      <span class="date-text" style="margin-left:20px">{{ element.followup_date | date:'shortDate' }}</span>
+      <span class="time-text" style="margin-left:20px">{{ formatTimeForDisplay(element.followup_time) }}</span>
+    </div>
+<button *ngIf="element.lead_status === 'Followup' || element.lead_status === 'Positive' || element.lead_status === 'Medium'" class="followup-edit-trigger" 
+            (click)="editFollowup(element)" matTooltip="Edit follow-up">
+     <img src="assets/edit-2.png" alt="Edit" style="width: 20px; height: 20px;">
+    </button>
+  </td>
+</ng-container>
+
+<ng-container matColumnDef="assignedDateTime">
+  <th mat-header-cell *matHeaderCellDef> Assigned On </th>
+  <td mat-cell *matCellDef="let element" class="assigned-cell"> 
+    <div class="assigned-display">
+      <span class="date-text">{{ element.assigned_date | date:'shortDate' }}</span>
+      <span class="time-text">{{ element.assigned_time }}</span>
+    </div>
+  </td>
+</ng-container>
+
+                  <ng-container matColumnDef="comments">
+                    <th mat-header-cell *matHeaderCellDef> Comments </th>
+                    <td mat-cell *matCellDef="let element">
+                      <button mat-raised-button color="primary" class="comments-button"
+                              (click)="openCommentsDialog(element._id, element.fullname)">
+                        Comments
+                        <span *ngIf="element.comments && element.comments.length > 0" class="comment-count">
+                          ({{element.comments.length}})
+                        </span>
+                      </button>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Action">
+                    <th mat-header-cell *matHeaderCellDef>Action</th>
+                    <td mat-cell *matCellDef="let element">
+                      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Action menu">
+                        <img src="assets/3-dots.png" alt="Menu" style="width: 16px; height: 16px;">
+                      </button>
+                      <mat-menu #menu="matMenu">
+                        <button mat-menu-item (click)="openDialog(element._id)">
+                          <img src="assets/edit.png" alt="Edit" style="width: 16px; height: 16px;">
+                          <span>Edit</span>
                         </button>
-                      </li>
-                      <li class="page-item" [class.disabled]="followupCurrentPage === 1" (click)="goToPreviousPage('followup')">
-                        <button class="page-link" type="button" aria-label="Previous">
-                          <span aria-hidden="true">&lsaquo;</span>
+                        <button mat-menu-item (click)="deleteContact(element._id)">
+                          <img src="assets/delete.png" alt="Delete" style="width: 18px; height: 18px;">
+                          <span>Delete</span>
                         </button>
-                      </li>
-                      <div class="page-number-container">
-                        <li *ngFor="let page of getPageNumbers('followup')"
-                            class="page-item"
-                            [class.active]="page === followupCurrentPage"
-                            (click)="goToPage(page, 'followup')">
-                          <button class="page-link" type="button">{{page}}</button>
-                        </li>
+                        <button mat-menu-item (click)="openDetailsDialog(element)">
+                          <img src="assets/eye.png" alt="View" style="width: 18px; height: 18px;">
+                          <span>View</span>
+                        </button>
+                      </mat-menu>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="newLeadsDisplayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: newLeadsDisplayedColumns;"></tr>
+                </table>
+<div class="pagination-container">
+  <nav aria-label="Contact pagination">
+    <ul class="pagination justify-content-end my-4">
+      <li class="page-item" [class.disabled]="newLeadsPageNum === 1" (click)="goToNewLeadsFirstPage()">
+        <button class="page-link" type="button" aria-label="First">&laquo;</button>
+      </li>
+      <li class="page-item" [class.disabled]="newLeadsPageNum === 1" (click)="goToNewLeadsPreviousPage()">
+        <button class="page-link" type="button" aria-label="Previous">&lsaquo;</button>
+      </li>
+
+      <div class="page-number-container d-flex">
+        <li *ngFor="let page of getNewLeadsPageNumbers()"
+            class="page-item"
+            [class.active]="page === newLeadsPageNum"
+            (click)="goToNewLeadsPage(page)">
+          <button class="page-link" type="button">{{page}}</button>
+        </li>
+      </div>
+
+      <li class="page-item" [class.disabled]="newLeadsPageNum === newLeadsTotalPages" (click)="goToNewLeadsNextPage()">
+        <button class="page-link" type="button" aria-label="Next">&rsaquo;</button>
+      </li>
+      <li class="page-item" [class.disabled]="newLeadsPageNum === newLeadsTotalPages" (click)="goToNewLeadsLastPage()">
+        <button class="page-link" type="button" aria-label="Last">&raquo;</button>
+      </li>
+    </ul>
+    <div class="pagination-info text-center text-muted mb-4">
+      <span>{{getNewLeadsStartItem()}}</span>-<span>{{getNewLeadsEndItem()}}</span> of <span>{{newLeadsTotalItems}}</span>
+    </div>
+  </nav>
+</div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Today's Followup Table -->
+           <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
+          <div class="card">
+            <div class="card-header bg-warning text-dark">
+              <h5 class="mb-0">Today's Followup ({{followupTotalItems}})</h5>
+            </div>
+            <div class="card-body p-0">
+              <div class="mat-elevation-z2 table-container today-table">
+                <table mat-table [dataSource]="followupDataSource" class="mat-elevation-z8">
+                  
+                  <!-- Checkbox Column -->
+                  <ng-container matColumnDef="select">
+                    <th mat-header-cell *matHeaderCellDef>
+                      <mat-checkbox (change)="$event ? followupMasterToggle() : null"
+                                    [checked]="followupSelection.hasValue() && isAllFollowupsSelected()"
+                                    [indeterminate]="followupSelection.hasValue() && !isAllFollowupsSelected()">
+                      </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                      <mat-checkbox (click)="$event.stopPropagation()"
+                                    (change)="$event ? followupSelection.toggle(row) : null"
+                                    [checked]="followupSelection.isSelected(row)">
+                      </mat-checkbox>
+                    </td>
+                  </ng-container>
+
+                  <!-- Column definitions for followups (similar to new leads but with followup column) -->
+                  <ng-container matColumnDef="fullname">
+                    <th mat-header-cell *matHeaderCellDef> Full Name </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.fullname }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="phone">
+                    <th mat-header-cell *matHeaderCellDef> Phone </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.phone }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef> Email </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.email }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="course">
+                    <th mat-header-cell *matHeaderCellDef> Course </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.courses }} </td>
+                  </ng-container>
+                  
+                  <!-- <ng-container matColumnDef="assignee">
+                    <th mat-header-cell *matHeaderCellDef> Assigned To </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.assignee || 'Unassigned' }} </td>
+                  </ng-container> -->
+                  <ng-container matColumnDef="assigneeSelection">
+                  <th mat-header-cell *matHeaderCellDef> Assignee </th>
+                  <td class="lead_status" mat-cell *matCellDef="let element">
+                    <mat-form-field appearance="outline" class="small-assignee-field">
+                      <mat-select [(value)]="element.assignee" (selectionChange)="onAssigneeSelect($event.value, element._id)">
+                        <mat-option *ngFor="let user of assigneeOptions" [value]="user">{{ user }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </td>
+                </ng-container>
+
+                   <ng-container matColumnDef="leadSelection">
+            <th mat-header-cell *matHeaderCellDef> Lead Status </th>
+            <td class="lead_status" mat-cell *matCellDef="let element">
+              <mat-select
+                [(value)]="element.lead_status"
+                (selectionChange)="onCourseSelectionChange($event.value, element._id)"
+                [ngClass]="getLeadStatusClass(element.lead_status)"
+                class="mat-select-lead-status">
+                <mat-option *ngFor="let lead of leadOptions" [value]="lead">{{ lead }}</mat-option>
+              </mat-select>
+            </td>
+          </ng-container>
+
+                  <ng-container matColumnDef="followupDateTime">
+                    <th mat-header-cell *matHeaderCellDef> Followup </th>
+                    <td mat-cell *matCellDef="let element" class="followup-cell"> 
+                      <div class="followup-display">
+                        <span class="date-text">{{ element.followup_date | date:'shortDate' }}</span>
+                        <span class="time-text">{{ formatTimeForDisplay(element.followup_time) }}</span>
                       </div>
-                      <li class="page-item" [class.disabled]="followupCurrentPage === followupTotalPages" (click)="goToNextPage('followup')">
-                        <button class="page-link" type="button" aria-label="Next">
-                          <span aria-hidden="true">&rsaquo;</span>
+                      <button *ngIf="element.lead_status === 'Followup' || element.lead_status === 'Positive' || element.lead_status === 'Medium'" class="followup-edit-trigger" 
+                              (click)="editFollowup(element)" matTooltip="Edit follow-up">
+                        <img src="assets/edit-2.png" alt="Edit" style="width: 20px; height: 20px;">
+                      </button>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="assignedDateTime">
+                    <th mat-header-cell *matHeaderCellDef> Assigned On </th>
+                    <td mat-cell *matCellDef="let element" class="assigned-cell"> 
+                      <div class="assigned-display">
+                        <span class="date-text">{{ element.assigned_date | date:'shortDate' }}</span>
+                        <span class="time-text">{{ element.assigned_time }}</span>
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="comments">
+                    <th mat-header-cell *matHeaderCellDef> Comments </th>
+                    <td mat-cell *matCellDef="let element">
+                      <button mat-raised-button color="primary" class="comments-button"
+                              (click)="openCommentsDialog(element._id, element.fullname)">
+                        Comments
+                        <span *ngIf="element.comments && element.comments.length > 0" class="comment-count">
+                          ({{element.comments.length}})
+                        </span>
+                      </button>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Action">
+                    <th mat-header-cell *matHeaderCellDef>Action</th>
+                    <td mat-cell *matCellDef="let element">
+                      <button mat-icon-button [matMenuTriggerFor]="menu2" aria-label="Action menu">
+                        <img src="assets/3-dots.png" alt="Menu" style="width: 16px; height: 16px;">
+                      </button>
+                      <mat-menu #menu2="matMenu">
+                        <button mat-menu-item (click)="openDialog(element._id)">
+                          <img src="assets/edit.png" alt="Edit" style="width: 16px; height: 16px;">
+                          <span>Edit</span>
                         </button>
-                      </li>
-                      <li class="page-item" [class.disabled]="followupCurrentPage === followupTotalPages" (click)="goToLastPage('followup')">
-                        <button class="page-link" type="button" aria-label="Last">
-                          <span aria-hidden="true">&raquo;</span>
+                        <button mat-menu-item (click)="deleteContact(element._id)">
+                          <img src="assets/delete.png" alt="Delete" style="width: 18px; height: 18px;">
+                          <span>Delete</span>
                         </button>
-                      </li>
-                    </ul>
-                    <div class="pagination-info">
-                      <span>{{getStartItem('followup')}}</span>-<span>{{getEndItem('followup')}}</span> of <span>{{followupTotalItems}}</span>
-                    </div>
-                  </div>
-                </div>
-              </nav>
+                        <button mat-menu-item (click)="openDetailsDialog(element)">
+                          <img src="assets/eye.png" alt="View" style="width: 18px; height: 18px;">
+                          <span>View</span>
+                        </button>
+                      </mat-menu>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="followupDisplayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: followupDisplayedColumns;"></tr>
+                </table>
+                <div class="pagination-container">
+  <nav aria-label="Contact pagination">
+    <ul class="pagination justify-content-end my-4">
+      <li class="page-item" [class.disabled]="followupPageNum === 1" (click)="goToFollowupFirstPage()">
+        <button class="page-link" type="button" aria-label="First">&laquo;</button>
+      </li>
+      <li class="page-item" [class.disabled]="followupPageNum === 1" (click)="goToFollowupPreviousPage()">
+        <button class="page-link" type="button" aria-label="Previous">&lsaquo;</button>
+      </li>
+
+      <div class="page-number-container d-flex">
+        <li *ngFor="let page of getFollowupPageNumbers()"
+            class="page-item"
+            [class.active]="page === followupPageNum"
+            (click)="goToFollowupPage(page)">
+          <button class="page-link" type="button">{{page}}</button>
+        </li>
+      </div>
+
+      <li class="page-item" [class.disabled]="followupPageNum === followupTotalPages" (click)="goToFollowupNextPage()">
+        <button class="page-link" type="button" aria-label="Next">&rsaquo;</button>
+      </li>
+      <li class="page-item" [class.disabled]="followupPageNum === followupTotalPages" (click)="goToFollowupLastPage()">
+        <button class="page-link" type="button" aria-label="Last">&raquo;</button>
+      </li>
+    </ul>
+    <div class="pagination-info text-center text-muted mb-4">
+      <span>{{getFollowupStartItem()}}</span>-<span>{{getFollowupEndItem()}}</span> of <span>{{followupTotalItems}}</span>
+    </div>
+  </nav>
+</div>
+
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+      
+    </ng-container>
+    
 
-    <!-- Full width Enrollments -->
-    <div class="row margin_top" *ngIf="userType === 'staff'">
-      <div class="col-md-12">
-        <div class="table_cont">
-          <div class="top_table_cont">
-            <h5>New Enrollments</h5>
-          </div>
-          <div class="mat-elevation-z2 table-container">
-           <table mat-table [dataSource]="newEnrollmentDataSource" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
-              <!-- Checkbox Column -->
-              <ng-container matColumnDef="select">
-                <th mat-header-cell *matHeaderCellDef>
-                  <mat-checkbox (change)="$event ? masterToggle('enrollment') : null"
-                                [checked]="enrollmentSelection.hasValue() && isAllSelected('enrollment')"
-                                [indeterminate]="enrollmentSelection.hasValue() && !isAllSelected('enrollment')">
-                  </mat-checkbox>
-                </th>
-                <td mat-cell *matCellDef="let row">
-                  <mat-checkbox (click)="$event.stopPropagation()"
-                                (change)="$event ? enrollmentSelection.toggle(row) : null"
-                                [checked]="enrollmentSelection.isSelected(row)">
-                  </mat-checkbox>
-                </td>
-              </ng-container>
-              
-              <!-- Full Name -->
-              <ng-container matColumnDef="fullname">
-                <th mat-header-cell mat-sort-header *matHeaderCellDef> Full Name </th>
-                <td mat-cell *matCellDef="let element"> {{ element.fullname }} </td>
-              </ng-container>
-              
-              <!-- Phone -->
-              <ng-container matColumnDef="phone">
-                <th mat-header-cell mat-sort-header *matHeaderCellDef> Phone </th>
-                <td mat-cell *matCellDef="let element"> {{ element.phone }} </td>
-              </ng-container>
-              
-              <!-- Course -->
-              <ng-container matColumnDef="course">
-                <th mat-header-cell mat-sort-header *matHeaderCellDef> Course </th>
-                <td mat-cell *matCellDef="let element">
-                  {{ element.courses?.join(', ') }}
-                </td>
-              </ng-container>
-              
-              <!-- Created Date -->
-              <ng-container matColumnDef="createdDate">
-                <th mat-header-cell mat-sort-header *matHeaderCellDef> Created Date </th>
-                <td mat-cell *matCellDef="let element"> 
-                  {{ element.createdAt | date:'shortDate' }} 
-                </td>
-              </ng-container>
-              
-              <!-- Created Time -->
-              <ng-container matColumnDef="createdTime">
-                <th mat-header-cell mat-sort-header *matHeaderCellDef> Created Time </th>
-                <td mat-cell *matCellDef="let element"> 
-                  {{ element.createdAt | date:'shortTime' }} 
-                </td>
-              </ng-container>
-              
-              <!-- Lead Status -->
-              <ng-container matColumnDef="leadSelection">
-                <th mat-header-cell *matHeaderCellDef> Lead Status </th>
-                <td class="lead_status" mat-cell *matCellDef="let element">
-                  <mat-form-field appearance="outline">
-                    <mat-select
-                      [(value)]="element.lead_status"
-                      (selectionChange)="onLeadStatusChange($event.value, element._id, false)"
-                      [ngClass]="getLeadStatusClass(element.lead_status)"
-                      class="mat-select-lead-status">
-                      <mat-option *ngFor="let lead of leadOptions" [value]="lead">{{ lead }}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </td>
-              </ng-container>
-              
-              <!-- Followup Date -->
-              <ng-container matColumnDef="followupDate">
-                <th mat-header-cell *matHeaderCellDef> Followup Date </th>
-                <td mat-cell *matCellDef="let element"> 
-                  {{ element.followup_date | date:'shortDate' }} 
-                </td>
-              </ng-container>
-              
-              <!-- Followup Time -->
-              <ng-container matColumnDef="followupTime">
-                <th mat-header-cell *matHeaderCellDef> Followup Time </th>
-                <td mat-cell *matCellDef="let element"> 
-                  {{ formatTimeForDisplay(element.followup_time) }} 
-                </td>
-              </ng-container>
-              
-              <!-- Comments -->
-              <ng-container matColumnDef="comments">
-                <th mat-header-cell *matHeaderCellDef> Comments </th>
-                <td mat-cell *matCellDef="let element">
-                  <button 
-                    mat-raised-button 
-                    color="primary" 
-                    class="comments-button"
-                    (click)="openCommentsDialog(element._id, element.fullname)">
-                    Comments
-                    <span *ngIf="element.comments && element.comments.length > 0" class="comment-count">
-                      ({{element.comments.length}})
-                    </span>
-                  </button>
-                </td>
-              </ng-container>
-              
-              <!-- Action -->
-              <ng-container matColumnDef="Action">
-                <th mat-header-cell *matHeaderCellDef> Action </th>
-                <td mat-cell *matCellDef="let element"> 
-                  <button mat-raised-button (click)="openDialog(element._id)">Edit</button>
-                </td>
-              </ng-container>
-              
-              <!-- Mark Registered -->
-              <ng-container matColumnDef="MarkRegistered">
-                <th mat-header-cell *matHeaderCellDef> Registration </th>
-                <td mat-cell *matCellDef="let element">
-                  <button
-                    mat-raised-button
-                    color="primary"
-                    [disabled]="element.isRegistered === 1"
-                    (click)="markAsRegistered(element._id, false)">
-                    {{ element.isRegistered === 1 ? 'Registered' : 'Mark Registered' }}
-                  </button>
-                </td>
-              </ng-container>
-              
-              <!-- Send Message -->
-              <!-- <ng-container *ngIf="userType === 'admin'" matColumnDef="SendMessage">
-                <th mat-header-cell *matHeaderCellDef> Send Message </th>
-                <td mat-cell *matCellDef="let element"> 
-                  <button mat-raised-button (click)="sendLeadDetails(element._id)">Send</button>
-                </td>
-              </ng-container> -->
-              
-              <tr mat-header-row *matHeaderRowDef="getNewEnrollmentDisplayedColumns()"></tr>
-              <tr mat-row *matRowDef="let row; columns: getNewEnrollmentDisplayedColumns()"></tr>
-            </table>
-            
-            <!-- Pagination -->
-            <div class="pagination-container">
-              <nav aria-label="Enrollment pagination">
-                <div class="pagination-wrapper">
-                  <div class="pagination-group">
-                    <ul class="pagination">
-                      <li class="page-item" [class.disabled]="newEnrollmentCurrentPage === 1" (click)="goToFirstPage('enrollment')">
-                        <button class="page-link" type="button" aria-label="First">
-                          <span aria-hidden="true">&laquo;</span>
-                        </button>
-                      </li>
-                      <li class="page-item" [class.disabled]="newEnrollmentCurrentPage === 1" (click)="goToPreviousPage('enrollment')">
-                        <button class="page-link" type="button" aria-label="Previous">
-                          <span aria-hidden="true">&lsaquo;</span>
-                        </button>
-                      </li>
-                      <div class="page-number-container">
-                        <li *ngFor="let page of getPageNumbers('enrollment')"
-                            class="page-item"
-                            [class.active]="page === newEnrollmentCurrentPage"
-                            (click)="goToPage(page, 'enrollment')">
-                          <button class="page-link" type="button">{{page}}</button>
-                        </li>
-                      </div>
-                      <li class="page-item" [class.disabled]="newEnrollmentCurrentPage === newEnrollmentTotalPages" (click)="goToNextPage('enrollment')">
-                        <button class="page-link" type="button" aria-label="Next">
-                          <span aria-hidden="true">&rsaquo;</span>
-                        </button>
-                      </li>
-                      <li class="page-item" [class.disabled]="newEnrollmentCurrentPage === newEnrollmentTotalPages" (click)="goToLastPage('enrollment')">
-                        <button class="page-link" type="button" aria-label="Last">
-                          <span aria-hidden="true">&raquo;</span>
-                        </button>
-                      </li>
-                    </ul>
-                    <div class="pagination-info">
-                      <span>{{getStartItem('enrollment')}}</span>-<span>{{getEndItem('enrollment')}}</span> of <span>{{newEnrollmentTotalItems}}</span>
-                    </div>
-                  </div>
-                </div>
-              </nav>
+<div class="row mt-4"   *ngIf="getUserType() === 'staff' || getUserType() === 'admin'">
+  <!-- All Followup Leads Table -->
+<div class="col-lg-6 col-md-6 col-sm-12 mb-4" *ngIf="getUserType() === 'staff'|| getUserType() === 'admin'">
+  <div class="card">
+    <div class="card-header bg-warning text-dark">
+      <h5 class="mb-0">All Followup Leads ({{followupLeadsTotalItems}})</h5>
+    </div>
+    <div class="card-body p-0">
+      <div class="mat-elevation-z2 table-container staff-table">
+        <table mat-table [dataSource]="followupLeadsDataSource" class="mat-elevation-z8">
+          
+          <!-- Checkbox Column -->
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef>
+              <mat-checkbox (change)="$event ? followupLeadsMasterToggle() : null"
+                            [checked]="followupLeadsSelection.hasValue() && isAllFollowupLeadsSelected()"
+                            [indeterminate]="followupLeadsSelection.hasValue() && !isAllFollowupLeadsSelected()">
+              </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="$event ? followupLeadsSelection.toggle(row) : null"
+                            [checked]="followupLeadsSelection.isSelected(row)">
+              </mat-checkbox>
+            </td>
+          </ng-container>
+
+          <!-- Column definitions -->
+          <ng-container matColumnDef="fullname">
+            <th mat-header-cell *matHeaderCellDef> Full Name </th>
+            <td mat-cell *matCellDef="let element"> {{ element.fullname }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="phone">
+            <th mat-header-cell *matHeaderCellDef> Phone </th>
+            <td mat-cell *matCellDef="let element"> {{ element.phone }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef> Email </th>
+            <td mat-cell *matCellDef="let element"> {{ element.email }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="course">
+            <th mat-header-cell *matHeaderCellDef> Course </th>
+            <td mat-cell *matCellDef="let element"> {{ element.courses }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="assigneeSelection">
+                  <th mat-header-cell *matHeaderCellDef> Assignee </th>
+                  <td class="lead_status" mat-cell *matCellDef="let element">
+                    <mat-form-field appearance="outline" class="small-assignee-field">
+                      <mat-select [(value)]="element.assignee" (selectionChange)="onAssigneeSelect($event.value, element._id)">
+                        <mat-option *ngFor="let user of assigneeOptions" [value]="user">{{ user }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </td>
+                </ng-container>
+                
+          <!-- <ng-container matColumnDef="assignee">
+            <th mat-header-cell *matHeaderCellDef> Assigned To </th>
+            <td mat-cell *matCellDef="let element"> {{ element.assignee || 'Unassigned' }} </td>
+          </ng-container> -->
+
+           <ng-container matColumnDef="leadSelection">
+            <th mat-header-cell *matHeaderCellDef> Lead Status </th>
+            <td class="lead_status" mat-cell *matCellDef="let element">
+              <mat-select
+                [(value)]="element.lead_status"
+                (selectionChange)="onCourseSelectionChange($event.value, element._id)"
+                [ngClass]="getLeadStatusClass(element.lead_status)"
+                class="mat-select-lead-status">
+                <mat-option *ngFor="let lead of leadOptions" [value]="lead">{{ lead }}</mat-option>
+              </mat-select>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="followupDateTime">
+            <th mat-header-cell *matHeaderCellDef> Followup </th>
+            <td mat-cell *matCellDef="let element" class="followup-cell"> 
+              <div class="followup-display">
+                <span class="date-text" [class.text-danger]="element.is_overdue" [class.text-warning]="element.is_today">
+                  {{ element.followup_date | date:'shortDate' }}
+                </span>
+                <span class="time-text">{{ formatTimeForDisplay(element.followup_time) }}</span>
+              </div>
+              <button *ngIf="element.lead_status === 'Followup' || element.lead_status === 'Positive' || element.lead_status === 'Medium'" class="followup-edit-trigger"  
+                      (click)="editFollowup(element)" matTooltip="Edit follow-up">
+                <img src="assets/edit-2.png" alt="Edit" style="width: 20px; height: 20px;">
+              </button>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="assignedDateTime">
+            <th mat-header-cell *matHeaderCellDef> Assigned On </th>
+            <td mat-cell *matCellDef="let element" class="assigned-cell"> 
+              <div class="assigned-display">
+                <span class="date-text">{{ element.assigned_date | date:'shortDate' }}</span>
+                <span class="time-text">{{ element.assigned_time }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="comments">
+            <th mat-header-cell *matHeaderCellDef> Comments </th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-raised-button color="primary" class="comments-button"
+                      (click)="openCommentsDialog(element._id, element.fullname)">
+                Comments
+                <span *ngIf="element.comments && element.comments.length > 0" class="comment-count">
+                  ({{element.comments.length}})
+                </span>
+              </button>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Action">
+            <th mat-header-cell *matHeaderCellDef>Action</th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Action menu">
+                <img src="assets/3-dots.png" alt="Menu" style="width: 16px; height: 16px;">
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="openDialog(element._id)">
+                  <img src="assets/edit.png" alt="Edit" style="width: 16px; height: 16px;">
+                  <span>Edit</span>
+                </button>
+                <button mat-menu-item (click)="deleteContact(element._id)">
+                  <img src="assets/delete.png" alt="Delete" style="width: 18px; height: 18px;">
+                  <span>Delete</span>
+                </button>
+                <button mat-menu-item (click)="openDetailsDialog(element)">
+                  <img src="assets/eye.png" alt="View" style="width: 18px; height: 18px;">
+                  <span>View</span>
+                </button>
+              </mat-menu>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="followupLeadsDisplayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: followupLeadsDisplayedColumns;"></tr>
+        </table>
+
+        <!-- Pagination for followup leads -->
+        <div class="pagination-container">
+          <nav aria-label="Followup leads pagination">
+            <ul class="pagination justify-content-end my-4">
+              <li class="page-item" [class.disabled]="followupLeadsPageNum === 1" (click)="goToFollowupLeadsFirstPage()">
+                <button class="page-link" type="button" aria-label="First">&laquo;</button>
+              </li>
+              <li class="page-item" [class.disabled]="followupLeadsPageNum === 1" (click)="goToFollowupLeadsPreviousPage()">
+                <button class="page-link" type="button" aria-label="Previous">&lsaquo;</button>
+              </li>
+
+              <div class="page-number-container d-flex">
+                <li *ngFor="let page of getFollowupLeadsPageNumbers()"
+                    class="page-item"
+                    [class.active]="page === followupLeadsPageNum"
+                    (click)="goToFollowupLeadsPage(page)">
+                  <button class="page-link" type="button">{{page}}</button>
+                </li>
+              </div>
+
+              <li class="page-item" [class.disabled]="followupLeadsPageNum === followupLeadsTotalPages" (click)="goToFollowupLeadsNextPage()">
+                <button class="page-link" type="button" aria-label="Next">&rsaquo;</button>
+              </li>
+              <li class="page-item" [class.disabled]="followupLeadsPageNum === followupLeadsTotalPages" (click)="goToFollowupLeadsLastPage()">
+                <button class="page-link" type="button" aria-label="Last">&raquo;</button>
+              </li>
+            </ul>
+            <div class="pagination-info text-center text-muted mb-4">
+              <span>{{getFollowupLeadsStartItem()}}</span>-<span>{{getFollowupLeadsEndItem()}}</span> of <span>{{followupLeadsTotalItems}}</span>
             </div>
-          </div>
+          </nav>
         </div>
       </div>
     </div>
   </div>
 </div>
+<!-- Finalized Leads Table -->
+<div class="col-lg-6 col-md-6 col-sm-12 mb-4" *ngIf="getUserType() === 'staff'|| getUserType() === 'admin'">
+  <div class="card">
+    <div class="card-header bg-info text-white">
+      <h5 class="mb-0">Finalized Leads ({{finalizedDataSource.data.length}})</h5>
+    </div>
+    <div class="card-body p-0">
+      <div class="mat-elevation-z2 table-container finalized-table">
+        <table mat-table [dataSource]="finalizedDataSource" class="mat-elevation-z8">
+          
+          <!-- Checkbox Column -->
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef>
+              <mat-checkbox (change)="$event ? finalizedMasterToggle() : null"
+                            [checked]="finalizedSelection.hasValue() && isAllFinalizedSelected()"
+                            [indeterminate]="finalizedSelection.hasValue() && !isAllFinalizedSelected()">
+              </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="$event ? finalizedSelection.toggle(row) : null"
+                            [checked]="finalizedSelection.isSelected(row)">
+              </mat-checkbox>
+            </td>
+          </ng-container>
+
+          <!-- Column definitions -->
+          <ng-container matColumnDef="fullname">
+            <th mat-header-cell *matHeaderCellDef> Full Name </th>
+            <td mat-cell *matCellDef="let element"> {{ element.fullname }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="phone">
+            <th mat-header-cell *matHeaderCellDef> Phone </th>
+            <td mat-cell *matCellDef="let element"> {{ element.phone }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef> Email </th>
+            <td mat-cell *matCellDef="let element"> {{ element.email }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="course">
+            <th mat-header-cell *matHeaderCellDef> Course </th>
+            <td mat-cell *matCellDef="let element"> {{ element.courses }} </td>
+          </ng-container>
+
+          
+<ng-container matColumnDef="assignee" *ngIf="getUserType() === 'admin'">
+  <th mat-header-cell *matHeaderCellDef> Assigned To </th>
+  <td mat-cell *matCellDef="let element"> {{ element.assignee || 'Unassigned' }} </td>
+</ng-container>
+<ng-container matColumnDef="assigneeSelection">
+                  <th mat-header-cell *matHeaderCellDef> Assignee </th>
+                  <td class="lead_status" mat-cell *matCellDef="let element">
+                    <mat-form-field appearance="outline" class="small-assignee-field">
+                      <mat-select [(value)]="element.assignee" (selectionChange)="onAssigneeSelect($event.value, element._id)">
+                        <mat-option *ngFor="let user of assigneeOptions" [value]="user">{{ user }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </td>
+                </ng-container>
+          <ng-container matColumnDef="Registration">
+          <th mat-header-cell *matHeaderCellDef>Create Registration</th>
+          <td mat-cell *matCellDef="let user">
+              <button mat-raised-button  (click)="openCreateRegistrationDialog(user)">
+              Registration
+            </button>
+          </td>
+        </ng-container>
+
+          <!-- <ng-container matColumnDef="finalizedDateTime">
+            <th mat-header-cell *matHeaderCellDef> Finalized On </th>
+            <td mat-cell *matCellDef="let element" class="finalized-cell"> 
+              <div class="finalized-display">
+                <span class="date-text">{{ element.finalized_date | date:'shortDate' }}</span>
+                <span class="time-text">{{ element.finalized_time }}</span>
+              </div>
+            </td>
+          </ng-container> -->
+
+          <ng-container matColumnDef="assignedDateTime">
+            <th mat-header-cell *matHeaderCellDef> Assigned On </th>
+            <td mat-cell *matCellDef="let element" class="assigned-cell"> 
+              <div class="assigned-display">
+                <span class="date-text">{{ element.assigned_date | date:'shortDate' }}</span>
+                <span class="time-text">{{ element.assigned_time }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="comments">
+            <th mat-header-cell *matHeaderCellDef> Comments </th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-raised-button color="primary" class="comments-button"
+                      (click)="openCommentsDialog(element._id, element.fullname)">
+                Comments
+                <span *ngIf="element.comments && element.comments.length > 0" class="comment-count">
+                  ({{element.comments.length}})
+                </span>
+              </button>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="markRegistered">
+            <th mat-header-cell *matHeaderCellDef> Register </th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-raised-button 
+                      [color]="element.isRegistered ? 'accent' : 'primary'"
+                      [disabled]="element.isRegistered"
+                      (click)="markAsRegistered(element._id)"
+                      class="register-button">
+                {{ element.isRegistered ? 'Registered' : 'Mark Registered' }}
+              </button>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Action">
+            <th mat-header-cell *matHeaderCellDef>Action</th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Action menu">
+                <img src="assets/3-dots.png" alt="Menu" style="width: 16px; height: 16px;">
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="openDialog(element._id)">
+                  <img src="assets/edit.png" alt="Edit" style="width: 16px; height: 16px;">
+                  <span>Edit</span>
+                </button>
+                <button mat-menu-item (click)="deleteContact(element._id)">
+                  <img src="assets/delete.png" alt="Delete" style="width: 18px; height: 18px;">
+                  <span>Delete</span>
+                </button>
+                <button mat-menu-item (click)="openDetailsDialog(element)">
+                  <img src="assets/eye.png" alt="View" style="width: 18px; height: 18px;">
+                  <span>View</span>
+                </button>
+              </mat-menu>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="finalizedDisplayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: finalizedDisplayedColumns;"></tr>
+        </table>
+
+        <!-- Pagination for finalized leads -->
+        <div class="pagination-container">
+          <nav aria-label="Finalized leads pagination">
+            <ul class="pagination justify-content-end my-4">
+              <li class="page-item" [class.disabled]="finalizedPageNum === 1" (click)="goToFinalizedFirstPage()">
+                <button class="page-link" type="button" aria-label="First">&laquo;</button>
+              </li>
+              <li class="page-item" [class.disabled]="finalizedPageNum === 1" (click)="goToFinalizedPreviousPage()">
+                <button class="page-link" type="button" aria-label="Previous">&lsaquo;</button>
+              </li>
+
+              <div class="page-number-container d-flex">
+                <li *ngFor="let page of getFinalizedPageNumbers()"
+                    class="page-item"
+                    [class.active]="page === finalizedPageNum"
+                    (click)="goToFinalizedPage(page)">
+                  <button class="page-link" type="button">{{page}}</button>
+                </li>
+              </div>
+
+              <li class="page-item" [class.disabled]="finalizedPageNum === finalizedTotalPages" (click)="goToFinalizedNextPage()">
+                <button class="page-link" type="button" aria-label="Next">&rsaquo;</button>
+              </li>
+              <li class="page-item" [class.disabled]="finalizedPageNum === finalizedTotalPages" (click)="goToFinalizedLastPage()">
+                <button class="page-link" type="button" aria-label="Last">&raquo;</button>
+              </li>
+            </ul>
+            <div class="pagination-info text-center text-muted mb-4">
+              <span>{{getFinalizedStartItem()}}</span>-<span>{{getFinalizedEndItem()}}</span> of <span>{{finalizedTotalItems}}</span>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<div class="row mt-4" *ngIf="getUserType() === 'staff'|| getUserType() === 'admin'">
+<div class="col-lg-6 col-md-6 col-sm-12 mb-4">
+          <div class="card">
+            <div class="card-header bg-success text-white">
+              <h5 class="mb-0">Registered Leads ({{registeredDataSource.data.length}})</h5>
+            </div>
+            <div class="card-body p-0">
+              <div class="mat-elevation-z2 table-container registered-table">
+                <table mat-table [dataSource]="registeredDataSource" class="mat-elevation-z8">
+                  
+                  <!-- Checkbox Column -->
+                  <ng-container matColumnDef="select">
+                    <th mat-header-cell *matHeaderCellDef>
+                      <mat-checkbox (change)="$event ? registeredMasterToggle() : null"
+                                    [checked]="registeredSelection.hasValue() && isAllRegisteredSelected()"
+                                    [indeterminate]="registeredSelection.hasValue() && !isAllRegisteredSelected()">
+                      </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                      <mat-checkbox (click)="$event.stopPropagation()"
+                                    (change)="$event ? registeredSelection.toggle(row) : null"
+                                    [checked]="registeredSelection.isSelected(row)">
+                      </mat-checkbox>
+                    </td>
+                  </ng-container>
+
+                  <!-- Column definitions for registered leads -->
+                  <ng-container matColumnDef="fullname">
+                    <th mat-header-cell *matHeaderCellDef> Full Name </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.fullname }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="phone">
+                    <th mat-header-cell *matHeaderCellDef> Phone </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.phone }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef> Email </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.email }} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="course">
+                    <th mat-header-cell *matHeaderCellDef> Course </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.courses }} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="assigneeSelection">
+                  <th mat-header-cell *matHeaderCellDef> Assignee </th>
+                  <td class="lead_status" mat-cell *matCellDef="let element">
+                    <mat-form-field appearance="outline" class="small-assignee-field">
+                      <mat-select [(value)]="element.assignee" (selectionChange)="onAssigneeSelect($event.value, element._id)">
+                        <mat-option *ngFor="let user of assigneeOptions" [value]="user">{{ user }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </td>
+                </ng-container>
+                  <ng-container matColumnDef="registeredDate">
+                    <th mat-header-cell *matHeaderCellDef> Registered Date </th>
+                    <td mat-cell *matCellDef="let element"> 
+                      {{ element.registered_date | date:'shortDate' }} 
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef> Status </th>
+                    <td mat-cell *matCellDef="let element">
+                      <span class="badge bg-success">Registered</span>
+                    </td>
+                  </ng-container>
+                   <ng-container matColumnDef="Action">
+            <th mat-header-cell *matHeaderCellDef>Action</th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Action menu">
+                <img src="assets/3-dots.png" alt="Menu" style="width: 16px; height: 16px;">
+              </button>
+              <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="openDialog(element._id)">
+                  <img src="assets/edit.png" alt="Edit" style="width: 16px; height: 16px;">
+                  <span>Edit</span>
+                </button>
+                <button mat-menu-item (click)="deleteContact(element._id)">
+                  <img src="assets/delete.png" alt="Delete" style="width: 18px; height: 18px;">
+                  <span>Delete</span>
+                </button>
+                <button mat-menu-item (click)="openDetailsDialog(element)">
+                  <img src="assets/eye.png" alt="View" style="width: 18px; height: 18px;">
+                  <span>View</span>
+                </button>
+              </mat-menu>
+            </td>
+          </ng-container>
+
+
+                  <tr mat-header-row *matHeaderRowDef="registeredDisplayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: registeredDisplayedColumns;"></tr>
+                </table>
+                    <div class="pagination-container">
+  <nav aria-label="Contact pagination">
+    <ul class="pagination justify-content-end my-4">
+      <li class="page-item" [class.disabled]="registeredPageNum === 1" (click)="goToRegisteredFirstPage()">
+        <button class="page-link" type="button" aria-label="First">&laquo;</button>
+      </li>
+      <li class="page-item" [class.disabled]="registeredPageNum === 1" (click)="goToRegisteredPreviousPage()">
+        <button class="page-link" type="button" aria-label="Previous">&lsaquo;</button>
+      </li>
+
+      <div class="page-number-container d-flex">
+        <li *ngFor="let page of getRegisteredPageNumbers()"
+            class="page-item"
+            [class.active]="page === registeredPageNum"
+            (click)="goToRegisteredPage(page)">
+          <button class="page-link" type="button">{{page}}</button>
+        </li>
+      </div>
+
+      <li class="page-item" [class.disabled]="registeredPageNum === registeredTotalPages" (click)="goToRegisteredNextPage()">
+        <button class="page-link" type="button" aria-label="Next">&rsaquo;</button>
+      </li>
+      <li class="page-item" [class.disabled]="registeredPageNum === registeredTotalPages" (click)="goToRegisteredLastPage()">
+        <button class="page-link" type="button" aria-label="Last">&raquo;</button>
+      </li>
+    </ul>
+    <div class="pagination-info text-center text-muted mb-4">
+      <span>{{getRegisteredStartItem()}}</span>-<span>{{getRegisteredEndItem()}}</span> of <span>{{registeredTotalItems}}</span>
+    </div>
+  </nav>
+</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
+    <div class="card">
+      <div class="card-header bg-info text-white">
+        <h5 class="mb-0">Accounts ({{accountsDataSource.data.length}})</h5>
+      </div>
+      <div class="card-body p-0">
+        <div class="mat-elevation-z2 table-container accounts-table">
+          <table mat-table [dataSource]="accountsDataSource" class="mat-elevation-z8">
+            
+            <!-- Checkbox Column -->
+            <ng-container matColumnDef="select">
+              <th mat-header-cell *matHeaderCellDef>
+                <mat-checkbox (change)="$event ? accountsMasterToggle() : null"
+                              [checked]="accountsSelection.hasValue() && isAllAccountsSelected()"
+                              [indeterminate]="accountsSelection.hasValue() && !isAllAccountsSelected()">
+                </mat-checkbox>
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()"
+                              (change)="$event ? accountsSelection.toggle(row) : null"
+                              [checked]="accountsSelection.isSelected(row)">
+                </mat-checkbox>
+              </td>
+            </ng-container>
+
+            <!-- Column definitions for accounts -->
+            <ng-container matColumnDef="contactName">
+              <th mat-header-cell *matHeaderCellDef>Full Name</th>
+              <td mat-cell *matCellDef="let account">{{ account.contactDetails?.name || 'N/A' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="email">
+              <th mat-header-cell *matHeaderCellDef>Email</th>
+              <td mat-cell *matCellDef="let account">{{ account.email || account.contactDetails?.email || 'N/A'}}</td>
+            </ng-container>
+            <!-- <ng-container matColumnDef="assigneeSelection">
+                  <th mat-header-cell *matHeaderCellDef> Assignee </th>
+                  <td class="lead_status" mat-cell *matCellDef="let element">
+                    <mat-form-field appearance="outline" class="small-assignee-field">
+                      <mat-select [(value)]="element.assignee" (selectionChange)="onAssigneeSelect($event.value, element._id)">
+                        <mat-option *ngFor="let user of assigneeOptions" [value]="user">{{ user }}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </td>
+                </ng-container> -->
+            <ng-container matColumnDef="phone">
+              <th mat-header-cell *matHeaderCellDef>Phone</th>
+              <td mat-cell *matCellDef="let account">{{ account.contactDetails?.phone || 'N/A' }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="totalAmount">
+              <th mat-header-cell *matHeaderCellDef>Total Amount</th>
+              <td mat-cell *matCellDef="let account">
+                {{ account.totalAmount  }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="pendingAmount">
+              <th mat-header-cell *matHeaderCellDef>Pending Amount</th>
+              <td mat-cell *matCellDef="let account">
+                {{ account.pendingAmount }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="paidAmount">
+              <th mat-header-cell *matHeaderCellDef>Paid Amount</th>
+              <td mat-cell *matCellDef="let account">
+                {{ (account.totalAmount - account.pendingAmount)  }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="pendingInstallments">
+              <th mat-header-cell *matHeaderCellDef>Pending Installments</th>
+              <td mat-cell *matCellDef="let account">{{ account.pendingInstallments }}</td>
+            </ng-container>
+              <ng-container matColumnDef="installmentActions">
+    <th mat-header-cell *matHeaderCellDef> Installment Actions </th>
+    <td mat-cell *matCellDef="let account">
+      <button mat-raised-button color="primary" 
+              (click)="manageInstallments(account)">
+        Manage
+      </button>
+    </td>
+  </ng-container>
+            <ng-container matColumnDef="overallStatus">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let account">
+                <span [class]="'status-' + account.overallStatus" class="status-badge">
+                  {{ account.overallStatus }}
+                </span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let account">
+                <button mat-raised-button  
+                        (click)="viewAccountModal(account.contactRef)">
+                  View 
+                </button>
+              </td>
+            </ng-container>
+            
+            <tr mat-header-row *matHeaderRowDef="accountsDisplayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: accountsDisplayedColumns;"  [class.overdue-account-row]="hasOverdueInstallments(row)"
+    class="account-row">></tr>
+          </table>
+
+          <!-- Pagination for accounts -->
+          <div class="pagination-container">
+            <nav aria-label="Accounts pagination">
+              <ul class="pagination justify-content-end my-4">
+                <li class="page-item" [class.disabled]="accountsPageNum === 1" (click)="goToAccountsFirstPage()">
+                  <button class="page-link" type="button" aria-label="First">&laquo;</button>
+                </li>
+                <li class="page-item" [class.disabled]="accountsPageNum === 1" (click)="goToAccountsPreviousPage()">
+                  <button class="page-link" type="button" aria-label="Previous">&lsaquo;</button>
+                </li>
+
+                <div class="page-number-container d-flex">
+                  <li *ngFor="let page of getAccountsPageNumbers()"
+                      class="page-item"
+                      [class.active]="page === accountsPageNum"
+                      (click)="goToAccountsPage(page)">
+                    <button class="page-link" type="button">{{page}}</button>
+                  </li>
+                </div>
+
+                <li class="page-item" [class.disabled]="accountsPageNum === accountsTotalPages" (click)="goToAccountsNextPage()">
+                  <button class="page-link" type="button" aria-label="Next">&rsaquo;</button>
+                </li>
+                <li class="page-item" [class.disabled]="accountsPageNum === accountsTotalPages" (click)="goToAccountsLastPage()">
+                  <button class="page-link" type="button" aria-label="Last">&raquo;</button>
+                </li>
+              </ul>
+              <div class="pagination-info text-center text-muted mb-4">
+                <span>{{getAccountsStartItem()}}</span>-<span>{{getAccountsEndItem()}}</span> of <span>{{accountsTotalItems}}</span>
+              </div>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+</section>

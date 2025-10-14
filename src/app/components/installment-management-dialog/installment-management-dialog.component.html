@@ -1,0 +1,213 @@
+
+<h2 mat-dialog-title>
+  Manage Installments - {{ data.account.contactDetails?.name }}
+  <button class="close-btn" mat-dialog-close aria-label="Close"></button>
+</h2>
+
+<mat-dialog-content class="mat-dialog-content">
+  <form [formGroup]="installmentForm" (ngSubmit)="onSubmit()">
+    <div class="installments-container">
+      <!-- Add Installment Button -->
+      <div class="add-installment-section">
+        <button type="button" mat-raised-button color="accent" (click)="addNewInstallment()" class="add-installment-btn">
+          + Add New Installment
+        </button>
+      </div>
+
+      <div class="installment-header-row">
+        <div class="header-cell">#</div>
+        <div class="header-cell">Amount</div>
+        <div class="header-cell">Due Date</div>
+        <div class="header-cell">Paid Amount</div>
+        <div class="header-cell">Due Amount</div>
+        <div class="header-cell">Status</div>
+        <div class="header-cell">Actions</div>
+        <div class="header-cell">Notes</div>
+      </div>
+
+      <div formArrayName="installments" *ngFor="let installment of installments.controls; let i = index">
+        <div [formGroupName]="i" class="installment-row" 
+             [class.overdue]="isOverdue(installment.get('dueDate')?.value)"
+             [class.paid]="installment.get('status')?.value === 'paid'">
+          
+          <div class="cell installment-number" data-label="Installment #">
+            {{ i + 1 }}
+            <button *ngIf="!installment.get('_id')?.value" type="button" class="remove-btn" 
+                    (click)="removeInstallment(i)" matTooltip="Remove this installment">
+              ×
+            </button>
+          </div>
+          
+          <div class="cell" data-label="Amount">
+            <mat-form-field appearance="outline" class="amount-field">
+              <input type="number" matInput formControlName="amount" 
+                     (change)="onAmountChange(i)" min="0" step="0.01">
+            </mat-form-field>
+          </div>
+          
+          <div class="cell" data-label="Due Date">
+            <mat-form-field appearance="outline" class="date-field">
+              <input matInput [matDatepicker]="picker" formControlName="dueDate"
+                     (dateChange)="onDueDateChange(i)">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          
+          <div class="cell" data-label="Paid Amount">
+            <mat-form-field appearance="outline" class="paid-amount-field">
+              <input type="number" matInput formControlName="paidAmount" 
+                     (change)="onPaidAmountChange(i)" min="0" step="0.01">
+            </mat-form-field>
+          </div>
+          
+          <div class="cell" data-label="Due Amount">
+            <mat-form-field appearance="outline" class="due-amount-field">
+              <input type="number" matInput formControlName="dueAmount" 
+                     (change)="onDueAmountChange(i)" min="0" step="0.01"
+                     [class.overdue-field]="installment.get('isOverdue')?.value">
+              <span matPrefix *ngIf="installment.get('dueAmount')?.value > 0" 
+                    style="color: #f44336;"></span>
+            </mat-form-field>
+          </div>
+          
+          <div class="cell status-cell" data-label="Status">
+            <span class="status-badge" 
+                  [style.background-color]="getStatusColor(installment.get('status')?.value)">
+              {{ getStatusText(installment.get('status')?.value) }}
+            </span>
+          </div>
+          
+                 <div class="cell actions-cell" data-label="Actions">
+    <button mat-raised-button 
+            color="primary" 
+            type="button"
+            *ngIf="installment.get('status')?.value !== 'paid'"
+            (click)="markAsPaid(i)"
+            class="mark-paid-btn">
+        {{ installment.get('dueAmount')?.value > 0 ? 'Pay Due (' + (installment.get('dueAmount')?.value) + ')' : 
+           installment.get('paidAmount')?.value > 0 ? 'Add Payment' : 'Make Payment' }}
+    </button>
+    <span *ngIf="installment.get('status')?.value === 'paid'" class="paid-text">
+        ✓ Paid
+    </span>
+</div>
+
+          
+          <div class="cell" data-label="Notes">
+            <mat-form-field appearance="outline" class="notes-field">
+              <input matInput formControlName="notes" placeholder="Notes">
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Totals Summary -->
+    <div class="totals-section">
+      <div class="total-item">
+        <strong>Total Amount:</strong> {{ calculateTotal('amount') | currency }}
+      </div>
+      <div class="total-item">
+        <strong>Total Paid:</strong> {{ calculateTotal('paidAmount') | currency }}
+      </div>
+      <div class="total-item">
+        <strong>Total Due:</strong> {{ calculateTotal('dueAmount') | currency }}
+      </div>
+      <div class="total-item">
+        <strong>Balance:</strong> 
+        <span [class.positive]="(calculateTotal('amount') - calculateTotal('paidAmount')) > 0">
+          {{ (calculateTotal('amount') - calculateTotal('paidAmount')) | currency }}
+        </span>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" 
+          (click)="onSubmit()"
+          [disabled]="!installmentForm.valid || isSubmitting">
+    {{ isSubmitting ? 'Updating...' : 'Update' }}
+  </button>
+</mat-dialog-actions>
+
+<!-- Payment Prompt -->
+<div *ngIf="showPaymentPrompt" class="payment-prompt-overlay">
+  <div class="payment-prompt-container">
+    <div class="payment-prompt-header">
+      <h3 class="payment-prompt-title">Make Payment</h3>
+    </div>
+    
+    <div class="payment-prompt-content">
+      <!-- Amount Input -->
+      <div class="payment-amount-section">
+        <label class="amount-label">Payment Amount</label>
+        <div class="amount-input-container">
+          <input 
+            type="number" 
+            class="amount-input"
+            [value]="paymentAmount"
+            (input)="onPaymentAmountChange($event)"
+            min="0.01"
+            [max]="remainingAmount"
+            step="0.01"
+          >
+          <!-- <span class="amount-currency">$</span> -->
+        </div>
+        <div class="amount-info">
+          Remaining: {{ remainingAmount | currency }} / Total: {{ installmentAmount | currency }}
+        </div>
+        
+        <!-- Quick Amount Buttons -->
+        <!-- <div class="quick-amount-buttons">
+          <button 
+            *ngFor="let percent of [0.25, 0.5, 0.75]"
+            class="quick-amount-btn"
+            (click)="setQuickAmount(percent)"
+          >
+            {{ percent * 100 }}%
+          </button>
+        </div> -->
+      </div>
+      
+      <!-- Payment Options -->
+      <div class="payment-options">
+        <button 
+          class="payment-option-btn"
+          [class.active]="paymentType === 'partial'"
+          (click)="paymentType = 'partial'"
+        >
+          <div class="option-label">Partial Payment</div>
+          <div class="option-amount">{{ paymentAmount }}</div>
+        </button>
+        
+        <button 
+          class="payment-option-btn"
+          [class.active]="paymentType === 'full'"
+          (click)="paymentType = 'full'; paymentAmount = remainingAmount"
+        >
+          <div class="option-label">Full Payment</div>
+          <div class="option-amount">{{ remainingAmount  }}</div>
+        </button>
+      </div>
+    </div>
+    
+    <div class="payment-prompt-actions">
+      <button 
+        class="prompt-btn prompt-btn-cancel"
+        (click)="closePaymentPrompt()"
+      >
+        Cancel
+      </button>
+      <button 
+        class="prompt-btn prompt-btn-confirm"
+        (click)="confirmPayment()"
+        [disabled]="paymentAmount <= 0 || paymentAmount > remainingAmount"
+      >
+        Confirm Payment
+      </button>
+    </div>
+  </div>
+</div>

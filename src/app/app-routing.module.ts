@@ -49,7 +49,7 @@ import { InstallmentComponent } from './components/installment/installment.compo
 import { AccountComponent } from './components/account/account.component';
 import { AllAccountsComponent } from './components/all-accounts/all-accounts.component';
 import { NotificationComponent } from './components/notification/notification.component';
-
+import { ExcelUploadComponent } from './components/excel-upload/excel-upload.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -100,6 +100,7 @@ const routes: Routes = [
 {path:'account/:id',component:AccountComponent},
 {path:'app-all-accounts',component:AllAccountsComponent},
 { path: 'notifications', component: NotificationComponent },
+{path:'app-excel-upload',component:ExcelUploadComponent},
   { path: '**', redirectTo: 'home' },
   
 

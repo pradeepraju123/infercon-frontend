@@ -21,7 +21,7 @@ export class AllAccountsComponent implements OnInit {
   pageNum = 1;
   totalItems: number = 0;
   totalPages: number = 1;
-  itemsPerPage: number = 10;
+  itemsPerPage: number = 5;
   
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
