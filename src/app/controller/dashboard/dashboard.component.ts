@@ -54,17 +54,17 @@ export class DashboardComponent  implements AfterViewInit {
   followupDataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   followupLeadsDataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   newLeadsDisplayedColumns: string[] = this.getUserType() === 'admin' 
-  ? ['select', 'fullname', 'phone', 'email', 'course', 'assigneeSelection', 'leadSelection', 'followupDateTime','assignedDateTime','comments', 'Action']
+  ? ['select', 'fullname', 'phone', 'email', 'course', 'assignee', 'leadSelection', 'followupDateTime','assignedDateTime','comments', 'Action']
   : ['select', 'fullname', 'phone', 'email', 'course', 'leadSelection', 'followupDateTime','assignedDateTime','comments', 'Action'];
   followupDisplayedColumns: string[] = this.getUserType() === 'admin' 
-  ? ['select', 'fullname', 'phone', 'email', 'course', 'assigneeSelection', 'leadSelection', 'followupDateTime','assignedDateTime','comments', 'Action']
+  ? ['select', 'fullname', 'phone', 'email', 'course', 'assignee', 'leadSelection', 'followupDateTime','assignedDateTime','comments', 'Action']
   : ['select', 'fullname', 'phone', 'email', 'course', 'leadSelection', 'followupDateTime','assignedDateTime','comments', 'Action'];
   followupLeadsDisplayedColumns: string[] = this.getUserType() === 'admin' 
-  ? ['select', 'fullname', 'phone', 'email', 'course', 'assigneeSelection', 'leadSelection', 'followupDateTime','assignedDateTime','comments', 'Action']
+  ? ['select', 'fullname', 'phone', 'email', 'course', 'assignee', 'leadSelection', 'followupDateTime','assignedDateTime','comments', 'Action']
   : ['select', 'fullname', 'phone', 'email', 'course', 'leadSelection', 'followupDateTime','assignedDateTime','comments', 'Action'];
   registeredDataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   registeredDisplayedColumns: string[] = this.getUserType() === 'admin' 
-  ? ['select', 'fullname', 'phone', 'email', 'course', 'assigneeSelection','registeredDate', 'status','Action']
+  ? ['select', 'fullname', 'phone', 'email', 'course', 'assignee','registeredDate', 'status','Action']
   :['select', 'fullname', 'phone', 'email', 'course','registeredDate', 'status','Action']
   registeredSelection = new SelectionModel<any>(true, []);
   newLeadsSelection = new SelectionModel<any>(true, []);
@@ -72,7 +72,7 @@ export class DashboardComponent  implements AfterViewInit {
   followupLeadsSelection = new SelectionModel<any>(true, []);
   finalizedDataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);
   finalizedDisplayedColumns: string[] = this.getUserType() === 'admin' 
-   ?['select', 'fullname', 'phone', 'email', 'course','assigneeSelection','Registration', 'assignedDateTime', 'comments', 'markRegistered', 'Action']
+   ?['select', 'fullname', 'phone', 'email', 'course','assignee','Registration', 'assignedDateTime', 'comments', 'markRegistered', 'Action']
    :['select', 'fullname', 'phone', 'email', 'course','Registration', 'assignedDateTime', 'comments', 'markRegistered', 'Action']
   finalizedSelection = new SelectionModel<any>(true, []);
   accountsDataSource: MatTableDataSource<any> = new MatTableDataSource<any>([]);

@@ -766,7 +766,7 @@ button[disabled] {
   position: absolute;
   right: 4px;
   top: 50%;
-  transform: translateY(-50%);
+  /* transform: translateY(-50%); */
   cursor: pointer;
   width: 20px;
   height: 20px;
@@ -1040,6 +1040,10 @@ td.mat-column-followupDateTime > div.inline {
 
 
 .staff-table .mat-column-course {
+  width: 120px !important; /* Fixed width for course */
+  padding: 0 2px !important;
+}
+.staff-table .mat-column-assignee {
   width: 120px !important; /* Fixed width for course */
   padding: 0 2px !important;
 }

@@ -505,7 +505,7 @@ button[disabled] {
   margin-right: 5px;
 }
 
-.followup-date-time {
+/* .followup-date-time {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -532,8 +532,71 @@ button[disabled] {
 .followup-cell {
   display: flex !important;
   align-items: center;
-  /* justify-content: space-between; */
+   justify-content: space-between; 
   padding: 4px 8px !important;
+} */
+.followup-date-time {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  text-align: center;
+}
+.followup-edit-trigger {
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  /* transform: translateY(-50%); */
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.followup-edit-trigger:hover {
+  transform: scale(1.09);
+}
+
+.followup-edit-trigger img {
+  width: 16px;
+  height: 16px;
+}
+.followup-cell {
+  position: relative;
+  padding: 0 4px !important;
+  height: 28px !important;
+  vertical-align: middle !important;
+  text-align: left;
+}
+
+.followup-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 32px;
+}
+.followup-display {
+  display: block;
+  font-size: 11px !important;
+  line-height: 1.2 !important;
+  text-align: left;
+  width: calc(100% - 24px); /* Leave space for edit button */
+}
+
+.date-text, .time-text {
+  display: block;
+  font-size: 14px !important;
+  line-height: 1.2 !important;
+  white-space: nowrap;
+  text-align: left;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 /* For the specific followup date/time cells */
 td.mat-column-followupDateTime {
