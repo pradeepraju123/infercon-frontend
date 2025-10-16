@@ -15,41 +15,82 @@
 
 /* Search Controls */
 .search-controls {
-  margin-bottom: 12px;
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  border: 1px solid #e0e0e0;
   display: flex;
+  gap: 15px;
+  align-items: flex-end;
   flex-wrap: wrap;
-  gap: 6px;
-  align-items: center;
 }
 
-.search-field {
-  flex: 0 0 auto;
-  width: 400px;
+.search-field, .status-filter, .assignee-dropdown {
+  flex: 1;
+  min-width: 200px;
 }
-.search-field .mat-form-field-wrapper {
+
+.search-field .mat-form-field-wrapper,
+.status-filter .mat-form-field-wrapper,
+.assignee-dropdown .mat-form-field-wrapper {
   padding-bottom: 0;
 }
 
-.search-field .mat-form-field-flex {
-  height: 36px;
+.search-field .mat-form-field-flex,
+.status-filter .mat-form-field-flex,
+.assignee-dropdown .mat-form-field-flex {
+  height: 42px;
   align-items: center;
 }
 
-.search-field .mat-form-field-infix {
+.search-field .mat-form-field-infix,
+.status-filter .mat-form-field-infix,
+.assignee-dropdown .mat-form-field-infix {
   padding: 0.4em 0;
   border-top: 0;
 }
 
-.search-field .mat-input-element {
-  font-size: 13px;
+.search-field .mat-input-element,
+.status-filter .mat-input-element,
+.assignee-dropdown .mat-input-element {
+  font-size: 14px;
 }
 
-.search-controls button[mat-raised-button] {
-  height: 36px;
-  padding: 0 10px;
-  font-size: 13px;
-  line-height: 36px;
+.assignee-search {
+  display: flex;
+  gap: 15px;
+  align-items: flex-end;
 }
+
+/* Search Buttons */
+.search-controls button[mat-raised-button] {
+  height: 42px;
+  font-size: 14px;
+  min-width: 100px;
+}
+
+button[mat-raised-button][color="primary"] {
+  background: #3AA7F4;
+  color: white;
+  border: none;
+}
+
+button[mat-raised-button][color="basic"] {
+  background: #6c757d;
+  color: white;
+  border: none;
+}
+
+button[mat-raised-button][color="primary"]:hover {
+  background: #2c8fd8;
+}
+
+button[mat-raised-button][color="basic"]:hover {
+  background: #5a6268;
+}
+
 /* Table Container */
 .table-container {
   border: 1px solid #E0E0E0;
@@ -93,6 +134,23 @@
   border: none;
 }
 
+/* Assignee Field */
+.small-assignee-field {
+  width: 130px;
+}
+
+.small-assignee-field .mat-form-field-wrapper {
+  padding-bottom: 0;
+}
+
+.small-assignee-field .mat-select-value {
+  font-size: 12px;
+}
+
+.small-assignee-field .mat-select-trigger {
+  height: 24px;
+}
+
 /* Status Badges */
 .status-badge {
   padding: 4px 8px;
@@ -121,6 +179,11 @@
 .status-overdue {
   background-color: #f8d7da;
   color: #721c24;
+}
+
+.status-cancelled {
+  background-color: #e9ecef;
+  color: #495057;
 }
 
 /* Action Buttons */
@@ -159,13 +222,23 @@ button[mat-raised-button]:hover {
   background: white;
   border-top: 1px solid #E0E0E0;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .pagination {
   margin: 0;
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .page-item {
@@ -173,18 +246,31 @@ button[mat-raised-button]:hover {
 }
 
 .page-number-container {
+  display: flex;
   flex-wrap: wrap;
+  gap: 2px;
 }
 
 .pagination-info {
   font-size: 0.9rem;
   color: #666;
   white-space: nowrap;
+  margin-left: auto;
 }
 
 .page-link {
   color: #0D6EFD;
   padding: 6px 12px;
+  border: 1px solid #dee2e6;
+  background: white;
+  text-decoration: none;
+  display: block;
+  transition: all 0.2s ease;
+}
+
+.page-link:hover {
+  background: #e9ecef;
+  border-color: #dee2e6;
 }
 
 .page-item.active .page-link {
@@ -196,8 +282,115 @@ button[mat-raised-button]:hover {
 .page-item.disabled .page-link {
   color: #6C757D;
   pointer-events: none;
+  background: #f8f9fa;
 }
 
+/* Responsive Design for Pagination */
+@media (max-width: 768px) {
+  .pagination-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+  
+  .pagination-controls {
+    justify-content: center;
+    order: 2;
+  }
+  
+  .pagination-info {
+    margin-left: 0;
+    text-align: center;
+    order: 1;
+  }
+  
+  .pagination {
+    justify-content: center;
+  }
+  
+  .page-number-container {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagination-container {
+    padding: 10px;
+  }
+  
+  .pagination {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 5px;
+    justify-content: center;
+  }
+  
+  .page-number-container {
+    order: -1;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  
+  .page-link {
+    padding: 4px 8px;
+    font-size: 0.85rem;
+  }
+  
+  .pagination-info {
+    font-size: 0.8rem;
+  }
+}
+
+/* Enhanced Overdue Status */
+.status-overdue {
+  background-color: #ffebee !important;
+  color: #c62828 !important;
+  border: 1px solid #f44336;
+  font-weight: bold;
+}
+
+/* Overdue row highlighting - make it more prominent */
+.overdue-row {
+  background-color: #fff5f5 !important;
+  border-left: 4px solid #dc3545;
+  position: relative;
+}
+
+.overdue-row:hover {
+  background-color: #ffe6e6 !important;
+}
+
+/* Overdue highlight for status badge */
+.overdue-highlight {
+  animation: pulse-overdue 2s infinite;
+  box-shadow: 0 0 5px rgba(220, 53, 69, 0.5);
+}
+
+@keyframes pulse-overdue {
+  0% { box-shadow: 0 0 5px rgba(220, 53, 69, 0.5); }
+  50% { box-shadow: 0 0 10px rgba(220, 53, 69, 0.8); }
+  100% { box-shadow: 0 0 5px rgba(220, 53, 69, 0.5); }
+}
+
+/* Overdue indicator */
+.overdue-indicator {
+  margin-left: 5px;
+  color: #dc3545;
+  font-size: 14px;
+  animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0.3; }
+}
+
+/* Make overdue status more visible in table */
+.overdue-status-cell {
+  background-color: #fff5f5 !important;
+  font-weight: bold;
+}
 /* Responsive Design */
 @media (max-width: 768px) {
   .all-accounts-container {
@@ -211,23 +404,41 @@ button[mat-raised-button]:hover {
   .search-controls {
     flex-direction: column;
     align-items: stretch;
+    gap: 15px;
   }
   
-  .search-field {
+  .search-field, 
+  .status-filter, 
+  .assignee-dropdown {
     min-width: 100%;
-    margin-bottom: 10px;
+    width: 100%;
+  }
+  
+  .assignee-search {
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+  }
+  
+  .search-controls button[mat-raised-button] {
+    width: 100%;
+    margin-top: 10px;
   }
   
   .table-container {
     overflow-x: auto;
   }
   
-  .pagination-container {
-    justify-content: center;
+  
+  
+  .small-assignee-field {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-controls {
+    padding: 15px;
   }
   
-  .pagination {
-    flex-wrap: wrap;
-    justify-content: center;
-  }
 }

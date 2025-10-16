@@ -68,4 +68,14 @@ payManualInstallment(paymentData: any): Observable<any> {
     return throwError(() => new Error('No authentication token found'));
   }
 }
+updateAssignee(contactRef: string, assignee: string): Observable<any> {
+   const token = sessionStorage.getItem('authToken'); 
+  if (token) {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return this.http.put(`${this.apiUrl}/update-assignee`, {contactRef: contactRef,assignee: assignee},{headers});
+}
+  else {
+    return throwError(() => new Error('No authentication token found'));
+  }
+}
 }
