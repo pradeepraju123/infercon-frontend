@@ -316,21 +316,20 @@
             {{ row.outstanding && row.outstanding > 0 ? '₹' + (row.outstanding | number) : 'N/A' }}
           </td>
         </ng-container>
+<ng-container matColumnDef="remarks">
+  <th mat-header-cell *matHeaderCellDef>Remarks</th>
+  <td mat-cell *matCellDef="let row">{{ formatRemarks(row.remarks) || 'N/A' }}</td>
+</ng-container>
 
-        <ng-container matColumnDef="remarks">
-          <th mat-header-cell *matHeaderCellDef>Remarks</th>
-          <td mat-cell *matCellDef="let row">{{ row.remarks || 'N/A' }}</td>
-        </ng-container>
-
-        <!-- Dynamic Fee Columns -->
-        <ng-container *ngFor="let column of displayedColumns | slice:baseColumns.length" [matColumnDef]="column">
-          <th mat-header-cell *matHeaderCellDef>
-            {{ getColumnHeader(column) }}
-          </th>
-          <td mat-cell *matCellDef="let row">
-            {{ getCellValue(row, column) }}
-          </td>
-        </ng-container>
+       <!-- Dynamic Fee Columns -->
+<ng-container *ngFor="let column of displayedColumns | slice:baseColumns.length" [matColumnDef]="column">
+  <th mat-header-cell *matHeaderCellDef>
+    {{ getColumnHeader(column) }}
+  </th>
+  <td mat-cell *matCellDef="let row">
+    {{ getCellValue(row, column) }}
+  </td>
+</ng-container>
 
                <!-- Add these after the remarks column in the table -->
 
@@ -363,7 +362,6 @@
     </div>
 
     <!-- Pagination -->
-   <!-- Pagination -->
     <nav aria-label="Contact pagination" *ngIf="totalItems > 0">
   <ul class="pagination justify-content-center my-4">
     <li class="page-item" [class.disabled]="pageNum === 1" (click)="goToFirstPage()">

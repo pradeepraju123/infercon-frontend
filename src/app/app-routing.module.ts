@@ -98,9 +98,9 @@ const routes: Routes = [
    {path:'app-user-register',component:UserRegisterComponent},
  {path:'user-register',component:UserRegisterComponent},
 {path:'account/:id',component:AccountComponent},
-{path:'app-all-accounts',component:AllAccountsComponent},
+{path:'app-all-accounts',component:AllAccountsComponent,canActivate: [authGuard]},
 { path: 'notifications', component: NotificationComponent },
-{path:'app-excel-upload',component:ExcelUploadComponent},
+{path:'app-excel-upload',component:ExcelUploadComponent,canActivate: [authGuard]},
   { path: '**', redirectTo: 'home' },
   
 

@@ -317,7 +317,6 @@ loadExcelUploadedContacts() {
   });
 }
 
-
   private updateDynamicColumns(data: any[]): void {
     // Find maximum number of fees in the dataset
     const maxFees = data.reduce((max, row) => {
@@ -391,7 +390,22 @@ loadExcelUploadedContacts() {
       this.handleFile(files[0]);
     }
   }
-
+formatRemarks(remarks: any): string {
+  if (!remarks) return 'N/A';
+  
+  // If it's a date string, format it as date only
+  try {
+    const date = new Date(remarks);
+    if (!isNaN(date.getTime()) && date.getFullYear() > 1900 && date.getFullYear() < 2100) {
+      return date.toISOString().split('T')[0]; // Returns YYYY-MM-DD
+    }
+  } catch (error) {
+    // Not a valid date, return as is
+  }
+  
+  // Return non-date remarks as they are
+  return remarks.toString();
+}
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
