@@ -246,7 +246,7 @@ onAssigneeSelect(selectedAssignee: string, itemId: string): Observable<any> {
 }
 // Also ensure these notification methods exist:
 getUserNotifications(userId: string): Observable<any> {
-  return this.http.get<any>(`http://localhost:8081/api/v1/notification/user/${userId}`).pipe(
+  return this.http.get<any>(`https://api.inferconautomation.com/api/v1/notification/user/${userId}`).pipe(
     catchError((error: any) => {
       console.error('API Error:', error);
       return throwError(() => error);
@@ -254,7 +254,7 @@ getUserNotifications(userId: string): Observable<any> {
   );
 }
 markNotificationAsRead(notificationId: string) {
-  return this.http.patch<any>(`http://localhost:8081/api/v1/notification/${notificationId}/read`, {}).pipe(
+  return this.http.patch<any>(`https://api.inferconautomation.com/api/v1/notification/${notificationId}/read`, {}).pipe(
     catchError((error: any) => {
       console.error('API Error:', error);
       return throwError(() => error);
@@ -262,7 +262,7 @@ markNotificationAsRead(notificationId: string) {
   );
 }
 markAllNotificationsAsRead(userId: string) {
-  return this.http.patch<any>(`http://localhost:8081/api/v1/notification/user/${userId}/read-all`, {}).pipe(
+  return this.http.patch<any>(`https://api.inferconautomation.com/api/v1/notification/user/${userId}/read-all`, {}).pipe(
     catchError((error: any) => {
       console.error('API Error:', error);
       return throwError(() => error);
@@ -270,7 +270,7 @@ markAllNotificationsAsRead(userId: string) {
   );
 }
 getUnreadCount(userId: string) {
-  return this.http.get<any>(`http://localhost:8081/api/v1/notification/unread-count/${userId}`).pipe(
+  return this.http.get<any>(`https://api.inferconautomation.com/api/v1/notification/unread-count/${userId}`).pipe(
     catchError((error: any) => {
       console.error('API Error:', error);
       return throwError(() => error);

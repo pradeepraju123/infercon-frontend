@@ -6,7 +6,7 @@ import { Observable, throwError } from 'rxjs';
 })
 export class AccountsService {
 
-private apiUrl = 'http://localhost:8081/api/v1/installments';
+private apiUrl = 'https://api.inferconautomation.com/api/v1/installments';
 
   constructor(private http: HttpClient) {}
   getInstallmentDetails(contactId: string): Observable<any> {

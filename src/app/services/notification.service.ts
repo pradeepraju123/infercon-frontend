@@ -6,7 +6,7 @@ import { Observable, throwError,Subject,tap } from 'rxjs';
   providedIn: 'root'
 })
 export class NotificationService {
-  private apiUrl = 'http://localhost:8081/api/v1/notification';
+  private apiUrl = 'https://api.inferconautomation.com/api/v1/notification';
   public notificationUpdate$ = new Subject<void>();
   constructor(private http: HttpClient) {}
   private getHeaders(): HttpHeaders {
