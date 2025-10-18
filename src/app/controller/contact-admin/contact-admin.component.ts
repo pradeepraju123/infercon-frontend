@@ -43,7 +43,7 @@ export class ContactAdminComponent implements AfterViewInit {
   pageNum = 1;
   totalItems: number = 0;
 totalPages: number = 1;
-itemsPerPage: number = 5;
+itemsPerPage: number = 20;
   data : any
   userType: any
   userName : any
