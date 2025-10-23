@@ -108,7 +108,10 @@
         </ng-container>
         <ng-container matColumnDef="course">
           <th mat-header-cell mat-sort-header *matHeaderCellDef> Course </th>
-          <td mat-cell *matCellDef="let element">
+          <td mat-cell *matCellDef="let element" 
+              [matTooltip]="element.courses" 
+              matTooltipPosition="above"
+              class="course-cell">
             {{ element.courses }}
           </td>
         </ng-container>

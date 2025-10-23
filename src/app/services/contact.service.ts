@@ -177,21 +177,31 @@ sendLeadNotification(staffName: string, staffMobile: string, leadName: string, l
 }
 // Add these methods to your ContactService class
 getComments(contactId: string): Observable<any> {
-  // const token = sessionStorage.getItem('authToken');
-  // if (token) {
-  //   const headers = new HttpHeaders({
-  //     'Authorization': 'Bearer ' + token
-  //   });
+  const token = sessionStorage.getItem('authToken');
+  if (token) {
+    const headers = new HttpHeaders({
+      'Authorization': 'Bearer ' + token
+    });
     return this.http.get(`${this.apiUrl}/contacts/${contactId}/comments`);
-  
+  } else {
+    return throwError('No authentication token found');
+  }
 }
 
 // In your contact.service.ts
 addComment(contactId: string, comment: string, createdBy: string): Observable<any> {
+  const token = sessionStorage.getItem('authToken');
+  if (token) {
+    const headers = new HttpHeaders({
+      'Authorization': 'Bearer ' + token
+    });
   return this.http.post(`${this.apiUrl}/contacts/${contactId}/comments`, {
     texts: comment,
     createdBy: createdBy
-  });
+  },{headers});
+}else {
+    return throwError('No authentication token found');
+  }
 }
 
 createRegisteredContact(contactData: any): Observable<any> {
