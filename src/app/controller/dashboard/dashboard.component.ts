@@ -111,33 +111,33 @@ export class DashboardComponent  implements AfterViewInit {
     newLeadsPageNum = 1;
     newLeadsTotalPages = 1;
     newLeadsTotalItems = 0;
-    newLeadsItemsPerPage = 5;
+    newLeadsItemsPerPage = 20;
   
     // Followup table pagination
     followupPageNum = 1;
     followupTotalPages = 1;
     followupTotalItems = 0;
-    followupItemsPerPage = 5;
+    followupItemsPerPage = 20;
     //total followup
     followupLeadsPageNum = 1;
     followupLeadsTotalPages = 1;
     followupLeadsTotalItems = 0;
-    followupLeadsItemsPerPage = 5
+    followupLeadsItemsPerPage = 20
     // Registered Leads table pagination
     registeredPageNum = 1;
     registeredTotalPages = 1;
     registeredTotalItems = 0;
-    registeredItemsPerPage = 5;
+    registeredItemsPerPage = 20;
     // Finalized table pagination
     finalizedPageNum = 1;
     finalizedTotalPages = 1;
     finalizedTotalItems = 0;
-    finalizedItemsPerPage = 5;  
+    finalizedItemsPerPage = 20;  
     // Accounts pagination
     accountsPageNum = 1;
     accountsTotalPages = 1;
     accountsTotalItems = 0;
-    accountsItemsPerPage = 5;
+    accountsItemsPerPage = 20;
   
     nnewComment: string = '';
     showComments: string | null = null;

@@ -4,6 +4,7 @@
 .card_content {
     /* border-radius: 25px; */
     padding: 10px 15px;
+    margin-left: 10px;
 }
 
 .order-card {
@@ -35,6 +36,7 @@
     margin-bottom: 30px;
     -webkit-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
+    
 }
 
 .card .card-block {
@@ -75,6 +77,9 @@
 }
 .top_content {
     padding: 10px;
+}
+.top_content{
+  margin-left: 12px;
 }
 /*  */
 

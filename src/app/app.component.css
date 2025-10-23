@@ -311,3 +311,45 @@ body, html {
 .notification-badge.new {
   animation: pulse 1s infinite;
 }
+
+/* Compact secondary navbar */
+.secondary_navbar .navbar-collapse {
+  flex-wrap: nowrap;
+  overflow: visible;
+}
+
+.secondary_navbar .navbar-nav {
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.secondary_navbar .nav-item {
+  white-space: nowrap;
+  flex-shrink: 1;
+  min-width: fit-content;
+}
+
+/* Reduce spacing dramatically */
+.secondary_navbar .navbar-nav .nav-link {
+  padding: 0.4rem 0.5rem !important;
+  font-size: 0.85rem !important;
+}
+
+.secondary_navbar .nav-item {
+  padding: 0px 2px !important;
+}
+
+.secondary_navbar .navbar {
+  padding: 4px 8px !important;
+}
+
+/* Make the logo smaller */
+.secondary_navbar .navbar-brand.no-style-logo img {
+  max-width: 80px !important;
+}
+
+/* Compact dropdown icons */
+.secondary_navbar .navbar-nav .fa-solid,
+.secondary_navbar .navbar-nav .fas {
+  font-size: 0.9rem;
+}
