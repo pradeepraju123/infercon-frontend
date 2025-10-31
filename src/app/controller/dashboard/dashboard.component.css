@@ -1454,3 +1454,23 @@ td.mat-column-followupDateTime > div.inline {
   color: white !important;
   font-weight: bold;
 }
+.mat-column-course {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+  min-width: 150px;
+}
+
+.mat-column-course .mat-cell {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 8px;
+}
+
+/* Optional: Tooltip for full text */
+.course-cell {
+  cursor: help;
+  position: relative;
+}

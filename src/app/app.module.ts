@@ -97,7 +97,7 @@ import { TemplateManagerComponent } from './components/template-manager/template
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { CommentsDialogComponent } from './components/comments-dialog/comments-dialog.component';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { CreateRegisteredDialogComponent } from './components/create-registered-dialog/create-registered-dialog.component';
 import { FollowupDialogComponent } from './components/followup-dialog/followup-dialog.component';
 import { UserRegisterComponent } from './controller/user-register/user-register.component';
@@ -233,6 +233,7 @@ import { ExcelUploadComponent } from './components/excel-upload/excel-upload.com
     MatSortModule,
     MatCardModule,
      MatMenuModule,
+      MatTooltipModule,
     NgxEditorModule.forRoot({
       locals: {
         // menu
